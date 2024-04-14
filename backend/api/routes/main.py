@@ -10,7 +10,6 @@ from backend.api.utils.functions import save_picture
 main_bp = Blueprint("main", __name__)
 
 
-@main_bp.route("/", methods=["GET"])
 @main_bp.route("/dashboard", methods=["GET"])
 @token_auth.login_required
 def dashboard():

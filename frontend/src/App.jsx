@@ -57,7 +57,6 @@ const PrivateRoutes = () => {
 			<Route path="/add_recipe" element={<AddRecipePage/>}/>
 			<Route path="/edit_recipe/:recipeId" element={<EditRecipePage/>}/>
 			<Route path="/search_recipe" element={<SearchRecipePage/>}/>
-			<Route path="/" element={<DashboardPage/>}/>
 			<Route path="/dashboard" element={<DashboardPage/>}/>
 			<Route path="*" element={<ErrorPage/>}/>
 		</Routes>
