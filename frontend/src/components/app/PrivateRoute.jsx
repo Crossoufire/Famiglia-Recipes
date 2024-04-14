@@ -15,7 +15,7 @@ export const PrivateRoute = ({ children }) => {
     }
     else {
         toast.info("You need to log in before accessing this page.");
-        navigate("/dashboard", { replace: true });
+        navigate("/", { replace: true });
         return null;
     }
 };

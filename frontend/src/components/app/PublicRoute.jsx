@@ -10,7 +10,7 @@ export const PublicRoute = ({ children }) => {
         return null;
     }
     else if (currentUser) {
-        return navigate("/");
+        return navigate("/dashboard");
     }
     else {
         return children;
