@@ -1,0 +1,214 @@
+[
+    {
+        "image": "",
+        "title": "Croquants aux amandes",
+        "cooking_time": 35,
+        "prep_time": 15,
+        "servings": 10,
+        "comment": "Une délicieuse recette de croquants aux amandes, parfaits pour accompagner un café ou un thé.",
+        "ingredients": [
+            {
+                "ingredient": "oeufs",
+                "proportion": 3
+            },
+            {
+                "ingredient": "amandes entières",
+                "proportion": 300
+            },
+            {
+                "ingredient": "farine",
+                "proportion": 400
+            },
+            {
+                "ingredient": "sucre en poudre",
+                "proportion": 250
+            },
+            {
+                "ingredient": "beurre mou",
+                "proportion": 60
+            },
+            {
+                "ingredient": "sucre vanillé",
+                "proportion": 1
+            },
+            {
+                "ingredient": "levure chimique",
+                "proportion": 1
+            }
+        ],
+        "steps": [
+            {
+                "description": "Préchauffer le four à 180°C."
+            },
+            {
+                "description": "Mélanger les oeufs, la farine, le sucre en poudre, le beurre mou, le sucre vanillé et la levure chimique jusqu'à obtenir une pâte homogène."
+            },
+            {
+                "description": "Ajouter les amandes entières à la pâte et bien mélanger."
+            },
+            {
+                "description": "Sur du papier sulfurisé, former un ou plusieurs boudins selon la dimension de la plaque à four."
+            },
+            {
+                "description": "Enfourner pendant 35 minutes, jusqu'à ce que les croquants soient bien dorés (vérifier selon votre four)."
+            },
+            {
+                "description": "Sortir les boudins du four et les couper en tranches tant qu'ils sont chauds pour faciliter la découpe des amandes."
+            },
+            {
+                "description": "Facultatif : remettre quelques minutes au four pour les 'sécher' si vous souhaitez qu'ils soient bien croquants."
+            }
+        ]
+    },
+    {
+        "image": "",
+        "title": "Calzone de ma maman",
+        "cooking_time": 20,
+        "prep_time": 30,
+        "servings": 6,
+        "comment": "Une recette familiale délicieuse et généreuse, parfaite pour un repas convivial.",
+        "ingredients": [
+            {
+                "ingredient": "gr. farine type 55",
+                "proportion": 400
+            },
+            {
+                "ingredient": "paquets de levure briochin",
+                "proportion": 2
+            },
+            {
+                "ingredient": "càc de sel fin",
+                "proportion": 2
+            },
+            {
+                "ingredient": "pincée de poivre",
+                "proportion": 1
+            },
+            {
+                "ingredient": " cl. d'eau",
+                "proportion": 60
+            },
+            {
+                "ingredient": "cébettes",
+                "proportion": 6
+            },
+            {
+                "ingredient": "olives vertes dénoyautées",
+                "proportion": 120
+            },
+            {
+                "ingredient": "gr. d'anchois",
+                "proportion": 80
+            },
+            {
+                "ingredient": "gr. de raisins secs de Corinthe bruns",
+                "proportion": 250
+            },
+            {
+                "ingredient": "càs d'huile d'olive",
+                "proportion": 1
+            }
+        ],
+        "steps": [
+            {
+                "description": "Faire tremper les raisins secs et attendre qu'ils gonflent, puis les essorer / serrer à la main."
+            },
+            {
+                "description": "Essorer / serrer à la main les olives vertes dénoyautées."
+            },
+            {
+                "description": "Partager la pâte en deux : la partie destinée au fond doit être légèrement plus épaisse que celle destinée au dessus."
+            },
+            {
+                "description": "Foncer un plat à tarte de 28 cm de diamètre avec la première partie de la pâte, puis y disposer les cébettes égouttées préalablement cuites dans de l'huile d'olive et de l'eau, les anchois coupés en petits bouts, les olives coupées en deux et les raisins secs."
+            },
+            {
+                "description": "Arroser d'huile d'olive et ajouter du poivre."
+            },
+            {
+                "description": "Recouvrir avec la deuxième partie de la pâte, souder les bords et piquer la surface avec une fourchette."
+            },
+            {
+                "description": "Laisser la calzone pousser entre 1 et 2 heures selon la température ambiante, en la couvrant d'un torchon et d'un linge léger mais chaud."
+            },
+            {
+                "description": "Avant de la mettre au four, ajouter de l'huile d'olive sur la pâte une fois qu'elle a gonflé."
+            },
+            {
+                "description": "Préchauffer le four à 180°C ou 200°C selon le four pendant 10 minutes."
+            },
+            {
+                "description": "Enfourner la calzone à 220°C pendant 20 minutes, en surveillant la cuisson pour qu'elle soit bien dorée comme du pain."
+            }
+        ]
+    },
+    {
+        "image": "",
+        "title": "Lentilles corail au wok",
+        "cooking_time": 15,
+        "prep_time": 10,
+        "servings": 2,
+        "comment": "Un plat végétarien délicieusement parfumé et rapide à préparer.",
+        "ingredients": [
+            {
+                "ingredient": "verre de lentilles corail",
+                "proportion": 1
+            },
+            {
+                "ingredient": "verre de riz",
+                "proportion": 1
+            },
+            {
+                "ingredient": "oignon",
+                "proportion": 1
+            },
+            {
+                "ingredient": "poivron",
+                "proportion": 0.5
+            },
+            {
+                "ingredient": "gr. de raisins secs",
+                "proportion": 20
+            },
+            {
+                "ingredient": "cac de sel",
+                "proportion": 1
+            },
+            {
+                "ingredient": "cac de poivre",
+                "proportion": 1
+            },
+            {
+                "ingredient": "cac de paprika",
+                "proportion": 1
+            },
+            {
+                "ingredient": "cas huile d'olive",
+                "proportion": 2
+            }
+        ],
+        "steps": [
+            {
+                "description": "Utilisez de préférence un wok, sinon une poêle."
+            },
+            {
+                "description": "Faites revenir l'oignon et le poivron dans 2 cuillères à soupe d'huile d'olive."
+            },
+            {
+                "description": "Rincez les lentilles à l'eau froide."
+            },
+            {
+                "description": "Ajoutez-les dans le wok avec un verre d'eau froide et les épices : sel, poivre et paprika."
+            },
+            {
+                "description": "Laissez cuire les lentilles corail comme un risotto, en ajoutant de l'eau en cours de cuisson si nécessaire."
+            },
+            {
+                "description": "Prévoyez environ 15 minutes de cuisson."
+            },
+            {
+                "description": "Accompagnez les lentilles corail de riz nature."
+            }
+        ]
+    }
+]

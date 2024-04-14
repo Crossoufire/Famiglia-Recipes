@@ -1,0 +1,70 @@
+[
+    {
+        "name": "Apéro",
+        "color": "#FF5733"
+    },
+    {
+        "name": "Plat",
+        "color": "#FFD700"
+    },
+    {
+        "name": "Dessert",
+        "color": "#8A2BE2"
+    },
+    {
+        "name": "Poisson",
+        "color": "#1E90FF"
+    },
+    {
+        "name": "Viande rouge",
+        "color": "#B22222"
+    },
+    {
+        "name": "Viande blanche",
+        "color": "#FFFAF0"
+    },
+    {
+        "name": "Végétarien",
+        "color": "#32CD32"
+    },
+    {
+        "name": "Végan",
+        "color": "#228B22"
+    },
+    {
+        "name": "Fruit de mer",
+        "color": "#FF4500"
+    },
+    {
+        "name": "Fruit",
+        "color": "#FFA500"
+    },
+    {
+        "name": "Légumineuse",
+        "color": "#6B8E23"
+    },
+    {
+        "name": "Four",
+        "color": "#800000"
+    },
+    {
+        "name": "Casserole",
+        "color": "#FF00FF"
+    },
+    {
+        "name": "Friteuse",
+        "color": "#FFFF00"
+    },
+    {
+        "name": "Cuisson vapeur",
+        "color": "#20B2AA"
+    },
+    {
+        "name": "Micro-ondes",
+        "color": "#708090"
+    },
+    {
+        "name": "Grill",
+        "color": "#A52A2A"
+    }
+]
