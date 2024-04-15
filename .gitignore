@@ -124,3 +124,5 @@ cython_debug/
 
 # Node
 */node_modules
+backend/api/static/recipe_images/*
+!backend/api/static/recipe_images/default.png

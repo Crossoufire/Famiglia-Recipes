@@ -208,26 +208,3 @@ def reset_password():
     current_app.logger.info(f"[INFO] - [{user.id}] Password changed.")
 
     return {"message": "Your password was successfully modified."}, 200
-
-
-@tokens.route("/tokens/register_token", methods=["POST"])
-def register_token():
-    """ Check the register token to validate a new user account """
-
-    try:
-        token = request.get_json()["token"]
-    except:
-        return abort(400)
-
-    # Check user token
-    user = User.verify_jwt_token(token)
-    if not user:
-        return abort(400, "This is an invalid or an expired token.")
-
-    # Commit changes
-    db.session.commit()
-
-    # Log info
-    current_app.logger.info(f"[INFO] - [{user.id}] Account activated.")
-
-    return {"message": "Your account has been activated."}, 200

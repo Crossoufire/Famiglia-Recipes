@@ -83,7 +83,7 @@ export class MyApiClient {
 	async login(username, password) {
 		const response = await this.post("/tokens", JSON.stringify({ username, password }), {
 			headers: {
-				Authorization:  `Basic ${window.btoa(`${username}:${password}`)}`
+				Authorization: `Basic ${window.btoa(`${username}:${password}`)}`
 			}
 		});
 

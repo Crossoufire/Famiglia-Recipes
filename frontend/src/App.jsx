@@ -14,7 +14,6 @@ import {UserProvider} from "@/providers/UserProvider";
 import {ThemeProvider} from "@/providers/ThemeProvider";
 import {PublicRoute} from "@/components/app/PublicRoute";
 import {SearchRecipePage} from "@/pages/SearchRecipePage";
-import {RegisterTokenPage} from "@/pages/RegisterTokenPage";
 import {ResetPasswordPage} from "@/pages/ResetPasswordPage";
 import {PrivateRoute, } from "@/components/app/PrivateRoute";
 import {ForgotPasswordPage} from "@/pages/ForgotPasswordPage";
@@ -34,7 +33,6 @@ export const App = () => {
 							<Content>
 								<Routes>
 									<Route path="/" element={<PublicRoute><HomePage/></PublicRoute>}/>
-									<Route path="/register_token" element={<PublicRoute><RegisterTokenPage/></PublicRoute>}/>
 									<Route path="/forgot_password" element={<PublicRoute><ForgotPasswordPage/></PublicRoute>}/>
 									<Route path="/reset_password" element={<PublicRoute><ResetPasswordPage/></PublicRoute>}/>
 									<Route path="*" element={<PrivateRoute><PrivateRoutes/></PrivateRoute>}/>
