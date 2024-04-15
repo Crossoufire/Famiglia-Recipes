@@ -83,7 +83,7 @@ def add_recipe():
     db.session.add(new_recipe)
     db.session.commit()
 
-    return {"message": "Nouvelle recette créée avec succès"}, 200
+    return jsonify(data={"recipe_id": new_recipe.id}), 200
 
 
 @main_bp.route("/update_favorite", methods=["POST"])

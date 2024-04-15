@@ -29,7 +29,7 @@ export const RecipeCard = ({ recipe }) => {
 					<div className="flex items-center justify-center">
 						<img
 							src={recipe.cover_image}
-							className="w-[200px] h-[200px]"
+							className="w-[200px] h-[200px] rounded-md"
 							alt="food"
 						/>
 					</div>

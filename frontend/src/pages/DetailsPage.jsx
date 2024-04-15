@@ -16,9 +16,9 @@ import {FaMinus, FaPen, FaPlus, FaRegStar, FaStar, FaTrash} from "react-icons/fa
 
 export const DetailsPage = () => {
     const api = useApi();
-    const { currentUser } = useUser();
-    const { recipeId } = useParams();
     const navigate = useNavigate();
+    const { recipeId } = useParams();
+    const { currentUser } = useUser();
     const [multi, setMulti] = useState(1);
     const { apiData, loading, error } = useFetchData(`/details/${recipeId}`);
 
@@ -113,7 +113,7 @@ export const DetailsPage = () => {
                             <ul className="mt-4 list-disc ml-5">
                                 {apiData.ingredients.map(data =>
                                     <li key={data.ingredient}>
-                                        {data.proportion * multi} {data.ingredient}
+                                        {parseFloat((data.proportion * multi).toFixed(1))} {data.ingredient}
                                     </li>
                                 )}
                             </ul>
@@ -178,36 +178,36 @@ const UpdateFavorite = ({ recipeId, isFavorited }) => {
 
 
 const Servings = ({ initServings, multiSetter }) => {
-    const [isDisabled, setIsDisabled] = useState(false);
+    const [disabled, setDisabled] = useState(false);
     const [servings, setServings] = useState(initServings);
 
-    const addPerson = () => {
-        if (servings + 1 !== 1) {
-            setIsDisabled(false);
-        }
-        const newServing = servings + 1;
-        setServings(newServing);
-        multiSetter(newServing/initServings);
-    }
+    const updateServings = (action) => {
+        let newServing = initServings;
 
-    const removePerson = () => {
-        if (servings - 1 === 1) {
-            setIsDisabled(true);
+        if (action === "add") {
+            newServing = servings + 1;
+            setDisabled(false);
         }
 
-        const newServing = servings - 1;
+        if (action === "remove") {
+            newServing = servings - 1;
+            if (newServing === 1) {
+                setDisabled(true);
+            }
+        }
+
         setServings(newServing);
-        multiSetter(newServing/initServings);
-    }
+        multiSetter(newServing / initServings);
+    };
 
     return (
         <div>
             <Badge variant="secondary" size="xl">
-                <Button onClick={removePerson} variant="ghost" size="xs" disabled={isDisabled}>
+                <Button onClick={() => updateServings("remove")} variant="ghost" size="xs" disabled={disabled}>
                     <FaMinus/>
                 </Button>
                 Servings: {servings} pers.
-                <Button onClick={addPerson} variant="ghost" size="xs">
+                <Button onClick={() => updateServings("add")} variant="ghost" size="xs">
                     <FaPlus/>
                 </Button>
             </Badge>
