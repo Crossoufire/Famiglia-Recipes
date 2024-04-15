@@ -1,28 +1,40 @@
 import {toast} from "sonner";
-import {useState} from "react";
 import {cn} from "@/lib/utils";
 import {FaTimes} from "react-icons/fa";
+import {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input";
 import {ErrorPage} from "@/pages/ErrorPage";
+import {useNavigate} from "react-router-dom";
 import {Button} from "@/components/ui/button";
+import {useApi} from "@/providers/ApiProvider";
+import {Loading} from "@/components/app/Loading";
 import {Textarea} from "@/components/ui/textarea";
 import {useFetchData} from "@/hooks/FetchDataHook";
 import {PageTitle} from "@/components/app/PageTitle";
 import {useFieldArray, useForm} from "react-hook-form";
-import {Loading} from "@/components/app/Loading.jsx";
-import {FormButton} from "@/components/app/FormButton.jsx";
+import {FormButton} from "@/components/app/FormButton";
 import MultipleSelector from "@/components/ui/multiple-selector";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 
 
 const defaultValues = {
-    ingredients: [{value: ""}],
-    proportions: [{value: ""}],
-    steps: [{value: ""}],
+    image: "",
+    title: "",
+    servings: "",
+    preparation: "",
+    cooking: "",
+    ingredients: [{ value: "" }],
+    proportions: [{ value: "" }],
+    steps: [{ value: "" }],
+    labels: [],
+    comment: "",
 };
 
 
 export const AddRecipePage = () => {
+    const api = useApi();
+    const navigate = useNavigate();
     const [pending, setPending] = useState(false);
     const { apiData, loading, error } = useFetchData("/labels");
     const form = useForm({ defaultValues, shouldFocusError: false });
@@ -30,39 +42,25 @@ export const AddRecipePage = () => {
     const inField = useFieldArray({ name: "ingredients", control: form.control });
     const propField = useFieldArray({ name: "proportions", control: form.control });
 
-    const apiCall = async (formData) => {
-        let response;
+    useEffect(() => {
+        const savedFormData = localStorage.getItem("recipeFormData");
+        if (savedFormData) {
+            toast.success("Saved form data restored");
+            form.reset(JSON.parse(savedFormData));
+        }
+    }, []);
 
-        try {
-            let body = {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
-                },
-                body: formData,
-            }
-            response = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/add_recipe`, body);
+    useEffect(() => {
+        if (form.formState.isDirty) {
+            const formData = JSON.stringify(form.getValues());
+            localStorage.setItem("recipeFormData", formData);
         }
-        catch (error) {
-            response = {
-                ok: false,
-                status: 500,
-                json: async () => {
-                    return {
-                        code: 500,
-                        message: "Internal Server Error",
-                        description: error.toString(),
-                    };
-                }
-            };
-        }
+    }, [form.watch()]);
 
-        return {
-            ok: response.ok,
-            status: response.status,
-            body: response.status !== 204 ? await response.json() : null,
-        }
-    }
+    const deleteSavedRecipe = () => {
+        localStorage.removeItem("recipeFormData");
+        form.reset(defaultValues);
+    };
 
     const onSubmit = async (data) => {
         const formData = new FormData();
@@ -76,14 +74,16 @@ export const AddRecipePage = () => {
         formData.append("recipe", JSON.stringify(data));
 
         setPending(true);
-        const response = await apiCall(formData);
+        const response = await api.post(`/add_recipe`, formData, { removeContentType: true });
         setPending(false);
 
         if (!response.ok) {
             return toast.error(response.body.description);
         }
 
-        return toast.success(response.body.message);
+        deleteSavedRecipe();
+        toast.success("Recipe Added!");
+        navigate(`/details/${response.body.data.recipe_id}`, { replace: true });
     };
 
     const addNewField = () => {
@@ -103,6 +103,22 @@ export const AddRecipePage = () => {
         <PageTitle title="Add a Recipe" subtitle="Add a recipe here using the following form">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-7 w-[750px] max-sm:w-full">
+                    <Alert variant="info">
+                        <AlertTitle>Automatic Form Saved</AlertTitle>
+                        <AlertDescription>
+                            The form data are saved everytime you do a modification. You can leave the page and return
+                            later.
+                        </AlertDescription>
+                    </Alert>
+
+                    {localStorage.getItem("recipeFormData") &&
+                        <Alert variant="warning">
+                            <AlertTitle>Reset Form Data &nbsp;</AlertTitle>
+                            <AlertDescription>
+                                You can reset the form here <Button size="xs" onClick={deleteSavedRecipe}>Reset</Button>
+                            </AlertDescription>
+                        </Alert>
+                    }
                     <div className="bg-card p-3 rounded-md grid grid-cols-12 gap-4">
                         <div className="col-span-12 md:col-span-10">
                             <FormField
@@ -225,6 +241,7 @@ export const AddRecipePage = () => {
                                                     {...field}
                                                     type="number"
                                                     placeholder="100"
+                                                    tabIndex={idx * 2 + 1}
                                                 />
                                             </FormControl>
                                             <FormMessage/>
@@ -249,11 +266,12 @@ export const AddRecipePage = () => {
                                                         {...field}
                                                         type="text"
                                                         placeholder="gr. de poulet"
+                                                        tabIndex={idx * 2 + 2}
                                                     />
                                                 </FormControl>
                                                 {idx !== 0 &&
                                                     <Button variant="ghost" size="sm" role="button" title="Remove field"
-                                                            onClick={() => removeNewField(idx)}>
+                                                            onClick={() => removeNewField(idx)} tabIndex="-1">
                                                         <FaTimes/>
                                                     </Button>
                                                 }
@@ -265,7 +283,8 @@ export const AddRecipePage = () => {
                             ))}
                         </div>
                         <div className="col-span-12">
-                            <Button type="button" variant="outline" size="sm" onClick={addNewField}>
+                            <Button type="button" variant="outline" size="sm" onClick={addNewField}
+                            tabIndex={inField.fields.length * 2 + 4}>
                                 Add More
                             </Button>
                         </div>
@@ -295,7 +314,7 @@ export const AddRecipePage = () => {
                                             </FormControl>
                                             {idx !== 0 &&
                                                 <Button variant="ghost" size="sm" role="button" title="Remove field"
-                                                        onClick={() => stepsField.remove(idx)}>
+                                                        onClick={() => stepsField.remove(idx)} tabIndex="-1">
                                                     <FaTimes/>
                                                 </Button>
                                             }
@@ -314,7 +333,7 @@ export const AddRecipePage = () => {
                         <FormField
                             name="labels"
                             control={form.control}
-                            rules={{ required: "At least 1 label required" }}
+                            rules={{required: "At least 1 label required"}}
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>
@@ -338,7 +357,7 @@ export const AddRecipePage = () => {
                         <FormField
                             name="comment"
                             control={form.control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>
                                         <div>Comment</div>
@@ -356,7 +375,7 @@ export const AddRecipePage = () => {
                     </div>
                     <div className="flex justify-start items-center">
                         <FormButton pending={pending} className="w-36">
-                            Add Recette
+                            Add Recipe
                         </FormButton>
                     </div>
                 </form>
