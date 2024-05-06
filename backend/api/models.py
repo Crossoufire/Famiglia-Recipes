@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 import secrets
 from datetime import datetime, timedelta
+from time import time
 from typing import Dict, List
 import jwt
 from flask import current_app, url_for
@@ -114,6 +115,17 @@ class User(db.Model):
         else:
             self.fav_recipes.remove(recipe)
         db.session.commit()
+
+    def generate_jwt_token(self, expires_in: int = 600) -> str:
+        """ Generate a <register token> or a <forgot password token> """
+
+        token = jwt.encode(
+            payload={"token": self.id, "exp": time() + expires_in},
+            key=current_app.config["SECRET_KEY"],
+            algorithm="HS256",
+        )
+
+        return token
 
     @staticmethod
     def verify_access_token(access_token: str) -> User:
