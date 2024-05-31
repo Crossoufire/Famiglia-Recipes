@@ -10,10 +10,12 @@ export const RecipeCard = ({ recipe }) => {
 			<div className="bg-card rounded-md p-4 h-full">
 				<div>
 					<Link to={`/details/${recipe.id}`}>
-						<h5 className="text-lg font-medium">{recipe.title}</h5>
+						<h5 className="text-lg font-medium line-clamp-1" title={recipe.title}>
+							{recipe.title}
+						</h5>
 					</Link>
 					<cite className="italic text-muted-foreground mt-2 mb-0 text-sm">
-						Added by {recipe.submitter.username} the {recipe.submitted_date}
+						Added by <b>{recipe.submitter.username}</b> the {recipe.submitted_date}
 					</cite>
 					<Separator/>
 				</div>
@@ -28,17 +30,17 @@ export const RecipeCard = ({ recipe }) => {
 					</div>
 					<div className="flex items-center justify-center">
 						<img
+							alt="food"
 							src={recipe.cover_image}
 							className="w-[200px] h-[200px] rounded-md"
-							alt="food"
 						/>
 					</div>
 					<div>
 						<h6 className="font-medium">Labels</h6>
 						<Separator/>
-						<div className="flex flex-wrap justify-start gap-3 mt-3">
+						<div className="flex flex-wrap justify-start gap-2 mt-3">
 							{recipe.labels.map(label =>
-								<Badge variant="inactive" color={label.color}>
+								<Badge key={label.id} variant="inactive" color={label.color}>
 									{label.name}
 								</Badge>
 							)}

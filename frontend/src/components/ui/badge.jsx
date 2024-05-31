@@ -32,11 +32,11 @@ const Badge = ({ className, variant, size, color, ...props }) => {
     return (
         <div
             className={cn(badgeVariants({ variant, size }), className)}
-            style={{background: color}}
+            style={{ background: color }}
             {...props}
         />
     );
-}
+};
 
 
 export { Badge, badgeVariants };

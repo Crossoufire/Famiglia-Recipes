@@ -72,19 +72,19 @@ export const EditRecipePage = () => {
     const addNewField = () => {
         inField.append({value: ""});
         propField.append({value: ""});
-    }
+    };
 
     const removeNewField = (idx) => {
         inField.remove(idx);
         propField.remove(idx);
-    }
+    };
 
     if (error) return <ErrorPage {...error}/>;
     if (loading) return <Loading/>;
 
 
     return (
-        <PageTitle title="Edit the Recipe" subtitle="Add a recipe here using the following form">
+        <PageTitle title="Edit the Recipe" subtitle="Edit the recipe using the following form">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-7 w-[750px] max-sm:w-full">
                     <div className="bg-card p-3 rounded-md grid grid-cols-12 gap-4">
@@ -175,7 +175,7 @@ export const EditRecipePage = () => {
                                 control={form.control}
                                 name="cooking"
                                 rules={{required: "Temps requis"}}
-                                render={({field}) =>
+                                render={({ field }) =>
                                     <FormItem>
                                         <FormLabel>Cuisson</FormLabel>
                                         <FormControl>
@@ -304,11 +304,11 @@ export const EditRecipePage = () => {
                                     </FormLabel>
                                     <FormControl>
                                         <MultipleSelector
+                                            maxSelected={5}
                                             value={field.value}
                                             onChange={field.onChange}
                                             defaultOptions={apiData.labels}
-                                            placeholder="Select labels..."
-                                            maxSelected={5}
+                                            placeholder={"Select labels..."}
                                         />
                                     </FormControl>
                                     <FormMessage/>

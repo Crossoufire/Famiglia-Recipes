@@ -8,12 +8,10 @@ import jwt
 from flask import current_app, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from backend.api import db
-from backend.api.utils.enums import RoleType
+from backend.api.utils.helper import RoleType
 
 
 class Token(db.Model):
-    """ Class for the management of the user's connexion tokens """
-
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), index=True)
     access_token = db.Column(db.String(64), nullable=False, index=True)
@@ -25,16 +23,12 @@ class Token(db.Model):
     user = db.relationship("User", backref=db.backref("token", lazy="noload"))
 
     def generate(self):
-        """ Generate the <access_token> and the <refresh_token> for a user """
-
         self.access_token = secrets.token_urlsafe()
         self.access_expiration = datetime.utcnow() + timedelta(minutes=current_app.config["ACCESS_TOKEN_MINUTES"])
         self.refresh_token = secrets.token_urlsafe()
         self.refresh_expiration = datetime.utcnow() + timedelta(days=current_app.config["REFRESH_TOKEN_DAYS"])
 
     def expire(self, delay: int = None):
-        """ Add an expiration time on both the <access token> and the <refresh token> """
-
         # Add 5 second delay for simultaneous requests
         if delay is None:
             delay = 5 if not current_app.testing else 0
@@ -48,14 +42,10 @@ class Token(db.Model):
 
         yesterday = datetime.utcnow() - timedelta(days=1)
         cls.query.filter(cls.refresh_expiration < yesterday).delete()
-
-        # Commit changes
         db.session.commit()
 
 
 class User(db.Model):
-    """ User model """
-
     def __repr__(self):
         return f"<User [{self.id}] - {self.username}>"
 
@@ -81,26 +71,19 @@ class User(db.Model):
         self.last_seen = datetime.utcnow()
 
     def revoke_all_tokens(self):
-        """ Revoke all the <access token> and <refresh token> of the current user """
-
         Token.query.filter(Token.user == self).delete()
         db.session.commit()
 
     def generate_auth_token(self) -> Token:
-        """ Generate and return an authentication token for the user """
-
         token = Token(user=self)
         token.generate()
 
         return token
 
     def to_dict(self) -> Dict:
-        """ Serialize the <user> class. Exclude the <email> and <password> fields """
-
         excluded_attrs = ("email", "password")
         user_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in excluded_attrs}
 
-        # Additional attributes
         user_dict.update({
             "registered": self.registered.strftime("%d %b %Y"),
             "last_seen": self.last_seen.strftime("%d %b %Y"),
@@ -117,33 +100,26 @@ class User(db.Model):
         db.session.commit()
 
     def generate_jwt_token(self, expires_in: int = 600) -> str:
-        """ Generate a <register token> or a <forgot password token> """
+        """ Generate the user <jwt token> for forgotten password """
 
         token = jwt.encode(
             payload={"token": self.id, "exp": time() + expires_in},
             key=current_app.config["SECRET_KEY"],
             algorithm="HS256",
         )
-
         return token
 
     @staticmethod
     def verify_access_token(access_token: str) -> User:
-        """ Verify the <access token> viability of the user and return the user object or None """
-
         token = Token.query.filter(Token.access_token == access_token).first()
-
         if token:
             if token.access_expiration > datetime.utcnow():
                 token.user.ping()
                 db.session.commit()
-
                 return token.user
 
     @staticmethod
     def verify_refresh_token(refresh_token: str, access_token: str) -> Token:
-        """ Verify the <refresh token> of the user """
-
         token = Token.query.filter_by(refresh_token=refresh_token, access_token=access_token).first()
         if token:
             if token.refresh_expiration > datetime.utcnow():
@@ -151,8 +127,6 @@ class User(db.Model):
 
             # Try to refresh with expired token: revoke all tokens from user as precaution
             token.user.revoke_all_tokens()
-
-            # Commit changes
             db.session.commit()
 
     @staticmethod
@@ -168,8 +142,6 @@ class User(db.Model):
 
 
 class Recipe(db.Model):
-    """ Recipe model """
-
     def __repr__(self):
         return f"<Recipe [{self.id}] - {self.title[:10]}>"
 
@@ -192,12 +164,9 @@ class Recipe(db.Model):
 
     @property
     def cover_image(self) -> str:
-        """ Return the recipe image url """
         return url_for("static", filename=f"recipe_images/{self.image}")
 
     def to_dict(self) -> Dict:
-        """ Serialization of the <recipe> model """
-
         from backend.api.routes.handlers import current_user
 
         recipe_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -216,13 +185,10 @@ class Recipe(db.Model):
 
     @staticmethod
     def form_only() -> List[str]:
-        """ Return the allowed fields for the edit form """
         return ["title", "image", "cooking_time", "prep_time", "servings", "ingredients", "steps", "comment", "labels"]
 
 
 class Label(db.Model):
-    """ Label model """
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
     color = db.Column(db.String, nullable=False)
@@ -231,7 +197,6 @@ class Label(db.Model):
     recipes = db.relationship("Recipe", secondary="recipe_label", back_populates="labels")
 
     def to_dict(self) -> Dict:
-        """ Serialize the <Label> class """
         return {"id": self.id, "name": self.name, "color": self.color}
 
     @classmethod
@@ -245,6 +210,8 @@ class Label(db.Model):
             label_row = cls.query.filter_by(name=label["name"]).first()
             if not label_row:
                 db.session.add(cls(name=label["name"], color=label["color"]))
+            else:
+                label_row.color = label["color"]
 
         db.session.commit()
 

@@ -1,6 +1,6 @@
 import {PageTitle} from "@/components/app/PageTitle";
-import {LoginForm} from "@/components/app/LoginForm.jsx";
-import {RegisterForm} from "@/components/app/RegisterForm.jsx";
+import {LoginForm} from "@/components/app/LoginForm";
+import {RegisterForm} from "@/components/app/RegisterForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 
 

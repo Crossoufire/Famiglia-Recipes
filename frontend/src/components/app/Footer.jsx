@@ -2,14 +2,14 @@ import {Separator} from "@/components/ui/separator";
 
 
 export const Footer = () => (
-    <footer className="w-full p-2 border-t border-t-neutral-500 bg-cyan-950/30 mt-20">
+    <footer className="w-full p-2 border-t border-t-neutral-500 bg-background mt-20">
         <div className="grid md:grid-cols-12 mx-auto gap-4 md:max-w-screen-xl text-center md:text-left">
             <div className="md:col-span-6 flex flex-col gap-y-1">
                 <div className="text-xl flex gap-x-2 font-bold items-center justify-center md:justify-start">
                     <img src="/favicon.ico" width={16} alt="favicon"/> Famiglia Recipes
                 </div>
                 <p className="md:w-[85%]">
-                    Welcome to Familgia Recipes and explore our curated collection of cherished family recipes.
+                    Welcome to Famiglia Recipes and explore our curated collection of cherished family recipes.
                 </p>
             </div>
             <div className="md:col-span-3 flex flex-col gap-y-1">

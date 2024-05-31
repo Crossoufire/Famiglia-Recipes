@@ -5,8 +5,8 @@ import {Input} from "@/components/ui/input";
 import {useNavigate} from "react-router-dom";
 import {useApi} from "@/providers/ApiProvider";
 import {PageTitle} from "@/components/app/PageTitle";
-import {FormError} from "@/components/app/FormError.jsx";
-import {FormButton} from "@/components/app/FormButton.jsx";
+import {FormError} from "@/components/app/FormError";
+import {FormButton} from "@/components/app/FormButton";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 
 
@@ -20,23 +20,25 @@ export const ForgotPasswordPage = () => {
     const onSubmit = async (data) => {
         setErrors("");
 
-        setPending(true);
-        const response = await api.post("/tokens/reset_password_token", {
-            email: data.email,
-            callback: import.meta.env.VITE_RESET_PASSWORD_CALLBACK,
-        });
-        setPending(false);
-
-        if (response.status === 401) {
-            return setErrors(response.body.description);
+        try {
+            setPending(true);
+            const response = await api.post("/tokens/reset_password_token", {
+                email: data.email,
+                callback: import.meta.env.VITE_RESET_PASSWORD_CALLBACK,
+            });
+            if (response.status === 401) {
+                return setErrors(response.body.description);
+            }
+            if (!response.ok) {
+                return toast.error(response.body.description);
+            }
+            toast.success("A reset email has been sent to change your password.");
+            navigate("/");
+        }
+        finally {
+            setPending(false);
         }
 
-        if (!response.ok) {
-            return toast.error(response.body.description);
-        }
-
-        toast.success("A reset email has been sent to change your password.");
-        navigate("/");
     };
 
     return (

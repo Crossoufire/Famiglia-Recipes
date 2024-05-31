@@ -25,7 +25,7 @@ export const ResetPasswordPage = () => {
             return toast.error(response.body.description);
         }
 
-        toast.success(response.body.message);
+        toast.success("Your password was successfully modified");
         navigate("/");
     };
 

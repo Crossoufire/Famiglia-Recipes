@@ -23,7 +23,7 @@ const TooltipContent = React.forwardRef(({ className, sideOffset = 4, ...props }
             "data-[side=top]:slide-in-from-bottom-2", className)}
         {...props}
     />
-))
+));
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 

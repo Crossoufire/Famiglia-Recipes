@@ -9,7 +9,7 @@ const Form = FormProvider;
 
 const FormFieldContext = React.createContext({});
 
-const FormItemContext = React.createContext({})
+const FormItemContext = React.createContext({});
 
 
 const FormField = ({ ...props }) => {
@@ -18,7 +18,7 @@ const FormField = ({ ...props }) => {
             <Controller {...props}/>
         </FormFieldContext.Provider>
     );
-}
+};
 
 
 const useFormField = () => {
@@ -121,7 +121,7 @@ const FormMessage = React.forwardRef(({ className, children, ...props }, ref) =>
             {body}
         </p>
     );
-})
+});
 FormMessage.displayName = "FormMessage";
 
 

@@ -7,6 +7,7 @@ from werkzeug.exceptions import Forbidden, Unauthorized
 from werkzeug.local import LocalProxy
 from backend.api.models import User
 
+
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
 
@@ -16,8 +17,6 @@ current_user = LocalProxy(lambda: token_auth.current_user())
 
 @basic_auth.verify_password
 def verify_password(username: str, password: str) -> User:
-    """ Verify the user's username and password on login and return the <user> object if successful """
-
     user = User.query.filter_by(username=username).first()
 
     if not user or not user.verify_password(password):
@@ -28,8 +27,6 @@ def verify_password(username: str, password: str) -> User:
 
 @basic_auth.error_handler
 def basic_auth_error(status: int = HTTPStatus.UNAUTHORIZED) -> Tuple[Dict, int, Dict]:
-    """ Error handler when the entered credentials are wrong """
-
     error = (Forbidden if status == HTTPStatus.FORBIDDEN else Unauthorized)()
 
     response = dict(
@@ -43,14 +40,11 @@ def basic_auth_error(status: int = HTTPStatus.UNAUTHORIZED) -> Tuple[Dict, int, 
 
 @token_auth.verify_token
 def verify_token(access_token: str) -> str | None:
-    """ Verify the user's <token> for each <@token_auth.login_required> routes """
     return User.verify_access_token(access_token) if access_token else None
 
 
 @token_auth.error_handler
 def token_auth_error(status: int = HTTPStatus.UNAUTHORIZED) -> Tuple[Dict, int]:
-    """ Error handler when the <access token> of the user is expired """
-
     error = (Forbidden if status == HTTPStatus.FORBIDDEN else Unauthorized)()
 
     response = dict(

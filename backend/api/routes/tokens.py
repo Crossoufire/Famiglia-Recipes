@@ -9,12 +9,11 @@ from backend.api.models import Token, User
 from backend.api.routes.handlers import basic_auth, current_user, token_auth
 from backend.api.routes.email import send_email
 
+
 tokens = Blueprint("tokens", __name__)
 
 
 def token_response(token: Token) -> Tuple[Dict, int, Dict]:
-    """ Generate the token response and send it to the user """
-
     headers = {
         "Set-Cookie": dump_cookie(
             key="refresh_token",
@@ -32,8 +31,6 @@ def token_response(token: Token) -> Tuple[Dict, int, Dict]:
 
 @tokens.route("/register_user", methods=["POST"])
 def register_user():
-    """ Register a new user """
-
     try:
         data = request.get_json()
     except:
@@ -54,7 +51,6 @@ def register_user():
     if User.query.filter_by(email=data["email"]).first():
         return abort(401, {"email": "Invalid email"})
 
-    # Create <new_user>
     # noinspection PyArgumentList
     new_user = User(
         username=data["username"],
@@ -64,7 +60,6 @@ def register_user():
         last_seen=datetime.utcnow(),
     )
 
-    # Add and commit
     db.session.add(new_user)
     db.session.commit()
 
@@ -74,7 +69,6 @@ def register_user():
 @tokens.route("/current_user", methods=["GET"])
 @token_auth.login_required
 def get_current_user() -> Dict:
-    """ Return the logged current user """
     return current_user.to_dict()
 
 
@@ -83,16 +77,9 @@ def get_current_user() -> Dict:
 def new_token():
     """ Create an <access token> and a <refresh token>. The <refresh token> is returned as a hardened cookie """
 
-    # Generate <access token> and <refresh token>
     token = current_user.generate_auth_token()
-
-    # Add token to db
     db.session.add(token)
-
-    # Clean Token table from old tokens
     Token.clean()
-
-    # Commit changes
     db.session.commit()
 
     return token_response(token)
@@ -103,7 +90,6 @@ def refresh():
     """ Refresh an <access token>. The client needs to pass the <refresh token> in a `refresh_token` cookie.
     The <access token> must be passed in the request body """
 
-    # Get <access token> and <refresh token>
     access_token = request.get_json().get("access_token")
     refresh_token = request.cookies.get("refresh_token")
 
@@ -114,13 +100,9 @@ def refresh():
     if token is None:
         return abort(401)
 
-    # Token now expired
     token.expire()
-
-    # Create new <access token> and <refresh token>
     new_token_ = token.user.generate_auth_token()
 
-    # Add all and commit changes
     db.session.add_all([token, new_token_])
     db.session.commit()
 
@@ -129,20 +111,14 @@ def refresh():
 
 @tokens.route("/tokens", methods=["DELETE"])
 def revoke_token():
-    """ Revoke an access token = logout """
+    """ Revoke an access token (used for logout) """
 
-    # Get <access token> from header
     access_token = request.headers["Authorization"].split()[1]
-
-    # Fetch <access token> in database
     token = Token.query.filter_by(access_token=access_token).first()
     if not token:
         return abort(401)
 
-    # Token is now expired
     token.expire()
-
-    # Commit changes
     db.session.commit()
 
     return {}, 204
@@ -150,8 +126,6 @@ def revoke_token():
 
 @tokens.route("/tokens/reset_password_token", methods=["POST"])
 def reset_password_token():
-    """ Generate a password reset token and send the mail to the user """
-
     try:
         data = request.get_json()
     except:
@@ -159,23 +133,21 @@ def reset_password_token():
 
     # Necessary fields
     fields = ("email", "callback")
-
     if not all(f in data for f in fields):
         return abort(400, f"Not all fields included: {', '.join(fields)}")
 
-    # Check user
     user = User.query.filter_by(email=data["email"]).first()
-
     if not user:
         return abort(401, "This email is invalid")
 
-    # Send email to user
     try:
         send_email(
-            user=user,
+            to=user.email,
+            username=user.username,
             subject="Password Reset Request",
             template="password_reset",
             callback=data["callback"],
+            token=user.generate_jwt_token(),
         )
     except Exception as e:
         current_app.logger.error(f"ERROR sending an email to account [{user.id}]: {e}")
@@ -186,25 +158,17 @@ def reset_password_token():
 
 @tokens.route("/tokens/reset_password", methods=["POST"])
 def reset_password():
-    """ Check password token and change user password """
-
     try:
         data = request.get_json()
     except:
         return abort(400)
 
-    # Check user token
     user = User.verify_jwt_token(data["token"])
-    if not user :
+    if not user:
         return abort(400, "This is an invalid or an expired token.")
 
-    # Add new password
     user.password = generate_password_hash(data.get("new_password"))
-
-    # Commit changes
     db.session.commit()
-
-    # Log info
     current_app.logger.info(f"[INFO] - [{user.id}] Password changed.")
 
-    return {"message": "Your password was successfully modified."}, 200
+    return {}, 204

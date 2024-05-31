@@ -10,32 +10,33 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 
 
 export const RegisterForm = () => {
-	const api = useApi()
+	const api = useApi();
 	const [errors, setErrors] = useState({});
 	const [pending, setPending] = useState(false);
 	const form = useForm({ shouldFocusError: false });
 
 	const onSubmit = async (data) => {
-		setErrors({})
+		setErrors({});
 
-		setPending(true);
-		const response = await api.post("/register_user", {
-			username: data.username,
-			email: data.email,
-			password: data.password,
-			registerKey: data.registerKey,
-		});
-		setPending(false);
-
-		if (response.status === 401) {
-			return setErrors(response.body.description);
+		try {
+			setPending(true);
+			const response = await api.post("/register_user", {
+				username: data.username,
+				email: data.email,
+				password: data.password,
+				registerKey: data.registerKey,
+			});
+			if (response.status === 401) {
+				return setErrors(response.body.description);
+			}
+			if (!response.ok) {
+				return toast.error(response.body.description);
+			}
+			toast.success(response.body.message);
 		}
-
-		if (!response.ok) {
-			return toast.error(response.body.description);
+		finally {
+			setPending(false);
 		}
-
-		toast.success(response.body.message);
 	};
 
 	return (

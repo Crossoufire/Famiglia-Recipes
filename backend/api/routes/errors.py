@@ -7,14 +7,12 @@ errors = Blueprint("errors", __name__)
 
 
 def log_http_exception(error: HTTPException):
-    """ Log the HTTP exception and send a mail to admin if in logger.error """
-
     # Do not log errors in testing
     if current_app.testing:
         return
 
     # In dev or prod: do not log 404 or 401 errors
-    if error.code == 404 or error == 401:
+    if error.code == 404 or error.code == 401:
         return
 
     # Add error to logger and send mail to admin (in prod only)
@@ -23,8 +21,6 @@ def log_http_exception(error: HTTPException):
 
 @errors.app_errorhandler(HTTPException)
 def http_error(error, message: str = None):
-    """ Catch and handle all HTTP errors (400, 404, 403, etc...) """
-
     log_http_exception(error)
 
     data = dict(
@@ -38,9 +34,6 @@ def http_error(error, message: str = None):
 
 @errors.app_errorhandler(IntegrityError)
 def sqlalchemy_integrity_error(error):
-    """ Catch and handle all database integrity errors """
-
-    # Log exception traceback
     current_app.logger.error(traceback.format_exc())
 
     data = dict(
@@ -55,9 +48,6 @@ def sqlalchemy_integrity_error(error):
 # noinspection PyUnusedLocal
 @errors.app_errorhandler(SQLAlchemyError)
 def sqlalchemy_error(error):
-    """ Catch and handle specific SQLAlchemy errors """
-
-    # Log exception traceback
     current_app.logger.error(traceback.format_exc())
 
     data = dict(
@@ -72,9 +62,6 @@ def sqlalchemy_error(error):
 # noinspection PyUnusedLocal
 @errors.app_errorhandler(Exception)
 def other_exceptions(error):
-    """ Catch and handle all the remaining exceptions errors """
-
-    # Log exception traceback
     current_app.logger.error(traceback.format_exc())
 
     data = dict(

@@ -4,7 +4,6 @@ import {ErrorPage} from "@/pages/ErrorPage";
 import {Toaster} from "@/components/ui/sonner";
 import {Footer} from "@/components/app/Footer";
 import {DetailsPage} from "@/pages/DetailsPage";
-import {Content} from "@/components/app/Content";
 import {Navbar} from "@/components/app/Navbar.jsx";
 import {DashboardPage} from "@/pages/DashboardPage";
 import {AddRecipePage} from "@/pages/AddRecipePage";
@@ -13,7 +12,7 @@ import {EditRecipePage} from "@/pages/EditRepicePage";
 import {UserProvider} from "@/providers/UserProvider";
 import {ThemeProvider} from "@/providers/ThemeProvider";
 import {PublicRoute} from "@/components/app/PublicRoute";
-import {SearchRecipePage} from "@/pages/SearchRecipePage";
+import {AllRecipesPage} from "@/pages/AllRecipesPage.jsx";
 import {ResetPasswordPage} from "@/pages/ResetPasswordPage";
 import {PrivateRoute, } from "@/components/app/PrivateRoute";
 import {ForgotPasswordPage} from "@/pages/ForgotPasswordPage";
@@ -28,16 +27,18 @@ export const App = () => {
 				<ApiProvider>
 					<UserProvider>
 						<SWRConfig>
-							<Toaster position="top-center" richColors/>
+							<Toaster position="bottom-right"/>
 							<Navbar/>
-							<Content>
+							<main className="md:max-w-screen-xl container max-sm:px-4">
 								<Routes>
 									<Route path="/" element={<PublicRoute><HomePage/></PublicRoute>}/>
-									<Route path="/forgot_password" element={<PublicRoute><ForgotPasswordPage/></PublicRoute>}/>
-									<Route path="/reset_password" element={<PublicRoute><ResetPasswordPage/></PublicRoute>}/>
+									<Route path="/forgot_password"
+										   element={<PublicRoute><ForgotPasswordPage/></PublicRoute>}/>
+									<Route path="/reset_password"
+										   element={<PublicRoute><ResetPasswordPage/></PublicRoute>}/>
 									<Route path="*" element={<PrivateRoute><PrivateRoutes/></PrivateRoute>}/>
 								</Routes>
-							</Content>
+							</main>
 							<Footer/>
 						</SWRConfig>
 					</UserProvider>
@@ -54,7 +55,7 @@ const PrivateRoutes = () => {
 			<Route path="/details/:recipeId" element={<DetailsPage/>}/>
 			<Route path="/add_recipe" element={<AddRecipePage/>}/>
 			<Route path="/edit_recipe/:recipeId" element={<EditRecipePage/>}/>
-			<Route path="/search_recipe" element={<SearchRecipePage/>}/>
+			<Route path="/all_recipes" element={<AllRecipesPage/>}/>
 			<Route path="/dashboard" element={<DashboardPage/>}/>
 			<Route path="*" element={<ErrorPage/>}/>
 		</Routes>

@@ -5,13 +5,14 @@ import {ErrorPage} from "@/pages/ErrorPage";
 import {Button} from "@/components/ui/button";
 import {useApi} from "@/providers/ApiProvider";
 import {Tooltip} from "@/components/ui/tooltip";
+import {FaRegPenToSquare} from "react-icons/fa6";
+import {Loading} from "@/components/app/Loading";
 import {useUser} from "@/providers/UserProvider";
 import {useFetchData} from "@/hooks/FetchDataHook";
 import {Separator} from "@/components/ui/separator";
 import {PageTitle} from "@/components/app/PageTitle";
-import {Loading} from "@/components/app/Loading.jsx";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {FaMinus, FaPen, FaPlus, FaRegStar, FaStar, FaTrash} from "react-icons/fa";
+import {FaMinus, FaPlus, FaRegStar, FaRegTrashAlt} from "react-icons/fa";
 
 
 export const DetailsPage = () => {
@@ -23,20 +24,16 @@ export const DetailsPage = () => {
     const { apiData, loading, error } = useFetchData(`/details/${recipeId}`);
 
     const onDeleteRecipe = async () => {
-        const confirm = window.confirm("Do you really want to delete this recipe?");
+        if (!window.confirm("Do you really want to delete this recipe?")) return;
 
-        if (!confirm) {
-            return;
-        }
-
-        const response = await api.post(`/delete_recipe`, {recipe_id: recipeId});
+        const response = await api.post(`/delete_recipe`, { recipe_id: recipeId });
         if (!response.ok) {
             return toast.error(response.body.description);
         }
 
-        toast.success("Recipe deleted!");
+        toast.success("Recipe successfully deleted!");
         navigate("/dashboard", { replace: true });
-    }
+    };
 
     if (error) return <ErrorPage {...error}/>;
     if (loading) return <Loading/>;
@@ -52,14 +49,14 @@ export const DetailsPage = () => {
                         <div className="flex items-center gap-4">
                             <Tooltip text="Edit recipe" side="left">
                                 <Link to={`/edit_recipe/${recipeId}`} className="opacity-40 hover:opacity-100">
-                                    <FaPen size={18}/>
+                                    <FaRegPenToSquare size={18}/>
                                 </Link>
                             </Tooltip>
                             {currentUser.role !== "user" &&
                                 <Tooltip text="Delete recipe" side="bottom">
                                     <div role="button" className="opacity-40 hover:opacity-100 hover:text-destructive"
                                     onClick={onDeleteRecipe}>
-                                        <FaTrash size={18} color="desctructive"/>
+                                        <FaRegTrashAlt size={18} color="desctructive"/>
                                     </div>
                                 </Tooltip>
                             }
@@ -72,9 +69,9 @@ export const DetailsPage = () => {
                         <div className="flex flex-col items-center sm:items-start gap-4">
                             {apiData.cover_image &&
                                 <img
+                                    alt="recipe-image"
                                     src={apiData.cover_image}
                                     className="w-[300px] h-[300px] rounded-md"
-                                    alt="recipe-image"
                                 />
                             }
                             <div className="flex items-center gap-2">
@@ -94,15 +91,15 @@ export const DetailsPage = () => {
                                     isFavorited={apiData.is_favorited}
                                 />
                                 <Servings
-                                    initServings={apiData.servings}
                                     multiSetter={setMulti}
+                                    initServings={apiData.servings}
                                 />
                             </div>
                             <div className="flex items-center gap-3">
-                                <Badge variant="secondary" size="xl">
+                                <Badge variant="secondary" size="xl" className="hover:bg-secondary">
                                     Cuisson: {apiData.cooking_time} min
                                 </Badge>
-                                <Badge variant="secondary" size="xl">
+                                <Badge variant="secondary" size="xl" className="hover:bg-secondary">
                                     Prep. time: {apiData.prep_time} min
                                 </Badge>
                             </div>
@@ -157,24 +154,21 @@ const UpdateFavorite = ({ recipeId, isFavorited }) => {
 
         const response = await api.post("/update_favorite", { recipe_id: recipeId });
         if (!response.ok) {
+            setIsFavorite(isFavorite);
             return toast.error(response.body.description);
         }
 
-        toast.success("Favorite updated!");
+        toast.success((!isFavorite ? "Added to your favorites" : "Removed from your favorites"));
     };
 
     return (
-        <Tooltip text={isFavorite ? "Remove from favorite" : "Add to favorite"}>
+        <Tooltip text={isFavorite ? "Remove favorite" : "Add favorite"}>
             <Button variant="secondary" onClick={updateFavorite}>
-                {isFavorite ?
-                    <FaStar className="text-amber-500" size={20}/>
-                    :
-                    <FaRegStar size={20}/>
-                }
+                <FaRegStar size={20} className={isFavorite && "text-amber-500"}/>
             </Button>
         </Tooltip>
     );
-}
+};
 
 
 const Servings = ({ initServings, multiSetter }) => {
@@ -202,14 +196,18 @@ const Servings = ({ initServings, multiSetter }) => {
 
     return (
         <div>
-            <Badge variant="secondary" size="xl">
-                <Button onClick={() => updateServings("remove")} variant="ghost" size="xs" disabled={disabled}>
+            <Badge variant="secondary" size="xl" className="hover:bg-secondary flex gap-3">
+                {disabled ?
                     <FaMinus/>
-                </Button>
+                    :
+                    <div role="button" onClick={() => updateServings("remove")}>
+                        <FaMinus className="hover:text-neutral-400"/>
+                    </div>
+                }
                 Servings: {servings} pers.
-                <Button onClick={() => updateServings("add")} variant="ghost" size="xs">
-                    <FaPlus/>
-                </Button>
+                <div role="button" onClick={() => updateServings("add")}>
+                    <FaPlus className="hover:text-neutral-400"/>
+                </div>
             </Badge>
         </div>
     );

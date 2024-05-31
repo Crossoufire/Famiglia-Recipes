@@ -6,15 +6,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def as_bool(value: str) -> bool:
-    """ Change value as boolean """
     if value:
         return value.lower() in ["true", "yes", "on", "1"]
     return False
 
 
 class Config:
-    """ Config class for environment variables """
-
     # Database option
     SQLALCHEMY_DATABASE_URI = (os.environ.get("FAM_DATABASE_URI") or
                                f"sqlite:///{os.path.join(basedir + '/instance', 'site.db')}")

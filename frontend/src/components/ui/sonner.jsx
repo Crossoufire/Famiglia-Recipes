@@ -7,9 +7,9 @@ const Toaster = ({ ...props }) => {
 
     return (
         <Sonner
-            theme={value.theme}
-            duration={8000}
+            duration={4000}
             closeButton={true}
+            theme={value.theme}
             {...props}
         />
     );

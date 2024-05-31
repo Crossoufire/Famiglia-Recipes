@@ -1,13 +1,13 @@
 import {toast} from "sonner";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
-import {Input} from "@/components/ui/input.jsx";
-import {useUser} from "@/providers/UserProvider.jsx";
-import {useNavigate, Link} from "react-router-dom";
-import {FormError} from "@/components/app/FormError.jsx";
-import {FormButton} from "@/components/app/FormButton.jsx";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.jsx";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.jsx";
+import {Input} from "@/components/ui/input";
+import {useUser} from "@/providers/UserProvider";
+import {Link, useNavigate} from "react-router-dom";
+import {FormError} from "@/components/app/FormError";
+import {FormButton} from "@/components/app/FormButton";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 
 
 export const LoginForm = () => {
@@ -20,26 +20,30 @@ export const LoginForm = () => {
 	const onSubmit = async (data) => {
 		setErrors("");
 
-		setIsPending(true);
-		const response = await login(data.username, data.password);
-		setIsPending(false);
+		try {
+			setIsPending(true);
+			const response = await login(data.username, data.password);
 
-		if (response.status === 401) {
-			return setErrors("Username or password incorrect");
+			if (response.status === 401) {
+				return setErrors("Username or password incorrect");
+			}
+
+			if (!response.ok) {
+				return toast.error(response.body.description);
+			}
+
+			navigate(`/dashboard`);
 		}
-
-		if (!response.ok) {
-			return toast.error(response.body.description);
+		finally {
+			setIsPending(false);
 		}
-
-		navigate(`/dashboard`);
 	};
 
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle className="flex justify-center">
-					Welcome back
+					Welcome back!
 				</CardTitle>
 			</CardHeader>
 			<CardContent>

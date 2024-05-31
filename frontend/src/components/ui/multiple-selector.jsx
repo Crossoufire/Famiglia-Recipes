@@ -206,10 +206,10 @@ const MultipleSelector = React.forwardRef((props, ref) => {
     return (
         <Command
             {...commandProps}
+            filter={commandFilter()}
             onKeyDown={(ev) => { handleKeyDown(ev); commandProps?.onKeyDown?.(ev) }}
             className={cn("overflow-visible bg-transparent", commandProps?.className)}
             shouldFilter={commandProps?.shouldFilter !== undefined ? commandProps.shouldFilter : !onSearch}
-            filter={commandFilter()}
         >
             <div className={cn("group rounded-md border border-input px-2 py-2 text-sm ring-offset-background " +
             "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2", className)}>

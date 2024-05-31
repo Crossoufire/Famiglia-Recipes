@@ -1,70 +1,82 @@
 [
     {
         "name": "Apéro",
-        "color": "#FF5733"
+        "color": "#E5A8B1"
+    },
+    {
+        "name": "Entrée",
+        "color": "#E5948B"
     },
     {
         "name": "Plat",
-        "color": "#FFD700"
+        "color": "#E5A4AD"
     },
     {
         "name": "Dessert",
-        "color": "#8A2BE2"
+        "color": "#E55996"
+    },
+    {
+        "name": "Sauce",
+        "color": "#80B8D6"
     },
     {
         "name": "Poisson",
-        "color": "#1E90FF"
+        "color": "#1FA39D"
     },
     {
         "name": "Viande rouge",
-        "color": "#B22222"
+        "color": "#E55A4A"
     },
     {
         "name": "Viande blanche",
-        "color": "#FFFAF0"
+        "color": "#E5C64A"
     },
     {
         "name": "Végétarien",
-        "color": "#32CD32"
+        "color": "#89D8A2"
     },
     {
         "name": "Végan",
-        "color": "#228B22"
+        "color": "#87B547"
     },
     {
         "name": "Fruit de mer",
-        "color": "#FF4500"
+        "color": "#E59C88"
     },
     {
         "name": "Fruit",
-        "color": "#FFA500"
+        "color": "#E59740"
     },
     {
         "name": "Légumineuse",
-        "color": "#6B8E23"
+        "color": "#6FD140"
     },
     {
         "name": "Four",
-        "color": "#800000"
+        "color": "#E57657"
     },
     {
         "name": "Casserole",
-        "color": "#FF00FF"
+        "color": "#E52389"
     },
     {
         "name": "Friteuse",
-        "color": "#FFFF00"
+        "color": "#E5C64A"
     },
     {
         "name": "Cuisson vapeur",
-        "color": "#20B2AA"
+        "color": "#00B9C3"
+    },
+    {
+        "name": "Cocotte-minute",
+        "color": "#E5D1B3"
     },
     {
         "name": "Micro-ondes",
-        "color": "#708090"
+        "color": "#6B7889"
     },
     {
         "name": "Grill",
-        "color": "#A52A2A"
+        "color": "#E54911"
     }
 ]

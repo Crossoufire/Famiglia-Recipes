@@ -1,24 +1,14 @@
 import imghdr
 import os
 import secrets
-from typing import Type, Any, Union
+import time
+from enum import Enum
+from functools import wraps
+from typing import Callable
 from flask import current_app
 
 
-def get_subclasses(cls: Type) -> Union[Type, Any]:
-    """ Get all the subclasses of a class (used now for ApiData) """
-
-    subclasses = set()
-    for subclass in cls.__subclasses__():
-        subclasses.add(subclass)
-        subclasses.update(get_subclasses(subclass))
-
-    return subclasses
-
-
 def save_picture(form_picture) -> str:
-    """ Save the recipe image locally """
-
     picture_fn = None
     if imghdr.what(form_picture) in ("gif", "jpeg", "jpg", "png", "webp", "tiff"):
         file = form_picture
@@ -28,3 +18,20 @@ def save_picture(form_picture) -> str:
         file.save(os.path.join(current_app.root_path, "static/recipe_images", picture_fn))
 
     return picture_fn
+
+
+def timer(func: Callable):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"Elapsed time: {int((end_time - start_time) * 1000)} ms")
+        return result
+    return wrapper
+
+
+class RoleType(Enum):
+    ADMIN = "admin"
+    MANAGER = "manager"
+    USER = "user"
