@@ -1,5 +1,5 @@
 import {toast} from "sonner";
-import {cn} from "@/lib/utils";
+import {cn, reorganizeForSelector} from "@/lib/utils";
 import {FaTimes} from "react-icons/fa";
 import {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input";
@@ -307,8 +307,8 @@ export const EditRecipePage = () => {
                                             maxSelected={5}
                                             value={field.value}
                                             onChange={field.onChange}
-                                            defaultOptions={apiData.labels}
                                             placeholder={"Select labels..."}
+                                            defaultOptions={reorganizeForSelector(apiData.labels)}
                                         />
                                     </FormControl>
                                     <FormMessage/>
