@@ -1,82 +1,102 @@
 [
     {
         "name": "Apéro",
-        "color": "#E5A8B1"
+        "color": "#E5A8B1",
+        "order": 1
     },
     {
         "name": "Entrée",
-        "color": "#E5948B"
+        "color": "#E5948B",
+        "order": 2
     },
     {
         "name": "Plat",
-        "color": "#E5A4AD"
+        "color": "#E5A4AD",
+        "order": 3
     },
     {
         "name": "Dessert",
-        "color": "#E55996"
+        "color": "#E55996",
+        "order": 4
     },
     {
         "name": "Sauce",
-        "color": "#80B8D6"
+        "color": "#80B8D6",
+        "order": 5
     },
     {
         "name": "Poisson",
-        "color": "#1FA39D"
-    },
-    {
-        "name": "Viande rouge",
-        "color": "#E55A4A"
-    },
-    {
-        "name": "Viande blanche",
-        "color": "#E5C64A"
-    },
-    {
-        "name": "Végétarien",
-        "color": "#89D8A2"
-    },
-    {
-        "name": "Végan",
-        "color": "#87B547"
+        "color": "#1FA39D",
+        "order": 6
     },
     {
         "name": "Fruit de mer",
-        "color": "#E59C88"
+        "color": "#E59C88",
+        "order": 7
     },
     {
-        "name": "Fruit",
-        "color": "#E59740"
+        "name": "Viande rouge",
+        "color": "#E55A4A",
+        "order": 8
+    },
+    {
+        "name": "Viande blanche",
+        "color": "#E5C64A",
+        "order": 9
     },
     {
         "name": "Légumineuse",
-        "color": "#6FD140"
+        "color": "#6FD140",
+        "order": 10
     },
     {
-        "name": "Four",
-        "color": "#E57657"
+        "name": "Végétarien",
+        "color": "#89D8A2",
+        "order": 11
+    },
+    {
+        "name": "Végan",
+        "color": "#87B547",
+        "order": 12
+    },
+    {
+        "name": "Fruit",
+        "color": "#E59740",
+        "order": 13
     },
     {
         "name": "Casserole",
-        "color": "#E52389"
+        "color": "#E52389",
+        "order": 14
     },
     {
         "name": "Friteuse",
-        "color": "#E5C64A"
+        "color": "#E5C64A",
+        "order": 15
     },
     {
         "name": "Cuisson vapeur",
-        "color": "#00B9C3"
+        "color": "#00B9C3",
+        "order": 16
     },
     {
         "name": "Cocotte-minute",
-        "color": "#E5D1B3"
+        "color": "#E5D1B3",
+        "order": 17
     },
     {
         "name": "Micro-ondes",
-        "color": "#6B7889"
+        "color": "#6B7889",
+        "order": 18
+    },
+    {
+        "name": "Four",
+        "color": "#E57657",
+        "order": 19
     },
     {
         "name": "Grill",
-        "color": "#E54911"
+        "color": "#E54911",
+        "order": 20
     }
 ]

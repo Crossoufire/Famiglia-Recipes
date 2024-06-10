@@ -34,10 +34,8 @@ export const AllRecipesPage = () => {
             setSelectedLabels([...selectedLabels, clickedLabel]);
         }
         else {
-            const insertIndex = apiData.labels.findIndex(label => label.id > clickedLabel.id);
-            const labels = [...apiData.labels.slice(0, insertIndex !== -1 ? insertIndex : apiData.labels.length),
-                clickedLabel, ...apiData.labels.slice(insertIndex !== -1 ? insertIndex : apiData.labels.length)];
-            await mutate({ ...apiData, labels: labels }, false);
+            const newLabels = [...apiData.labels, clickedLabel].sort((a, b) => a.order - b.order);
+            await mutate({ ...apiData, labels: newLabels }, false);
             setSelectedLabels(selectedLabels.filter(label => label.name !== clickedLabel.name));
         }
     };

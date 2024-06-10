@@ -3,7 +3,7 @@ import {Tooltip} from "@/components/ui/tooltip";
 import {useUser} from "@/providers/UserProvider";
 import {Loading} from "@/components/app/Loading";
 import * as Nav from "@/components/ui/navigation-menu";
-import {FaArrowRightFromBracket, FaMagnifyingGlass, FaPlus} from "react-icons/fa6";
+import {FaArrowRightFromBracket, FaMagnifyingGlass, FaPlus, FaTableCellsLarge} from "react-icons/fa6";
 
 
 export const Navbar = () => {
@@ -16,7 +16,13 @@ export const Navbar = () => {
                 <div className="md:max-w-screen-xl flex w-full justify-between items-center mx-auto container">
                     <Nav.NavigationMenu>
                         <Nav.NavigationMenuList>
-                            <Nav.NavigationMenuItem>
+                            <Nav.NavigationMenuItem className="flex items-center gap-3">
+                                <img
+                                    src="public/logo192.png"
+                                    height={35}
+                                    width={35}
+                                    alt="Famiglia-Recipes"
+                                />
                                 <p className="text-lg font-semibold mr-2">Famiglia-Recipes</p>
                             </Nav.NavigationMenuItem>
                         </Nav.NavigationMenuList>
@@ -36,8 +42,13 @@ export const Navbar = () => {
                         <div className="hidden lg:block">
                             <Nav.NavigationMenu>
                                 <Nav.NavigationMenuList>
-                                    <Nav.NavigationMenuItem>
-                                        <p className="text-lg font-semibold mr-2">Famiglia-Recipes</p>
+                                    <Nav.NavigationMenuItem className="mr-3">
+                                        <img
+                                            src="/logo192.png"
+                                            height={35}
+                                            width={35}
+                                            alt="Famiglia-Recipes"
+                                        />
                                     </Nav.NavigationMenuItem>
                                     <Nav.NavigationMenuItem>
                                         <NavLink to="/dashboard" className={Nav.navigationMenuTriggerStyle()}>
@@ -75,10 +86,10 @@ export const Navbar = () => {
                         </div>
                         <div className="lg:hidden">
                             <Nav.NavigationMenu>
-                                <Nav.NavigationMenuList className="flex items-center justify-between gap-3">
+                                <Nav.NavigationMenuList className="flex items-center justify-between gap-10">
                                     <Nav.NavigationMenuItem>
                                         <NavLink to="/dashboard" className={Nav.navigationMenuTriggerStyle()}>
-                                            Dashboard
+                                            <FaTableCellsLarge/>
                                         </NavLink>
                                     </Nav.NavigationMenuItem>
                                     <Nav.NavigationMenuItem>

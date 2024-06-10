@@ -101,7 +101,7 @@ def get_recipe_for_edit(recipe_id: int):
 
     data = dict(
         fields={key: value for key, value in recipe.to_dict().items() if key in recipe.form_only()},
-        labels=[label.to_dict() for label in Label.query.all()],
+        labels=[label.to_dict() for label in Label.query.order_by(Label.order.asc()).all()],
     )
 
     return jsonify(data=data), 200
@@ -163,7 +163,7 @@ def edit_recipe(recipe_id: int):
 def all_recipes():
     data = dict(
         recipes=[recipe.to_dict() for recipe in Recipe.query.all()],
-        labels=[label.to_dict() for label in Label.query.all()],
+        labels=[label.to_dict() for label in Label.query.order_by(Label.order.asc()).all()],
     )
 
     return jsonify(data=data), 200
@@ -190,7 +190,7 @@ def delete_recipe():
 @main_bp.route("/get_labels", methods=["GET"])
 @token_auth.login_required
 def get_labels():
-    labels = [label.to_dict() for label in Label.query.all()]
+    labels = [label.to_dict() for label in Label.query.order_by(Label.order.asc()).all()]
     return jsonify(data=labels), 200
 
 

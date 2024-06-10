@@ -192,12 +192,13 @@ class Label(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
     color = db.Column(db.String, nullable=False)
+    order = db.Column(db.Integer, nullable=False, unique=True)
 
     # --- Relationships --------------------------------------------------
     recipes = db.relationship("Recipe", secondary="recipe_label", back_populates="labels")
 
     def to_dict(self) -> Dict:
-        return {"id": self.id, "name": self.name, "color": self.color}
+        return {"id": self.id, "name": self.name, "color": self.color, "order": self.order}
 
     @classmethod
     def init_labels(cls):
@@ -209,9 +210,10 @@ class Label(db.Model):
         for label in json_labels:
             label_row = cls.query.filter_by(name=label["name"]).first()
             if not label_row:
-                db.session.add(cls(name=label["name"], color=label["color"]))
+                db.session.add(cls(name=label["name"], color=label["color"], order=label["order"]))
             else:
                 label_row.color = label["color"]
+                label_row.order = label["order"]
 
         db.session.commit()
 
