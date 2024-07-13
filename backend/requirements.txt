@@ -24,7 +24,7 @@ flask==3.0.3
     #   flask-mail
     #   flask-migrate
     #   flask-sqlalchemy
-flask-cors==4.0.0
+flask-cors==4.0.1
     # via -r requirements.in
 flask-httpauth==4.8.0
     # via -r requirements.in
