@@ -61,7 +61,7 @@ pyjwt==2.8.0
     # via -r requirements.in
 python-dotenv==1.0.1
     # via -r requirements.in
-requests==2.31.0
+requests==2.32.2
     # via -r requirements.in
 sqlalchemy==2.0.29
     # via
