@@ -73,5 +73,5 @@ typing-extensions==4.11.0
     #   sqlalchemy
 urllib3==2.2.1
     # via requests
-werkzeug==3.0.2
+werkzeug==3.0.3
     # via flask
