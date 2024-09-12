@@ -126,3 +126,5 @@ cython_debug/
 */node_modules
 backend/api/static/recipe_images/*
 !backend/api/static/recipe_images/default.png
+backend/poetry.lock
+frontend/package-lock.json

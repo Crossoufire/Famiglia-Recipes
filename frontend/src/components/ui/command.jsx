@@ -36,7 +36,7 @@ const CommandDialog = ({ children, ...props }) => {
 
 const CommandInput = React.forwardRef(({ className, ...props }, ref) => (
     <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-        <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+        <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50"/>
         <CommandPrimitive.Input
             ref={ref}
             className={cn(
@@ -85,10 +85,9 @@ CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 const CommandItem = React.forwardRef(({ className, ...props }, ref) => (
     <CommandPrimitive.Item
         ref={ref}
-        className={cn(
-            "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-            className
-        )}
+        className={cn("relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none " +
+            "aria-[selected='true']:bg-accent aria-[selected='true']:text-accent-foreground " +
+            "data-[disabled='true']:pointer-events-none data-[disabled='true']:opacity-50", className)}
         {...props} />
 ));
 CommandItem.displayName = CommandPrimitive.Item.displayName;

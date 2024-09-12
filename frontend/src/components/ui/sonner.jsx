@@ -8,7 +8,7 @@ const Toaster = ({ ...props }) => {
     return (
         <Sonner
             duration={4000}
-            closeButton={true}
+            closeButton={false}
             theme={value.theme}
             {...props}
         />
@@ -16,4 +16,4 @@ const Toaster = ({ ...props }) => {
 };
 
 
-export { Toaster };
+export {Toaster};

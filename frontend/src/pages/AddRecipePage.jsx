@@ -76,8 +76,12 @@ export const AddRecipePage = () => {
         const formData = new FormData();
 
         formData.append("image", data.image);
-        try { data = { ...data, image: data.image.name } }
-        catch { data = { ...data } }
+        try {
+            data = { ...data, image: data.image.name };
+        }
+        catch {
+            data = { ...data };
+        }
         formData.append("recipe", JSON.stringify(data));
 
         try {
@@ -130,7 +134,9 @@ export const AddRecipePage = () => {
                                                 {...field}
                                                 type="file"
                                                 value={field.value?.fileName}
-                                                onChange={ev => { field.onChange(ev.target.files[0]) }}
+                                                onChange={ev => {
+                                                    field.onChange(ev.target.files[0]);
+                                                }}
                                             />
                                         </Form.FormControl>
                                         <Form.FormMessage/>
@@ -271,7 +277,7 @@ export const AddRecipePage = () => {
                                                 </Form.FormControl>
                                                 {idx !== 0 &&
                                                     <Button variant="ghost" size="sm" role="button" title="Remove field"
-                                                    onClick={() => removeNewField(idx)} tabIndex="-1">
+                                                            onClick={() => removeNewField(idx)} tabIndex="-1">
                                                         <FaTimes/>
                                                     </Button>
                                                 }
@@ -284,7 +290,7 @@ export const AddRecipePage = () => {
                         </div>
                         <div className="col-span-12">
                             <Button type="button" variant="outline" size="sm" onClick={addNewField}
-                            tabIndex={inField.fields.length * 2 + 4}>
+                                    tabIndex={inField.fields.length * 2 + 4}>
                                 Add More
                             </Button>
                         </div>
@@ -324,7 +330,7 @@ export const AddRecipePage = () => {
                                 }
                             />
                         ))}
-                        <Button type="button" variant="outline" size="sm" onClick={() => stepsField.append({value: ""})}>
+                        <Button type="button" variant="outline" size="sm" onClick={() => stepsField.append({ value: "" })}>
                             Add Step
                         </Button>
                     </div>
@@ -343,8 +349,14 @@ export const AddRecipePage = () => {
                                             maxSelected={5}
                                             value={field.value}
                                             onChange={field.onChange}
-                                            placeholder={"Select labels..."}
+                                            placeholder="Select Labels..."
+                                            className="h-9 flex items-center"
                                             defaultOptions={reorganizeForSelector(labels)}
+                                            emptyIndicator={
+                                                <p className="text-center text-lg text-gray-400">
+                                                    No labels found
+                                                </p>
+                                            }
                                         />
                                     </Form.FormControl>
                                     <Form.FormMessage/>

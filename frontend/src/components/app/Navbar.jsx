@@ -18,9 +18,9 @@ export const Navbar = () => {
                         <Nav.NavigationMenuList>
                             <Nav.NavigationMenuItem className="flex items-center gap-3">
                                 <img
-                                    src="public/logo192.png"
-                                    height={35}
                                     width={35}
+                                    height={35}
+                                    src="/logo192.png"
                                     alt="Famiglia-Recipes"
                                 />
                                 <p className="text-lg font-semibold mr-2">Famiglia-Recipes</p>

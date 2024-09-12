@@ -57,10 +57,12 @@ const removePickedOption = (groupOption, picked) => {
 
 
 const MultipleSelector = React.forwardRef((props, ref) => {
-    const { value, onChange, placeholder, defaultOptions: arrayDefaultOptions = [],
+    const {
+        value, onChange, placeholder, defaultOptions: arrayDefaultOptions = [],
         options: arrayOptions, delay, onSearch, loadingIndicator, emptyIndicator, maxSelected = Number.MAX_SAFE_INTEGER,
         onMaxSelected, hidePlaceholderWhenSelected, disabled, groupBy, className, selectFirstItem = true,
-        creatable = false, triggerSearchOnFocus = false, commandProps, inputProps } = props;
+        creatable = false, triggerSearchOnFocus = false, commandProps, inputProps
+    } = props;
 
     const inputRef = React.useRef(null);
     const [open, setOpen] = React.useState(false);
@@ -72,7 +74,8 @@ const MultipleSelector = React.forwardRef((props, ref) => {
 
     React.useImperativeHandle(ref, () => ({
         selectedValue: [...selected],
-        input: inputRef.current }), [selected]);
+        input: inputRef.current
+    }), [selected]);
 
     const handleUnselect = React.useCallback((option) => {
         const newOptions = selected.filter((s) => s.value !== option.value);
@@ -145,7 +148,10 @@ const MultipleSelector = React.forwardRef((props, ref) => {
             <CommandItem
                 value={inputValue}
                 className="cursor-pointer"
-                onMouseDown={(ev) => { ev.preventDefault(); ev.stopPropagation() }}
+                onMouseDown={(ev) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                }}
                 onSelect={(value) => {
                     if (selected.length >= maxSelected) {
                         onMaxSelected?.(selected.length);
@@ -207,12 +213,15 @@ const MultipleSelector = React.forwardRef((props, ref) => {
         <Command
             {...commandProps}
             filter={commandFilter()}
-            onKeyDown={(ev) => { handleKeyDown(ev); commandProps?.onKeyDown?.(ev) }}
+            onKeyDown={(ev) => {
+                handleKeyDown(ev);
+                commandProps?.onKeyDown?.(ev);
+            }}
             className={cn("overflow-visible bg-transparent", commandProps?.className)}
-            shouldFilter={commandProps?.shouldFilter !== undefined ? commandProps.shouldFilter : !onSearch}
+            shouldFilter={commandProps?.shouldFilter === undefined ? !onSearch : commandProps.shouldFilter}
         >
             <div className={cn("group rounded-md border border-input px-2 py-2 text-sm ring-offset-background " +
-            "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2", className)}>
+                "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2", className)}>
                 <div className="flex flex-wrap gap-2">
                     {selected.map((option) => {
                         return (
@@ -245,7 +254,7 @@ const MultipleSelector = React.forwardRef((props, ref) => {
                         }}
                         placeholder={hidePlaceholderWhenSelected && selected.length !== 0 ? "" : placeholder}
                         className={cn("ml-2 flex-1 bg-transparent h-8 outline-none placeholder:text-muted-foreground " +
-                        "cursor-pointer", inputProps?.className)}
+                            "cursor-pointer", inputProps?.className)}
                     />
                 </div>
             </div>
@@ -284,7 +293,7 @@ const MultipleSelector = React.forwardRef((props, ref) => {
                                                             onChange?.(newOptions);
                                                         }}
                                                         className={cn("cursor-pointer", option.disable &&
-                                                        "cursor-default text-muted-foreground")}
+                                                            "cursor-default text-muted-foreground")}
                                                     >
                                                         {option.label}
                                                     </CommandItem>
