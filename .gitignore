@@ -119,16 +119,18 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Pycharm
+.idea/
+
 
 # ----- Famiglia-Recipes ----------------------------------------------------------------------
-
-.idea/
 
 # BACKEND STUFF
 backend/.env
 backend/.flaskenv
-backend/poetry.lock
-
+backend/uv.lock
+backend/instance/*
+backend/.python-version
 backend/api/static/recipe_images/*
 !backend/api/static/recipe_images/default.jpg
 
