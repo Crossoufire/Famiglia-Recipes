@@ -1,7 +1,9 @@
 import unittest
 from datetime import datetime
 from typing import Type, Dict
+
 from werkzeug.security import generate_password_hash
+
 from backend.api import db, create_app
 from backend.config import Config
 
@@ -36,8 +38,8 @@ class BaseTest(unittest.TestCase):
         self.app_context.push()
         db.create_all()
 
-        from backend.api.models import User
-        from backend.api.models import Label
+        from backend.api.models.models import User
+        from backend.api.models.models import Label
 
         user = User(
             username="test",

@@ -1,5 +1,7 @@
 import os
+
 from dotenv import load_dotenv
+
 
 load_dotenv()
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,7 +23,6 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
     ACCESS_TOKEN_MINUTES = int(os.environ.get("ACCESS_TOKEN_MINUTES") or "15")
     REFRESH_TOKEN_DAYS = int(os.environ.get("REFRESH_TOKEN_DAYS") or "7")
-    REFRESH_TOKEN_IN_COOKIE = as_bool(os.environ.get("REFRESH_TOKEN_IN_COOKIE") or "yes")
     RESET_TOKEN_MINUTES = int(os.environ.get("RESET_TOKEN_MINUTES") or "15")
     MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 

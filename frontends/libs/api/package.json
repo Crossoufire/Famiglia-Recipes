@@ -1,0 +1,7 @@
+{
+    "name": "@famiglia-recipes/api",
+    "version": "1.0.0",
+    "description": "API system abstraction for Famiglia-Recipes",
+    "private": true,
+    "main": "src/index.js"
+}

@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ],
+            "@famiglia-recipes/api": [
+                "../../libs/api"
+            ]
+        }
+    }
+}

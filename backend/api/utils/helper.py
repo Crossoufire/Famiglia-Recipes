@@ -5,6 +5,8 @@ import time
 from enum import Enum
 from functools import wraps
 from typing import Callable
+from datetime import datetime, timezone
+
 from flask import current_app
 
 
@@ -28,7 +30,16 @@ def timer(func: Callable):
         end_time = time.time()
         print(f"Elapsed time: {int((end_time - start_time) * 1000)} ms")
         return result
+
     return wrapper
+
+
+def aware_utcnow():
+    return datetime.now(timezone.utc)
+
+
+def naive_utcnow():
+    return aware_utcnow().replace(tzinfo=None)
 
 
 class RoleType(Enum):

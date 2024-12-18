@@ -1,12 +1,14 @@
 import logging
 import os
-from logging.handlers import SMTPHandler, RotatingFileHandler
 from typing import Type
+from logging.handlers import SMTPHandler, RotatingFileHandler
+
 from flask import Flask
 from flask_cors import CORS
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+
 from backend.config import Config
 
 
@@ -19,7 +21,7 @@ cors = CORS()
 
 def _import_blueprints(app: Flask):
     from backend.api.routes.tokens import tokens as tokens_bp
-    from backend.api.routes.errors import errors as errors_bp
+    from backend.api.core.errors import errors as errors_bp
     from backend.api.routes.main import main_bp as main_bp
 
     api_blueprints = [main_bp, errors_bp, tokens_bp]
@@ -79,7 +81,7 @@ def create_app(config_class: Type[Config] = Config) -> Flask:
             _create_app_logger(app)
             _create_mail_handler(app)
 
-        from backend.api.models import Label
+        from backend.api.models.models import Label
         Label.init_labels()
 
         return app
