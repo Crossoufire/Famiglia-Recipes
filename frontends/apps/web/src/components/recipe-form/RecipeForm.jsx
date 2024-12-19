@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {useForm} from "react-hook-form";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -12,10 +13,12 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 
 export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type }) => {
     const form = useForm({ defaultValues: initValues });
+    const [blockerActive, setBlockerActive] = useState(true);
 
     useBlocker({
         shouldBlockFn: () => {
             if (!form.formState.isDirty) return false;
+            if (!blockerActive) return false;
             return !confirm("Are you sure you want to leave? All your changes will be lost.");
         },
     });
@@ -201,7 +204,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-52" disabled={pendingState || form.formState.isSubmitting}>
+                <Button type="submit" className="w-52" disabled={pendingState || form.formState.isSubmitting} onClick={() => setBlockerActive(false)}>
                     {type === "Creation" ? "Create Recipe" : "Edit Recipe"}
                 </Button>
             </form>
