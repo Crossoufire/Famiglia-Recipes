@@ -123,7 +123,6 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                     control={form.control}
                     rules={{
                         validate: (value) => {
-                            console.log(value);
                             if (!value || value.length === 0) {
                                 return "One quantity and ingredient required.";
                             }

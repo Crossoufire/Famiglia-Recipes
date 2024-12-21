@@ -92,9 +92,9 @@ class User(db.Model):
         user_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in excluded_attrs}
 
         user_dict.update({
-            "registered": self.registered.strftime("%d %b %Y"),
-            "last_seen": self.last_seen.strftime("%d %b %Y"),
             "role": RoleType(self.role).value,
+            "last_seen": self.last_seen.strftime("%d %b %Y"),
+            "registered": self.registered.strftime("%d %b %Y"),
         })
 
         return user_dict

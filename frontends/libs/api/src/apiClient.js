@@ -9,8 +9,9 @@ export class ApiClient {
         this.base_url = `${base_api_url}/api`;
     }
 
-    isAuthenticated() {
-        return this.getAccessToken() !== null;
+    async isAuthenticated() {
+        const accessToken = await this.getAccessToken();
+        return accessToken !== null;
     }
 
     setAccessToken(_token) {
@@ -55,11 +56,12 @@ export class ApiClient {
 
     async request(data) {
         let response = await this.requestInternal(data);
+        const isAuthenticated = await this.isAuthenticated();
 
-        if ((response.status === 401 || (response.status === 403 && this.isAuthenticated())) && data.url !== "/tokens") {
-            let beforeRenewAccessToken = this.getAccessToken();
+        if ((response.status === 401 || (response.status === 403 && isAuthenticated)) && data.url !== "/tokens") {
+            let beforeRenewAccessToken = await this.getAccessToken();
 
-            const body = { access_token: this.getAccessToken() };
+            const body = { access_token: await this.getAccessToken() };
 
             // Include refresh token in body for mobile clients
             if (!this.includeCredentials()) {
@@ -80,7 +82,7 @@ export class ApiClient {
             }
 
             // Check no another call was made just before that changed the access and refresh tokens
-            if (!refreshResponse.ok && (beforeRenewAccessToken !== this.getAccessToken())) {
+            if (!refreshResponse.ok && (beforeRenewAccessToken !== await this.getAccessToken())) {
                 response = await this.requestInternal(data);
             }
         }
@@ -96,7 +98,7 @@ export class ApiClient {
             let body = {
                 method: data.method,
                 headers: {
-                    "Authorization": `Bearer ${this.getAccessToken()}`,
+                    "Authorization": `Bearer ${await this.getAccessToken()}`,
                     "X-Is-Mobile": !this.includeCredentials(),
                     ...(data.removeContentType ? {} : { "Content-Type": "application/json" }),
                     ...data.headers,
