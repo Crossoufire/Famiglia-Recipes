@@ -1,10 +1,11 @@
 import {useState} from "react";
-import {useRouter} from "expo-router";
+import {Link, useRouter} from "expo-router";
 import {Search} from "lucide-react-native";
+import {Loading} from "@/components/Loading";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {allRecipesOptions, queryKeys} from "@famiglia-recipes/api";
 import {groupRecipesAlphabetically, normalizeStr} from "famiglia-recipes/src/lib/utils";
-import {Pressable, RefreshControl, ScrollView, SectionList, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Pressable, RefreshControl, ScrollView, Text, TextInput, View} from "react-native";
 
 
 export default function AllRecipesScreen() {
@@ -14,7 +15,7 @@ export default function AllRecipesScreen() {
     const [selectedLabels, setSelectedLabels] = useState([]);
     const { data: apiData, isLoading, error, isRefetching, refetch } = useQuery(allRecipesOptions());
 
-    if (isLoading) return <Text>Loading...</Text>;
+    if (isLoading) return <Loading/>;
     if (error) return <Text>Error: {error?.description}</Text>;
 
     const filteredRecipes = apiData.recipes.filter(recipe => {
@@ -47,7 +48,7 @@ export default function AllRecipesScreen() {
 
     return (
         <ScrollView className="mt-8 mb-8" refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch}/>}>
-            <View className="flex flex-col gap-6">
+            <View className="flex flex-col gap-6 mb-2">
                 <View className="rounded-md border border-neutral-500 w-full">
                     <View className="flex flex-row items-center pl-2.5 w-full">
                         <Search color="#737373" size={20}/>
@@ -92,25 +93,44 @@ export default function AllRecipesScreen() {
                     </View>
                 </View>
             </View>
-            <SectionList
-                className="mt-6"
-                sections={sections}
-                keyExtractor={item => `section-${item.id}`}
-                renderSectionHeader={({ section }) => (
-                    <Text className="text-2xl font-semibold text-neutral-400 ml-2 mt-4">
-                        {section.title}
-                    </Text>
-                )}
-                renderItem={({ item: recipe }) => (
-                    <View key={`badge-view-${recipe.id}`} className="ml-2 mb-1">
-                        <TouchableOpacity onPress={() => router.navigate(`details/${recipe.id}`)}>
-                            <Text className="text-lg text-white">
-                                {recipe.title}
-                            </Text>
-                        </TouchableOpacity>
+            <View>
+                {sections.map(section => (
+                    <View>
+                        <Text className="text-2xl font-semibold text-cyan-300 mt-8">
+                            {section.title}
+                        </Text>
+                        <View className="flex flex-col gap-2">
+                            {section.data.map(recipe =>
+                                <Link key={recipe.id} href={`/details/${recipe.id}`}>
+                                    <Text className="text-white">
+                                        {recipe.title}
+                                    </Text>
+                                </Link>
+                            )}
+                        </View>
                     </View>
-                )}
-            />
+                ))}
+
+            </View>
+            {/*<SectionList*/}
+            {/*    className="mt-6"*/}
+            {/*    sections={sections}*/}
+            {/*    keyExtractor={item => `section-${item.id}`}*/}
+            {/*    renderSectionHeader={({ section }) => (*/}
+            {/*        <Text className="text-2xl font-semibold text-neutral-400 ml-2 mt-4">*/}
+            {/*            {section.title}*/}
+            {/*        </Text>*/}
+            {/*    )}*/}
+            {/*    renderItem={({ item: recipe }) => (*/}
+            {/*        <View key={`badge-view-${recipe.id}`} className="ml-2 mb-1">*/}
+            {/*            <TouchableOpacity onPress={() => router.navigate(`details/${recipe.id}`)}>*/}
+            {/*                <Text className="text-lg text-white">*/}
+            {/*                    {recipe.title}*/}
+            {/*                </Text>*/}
+            {/*            </TouchableOpacity>*/}
+            {/*        </View>*/}
+            {/*    )}*/}
+            {/*/>*/}
         </ScrollView>
     );
 }

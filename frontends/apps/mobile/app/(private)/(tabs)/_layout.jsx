@@ -7,15 +7,15 @@ export default function TabLayout() {
         <Tabs>
             <Tabs.Screen
                 name="dashboard/index"
-                options={{ title: "Dashboard", tabBarIcon: () => <Home color="#e2e2e2" size={18}/> }}
+                options={{ title: "Your dashboard", tabBarLabel: "Dashboard", tabBarIcon: () => <Home color="#e2e2e2" size={16}/> }}
             />
             <Tabs.Screen
                 name="all-recipes/index"
-                options={{ title: "All Recipes", tabBarIcon: () => <Search color="#e2e2e2" size={18}/> }}
+                options={{ title: "All Recipes", tabBarIcon: () => <Search color="#e2e2e2" size={16}/> }}
             />
             <Tabs.Screen
                 name="add-recipe/index"
-                options={{ title: "Add Recipe", tabBarIcon: () => <PlusCircle color="#e2e2e2" size={18}/> }}
+                options={{ title: "Add Recipe", tabBarIcon: () => <PlusCircle color="#e2e2e2" size={16}/> }}
             />
         </Tabs>
     );

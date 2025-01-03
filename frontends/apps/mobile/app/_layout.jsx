@@ -20,7 +20,7 @@ const theme = {
     dark: true,
     colors: {
         primary: "hsl(0 0% 98%)",
-        background: "hsl(0 0% 6%)",
+        background: "hsl(0,0%,13%)",
         card: "hsl(206 18% 10%)",
         text: "hsl(0 0% 98%)",
         border: "hsl(0 0% 14.9%)",
@@ -61,9 +61,9 @@ export default function RootLayout() {
             <StatusBar style="dark"/>
             <QueryClientProvider client={queryClient}>
                 <Stack>
-                    <Stack.Screen name="index" options={{ title: "Login" }}/>
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
-                    <Stack.Screen name="details/[recipeId]" options={{ title: "Details" }}/>
+                    <Stack.Screen name="login" options={{ headerShown: false }}/>
+                    <Stack.Screen name="index" options={{ headerShown: false }}/>
+                    <Stack.Screen name="(private)" options={{ headerShown: false }}/>
                 </Stack>
             </QueryClientProvider>
         </ThemeProvider>

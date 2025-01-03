@@ -61,7 +61,7 @@ export class ApiClient {
         if ((response.status === 401 || (response.status === 403 && isAuthenticated)) && data.url !== "/tokens") {
             let beforeRenewAccessToken = await this.getAccessToken();
 
-            const body = { access_token: await this.getAccessToken() };
+            const body = { access_token: beforeRenewAccessToken };
 
             // Include refresh token in body for mobile clients
             if (!this.includeCredentials()) {
@@ -82,7 +82,8 @@ export class ApiClient {
             }
 
             // Check no another call was made just before that changed the access and refresh tokens
-            if (!refreshResponse.ok && (beforeRenewAccessToken !== await this.getAccessToken())) {
+            const newAccessToken = await this.getAccessToken();
+            if (!refreshResponse.ok && (beforeRenewAccessToken !== newAccessToken)) {
                 response = await this.requestInternal(data);
             }
         }
@@ -172,7 +173,8 @@ export class ApiClient {
     };
 
     async fetchCurrentUser() {
-        if (this.isAuthenticated()) {
+        const isAuthenticated = await this.isAuthenticated();
+        if (isAuthenticated) {
             const response = await this.get("/current_user");
             return response.ok ? response.body : null;
         }

@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {Loading} from "@/components/Loading";
 import {useLocalSearchParams, useRouter} from "expo-router";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {ChefHat, CircleCheck, Clock, History, Minus, Plus} from "lucide-react-native";
@@ -15,7 +16,7 @@ export default function DetailsScreen() {
     const { deleteRecipe, updateFavorite } = useMutations();
     const { data: recipe, isLoading, error, isRefetching, refetch } = useQuery(recipeDetailsOptions(recipeId));
 
-    if (isLoading) return <Text>Loading...</Text>;
+    if (isLoading) return <Loading/>;
     if (error) return <Text>Error: {error?.description}</Text>;
 
     const onDeleteRecipe = async () => {
@@ -48,15 +49,15 @@ export default function DetailsScreen() {
     return (
         <ScrollView className="mt-6" refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch}/>}
                     style={{ paddingLeft: 10, paddingRight: 10 }}>
-            <Text className="text-2xl text-white tracking-tight font-bold mb-4">
-                {recipe.title}
-            </Text>
             <Image
                 style={{ height: 300 }}
                 className={"w-full mb-4"}
                 source={{ uri: recipe.cover_image || "https://placehold.co/300x200" }}
             />
-            <View className="flex flex-row flex-wrap items-center justify-between mb-5">
+            <Text className="text-3xl text-white tracking-tight font-bold mb-4">
+                {recipe.title}
+            </Text>
+            <View className="flex flex-row flex-wrap items-center justify-between mb-8">
                 <View className="flex flex-row items-center justify-between gap-2">
                     <Clock size={20} color="#d97706"/>
                     <View>
@@ -107,7 +108,7 @@ export default function DetailsScreen() {
                     )}
                 </View>
             </View>
-            <View className="mt-8">
+            <View className="mt-10 mb-10">
                 <Text className="text-2xl font-semibold mb-4 tracking-tight text-white">
                     Instructions
                 </Text>
