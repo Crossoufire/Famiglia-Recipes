@@ -64,6 +64,17 @@ def add_recipe():
     db.session.add(new_recipe)
     db.session.commit()
 
+    # Add comment to recipe
+    new_comment = Comment(
+        user_id=current_user.id,
+        recipe_id=new_recipe.id,
+        content=json_data.get("comment"),
+        created_at=naive_utcnow(),
+    )
+
+    db.session.add(new_comment)
+    db.session.commit()
+
     return jsonify(data=dict(recipe_id=new_recipe.id)), 200
 
 
@@ -120,7 +131,6 @@ def edit_recipe(recipe_id: int):
     recipe.cooking_time = json_data["cooking"]
     recipe.prep_time = json_data["preparation"]
     recipe.servings = json_data["servings"]
-    recipe.comment = json_data.get("comment")
     recipe.ingredients = json.dumps(ingredients)
     recipe.steps = json.dumps(steps)
 
@@ -153,6 +163,10 @@ def delete_recipe():
         return abort(400, description="Invalid request")
 
     recipe = Recipe.query.get_or_404(recipe_id)
+
+    # Delete comments
+    Comment.query.filter_by(recipe_id=recipe_id).delete()
+    
     db.session.delete(recipe)
     db.session.commit()
 

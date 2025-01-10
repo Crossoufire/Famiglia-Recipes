@@ -190,19 +190,21 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                         </FormItem>
                     )}
                 />
-                <FormField
-                    name="comment"
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Comment</FormLabel>
-                            <FormControl>
-                                <Textarea {...field}/>
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    )}
-                />
+                {type === "Creation" &&
+                    <FormField
+                        name="comment"
+                        control={form.control}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Comment</FormLabel>
+                                <FormControl>
+                                    <Textarea {...field}/>
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                }
                 <Button type="submit" className="w-52" disabled={pendingState || form.formState.isSubmitting} onClick={() => setBlockerActive(false)}>
                     {type === "Creation" ? "Create Recipe" : "Edit Recipe"}
                 </Button>

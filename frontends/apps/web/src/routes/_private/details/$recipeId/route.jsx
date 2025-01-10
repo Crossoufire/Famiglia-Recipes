@@ -74,7 +74,7 @@ function RecipeDetailsPage() {
                                     <Pen className="h-4 w-4"/>
                                 </Button>
                             </Link>
-                            {currentUser.role === "user" &&
+                            {currentUser.role !== "user" &&
                                 <Button variant="outline" size="icon" className="h-8 w-8" onClick={onDeleteRecipe}>
                                     <Trash2 className="h-4 w-4"/>
                                 </Button>
