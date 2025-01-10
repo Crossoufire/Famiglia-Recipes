@@ -9,21 +9,20 @@ export class ApiClient {
         this.base_url = `${base_api_url}/api`;
     }
 
-    async isAuthenticated() {
-        const accessToken = await this.getAccessToken();
-        return accessToken !== null;
+    isAuthenticated() {
+        return this.getAccessToken().then(token => !!token);
     }
 
     setAccessToken(_token) {
-        throw new Error("setAccessToken needs to be implemented by the child class");
+        return Promise.resolve();
     }
 
     getAccessToken() {
-        return null;
+        return Promise.resolve(null);
     }
 
     removeAccessToken() {
-        throw new Error("removeAccessToken needs to be implemented by the child class");
+        return Promise.resolve();
     }
 
     setRefreshToken(value) {

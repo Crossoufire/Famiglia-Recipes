@@ -4,8 +4,10 @@ import {createFileRoute, redirect} from "@tanstack/react-router";
 
 // noinspection JSCheckFunctionSignatures,JSUnusedGlobalSymbols
 export const Route = createFileRoute("/_public")({
-    beforeLoad: ({ context: { auth } }) => {
-        if (auth.currentUser && getApiClient().isAuthenticated()) {
+    beforeLoad: async ({ context: { auth } }) => {
+        const apiClient = getApiClient();
+        const isAuthenticated = await apiClient.isAuthenticated();
+        if (auth.currentUser && isAuthenticated) {
             throw redirect({ to: "/dashboard" });
         }
     },

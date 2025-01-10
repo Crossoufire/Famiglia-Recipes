@@ -3,9 +3,9 @@ import {cn} from "@/lib/utils";
 import {useEffect, useState} from "react";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
+import {Separator} from "@/components/ui/separator";
 import {MutedText} from "@/components/app/MutedText";
 import {PageTitle} from "@/components/app/PageTitle";
-import {Separator} from "@/components/ui/separator";
 import {Card, CardContent} from "@/components/ui/card";
 import {useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
 import {queryKeys, useAuth, useMutations} from "@famiglia-recipes/api";
@@ -56,8 +56,8 @@ function RecipeDetailsPage() {
 
     return (
         <PageTitle title={`${recipe.title}`} onlyHelmet>
-            <div className="flex max-sm:flex-col max-w-6xl mx-auto mt-8 gap-10">
-                <div className="w-2/3 max-sm:w-full">
+            <div className="flex max-sm:flex-col max-w-6xl mx-auto mt-8 gap-8 max-lg:gap-5">
+                <div className="w-2/3 max-sm:w-full max-lg:w-[65%]">
                     <div className="space-y-6">
                         <h1 className="text-3xl font-bold tracking-tight">
                             {recipe.title}
@@ -88,7 +88,7 @@ function RecipeDetailsPage() {
                             <div className="flex items-center justify-between gap-3">
                                 <Clock className="w-6 h-6 text-amber-600"/>
                                 <div>
-                                    <div className="font-semibold">Preparation</div>
+                                    <div className="font-semibold">Prep.</div>
                                     <div>{recipe.prep_time} min</div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@ function RecipeDetailsPage() {
                         <ol className="space-y-4">
                             {recipe.steps.map((step, idx) =>
                                 <li key={idx}>
-                                    <div className="grid grid-cols-[80px_1fr]">
+                                    <div className="grid grid-cols-[80px_1fr] text-lg">
                                         <div className="flex items-center font-semibold text-cyan-500">Step {idx + 1}</div>
                                         <div>{step.description}</div>
                                     </div>
@@ -139,7 +139,6 @@ function RecipeDetailsPage() {
                             <div className="space-y-6">
                                 <Card className="p-0">
                                     <CardContent className="px-4 py-3">
-                                        {/*<p className="font-semibold mb-2">Someone</p>*/}
                                         <p>{recipe.comment}</p>
                                     </CardContent>
                                 </Card>
@@ -149,7 +148,7 @@ function RecipeDetailsPage() {
                         }
                     </div>
                 </div>
-                <div className="w-1/3 max-sm:w-full">
+                <div className="w-1/3 max-sm:w-full max-lg:w-[35%]">
                     <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
                         <img
                             alt={recipe.title}
@@ -160,7 +159,7 @@ function RecipeDetailsPage() {
                     <Card className="sticky top-24 mt-8">
                         <CardContent className="pt-3">
                             <h2 className="text-2xl font-semibold tracking-tight mb-6">Ingredients</h2>
-                            <ul className="space-y-3">
+                            <ul className="space-y-3 text-lg">
                                 {recipe.ingredients.map(data =>
                                     <li key={data.ingredient} className="flex items-start">
                                         <CircleCheck className="w-4 h-4 mr-4 mt-1 flex-shrink-0 text-green-600"/>

@@ -16,7 +16,7 @@ export const RecipeCard = ({ recipe }) => {
                     />
                 </div>
                 <div className="flex flex-col flex-grow">
-                    <CardHeader className="space-y-3 -mt-1">
+                    <CardHeader className="space-y-3 -mt-1 max-lg:px-4">
                         <div className="flex items-center justify-between text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
                                 <Clock className="h-4 w-4 text-amber-600"/>
@@ -28,15 +28,15 @@ export const RecipeCard = ({ recipe }) => {
                             </div>
                         </div>
                         <div className="space-y-0.5">
-                            <h2 className="text-2xl font-bold tracking-tight line-clamp-2" title={recipe.title}>
+                            <h2 className="text-2xl max-lg:text-xl font-bold tracking-tight line-clamp-2" title={recipe.title}>
                                 {recipe.title}
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                                Added by <b>{recipe.submitter.username}</b> on {recipe.submitted_date}
+                                <b>{recipe.submitter.username}</b> - {recipe.submitted_date}
                             </p>
                         </div>
                     </CardHeader>
-                    <CardFooter className="mt-auto pb-4">
+                    <CardFooter className="mt-auto pb-4 max-lg:px-4">
                         <div className="flex flex-wrap gap-2">
                             {recipe.labels.map(label =>
                                 <Badge key={label.id} variant="inactive" color={label.color}>

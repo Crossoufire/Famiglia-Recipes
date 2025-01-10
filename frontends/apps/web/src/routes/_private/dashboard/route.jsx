@@ -25,7 +25,7 @@ function DashboardPage() {
                 {apiData.favorite_recipes.length === 0 ?
                     <MutedText>No favorite recipes added yet</MutedText>
                     :
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid max-sm:grid-cols-1 max-lg:grid-cols-3 grid-cols-4 gap-6 max-lg:gap-4">
                         {apiData.favorite_recipes.map(recipe =>
                             <RecipeCard
                                 key={recipe.id}
@@ -41,7 +41,7 @@ function DashboardPage() {
                 {apiData.last_recipes.length === 0 ?
                     <MutedText>No last recipes added yet</MutedText>
                     :
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid max-sm:grid-cols-1 max-lg:grid-cols-3 grid-cols-4 gap-6 max-lg:gap-4">
                         {apiData.last_recipes.map(recipe =>
                             <RecipeCard
                                 key={recipe.id}
