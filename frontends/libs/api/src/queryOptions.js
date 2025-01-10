@@ -9,6 +9,7 @@ export const queryKeys = {
     dashboardKey: () => ["dashboard"],
     allRecipesKey: () => ["allRecipes"],
     editRecipeKey: (recipeId) => ["editRecipe", recipeId],
+    recipeCommentsKey: (recipeId) => ["comments", recipeId],
     recipeDetailsKey: (recipeId) => ["recipeDetails", recipeId],
 };
 
@@ -35,6 +36,12 @@ export const allRecipesOptions = () => queryOptions({
 export const recipeDetailsOptions = (recipeId) => queryOptions({
     queryKey: queryKeys.recipeDetailsKey(recipeId),
     queryFn: () => fetcher({ url: `/details/${recipeId}` }),
+});
+
+
+export const recipeCommentsOptions = (recipeId) => queryOptions({
+    queryKey: queryKeys.recipeCommentsKey(recipeId),
+    queryFn: () => fetcher({ url: `/recipe/${recipeId}/comments` }),
 });
 
 

@@ -1,4 +1,4 @@
-import {postFetcher} from "./helpers";
+import {fetcher, postFetcher} from "./helpers";
 import {useMutation} from "@tanstack/react-query";
 
 
@@ -24,6 +24,15 @@ const mutationFunctionsMap = {
     updateRecipe: ({ recipe_id, data }) => postFetcher({
         url: `/edit_recipe/${recipe_id}`, data, options: { removeContentType: true },
     }),
+    addComment: ({ recipe_id, content }) => postFetcher({
+        url: `/recipe/${recipe_id}/comments`, data: { content },
+    }),
+    editComment: ({ comment_id, content }) => postFetcher({
+        url: `/comments/${comment_id}`, data: { content },
+    }),
+    deleteComment: ({ comment_id }) => fetcher({
+        url: `/comments/${comment_id}`, method: "delete",
+    }),
 };
 
 
@@ -35,6 +44,12 @@ export const useMutations = () => {
     const updateFavorite = useMutation({ mutationFn: mutationFunctionsMap.updateFavorite });
     const addRecipe = useMutation({ mutationFn: mutationFunctionsMap.addRecipe });
     const updateRecipe = useMutation({ mutationFn: mutationFunctionsMap.updateRecipe });
+    const addComment = useMutation({ mutationFn: mutationFunctionsMap.addComment });
+    const editComment = useMutation({ mutationFn: mutationFunctionsMap.editComment });
+    const deleteComment = useMutation({ mutationFn: mutationFunctionsMap.deleteComment });
 
-    return { resetPassword, registerToken, forgotPassword, deleteRecipe, updateFavorite, addRecipe, updateRecipe };
+    return {
+        resetPassword, registerToken, forgotPassword, deleteRecipe, updateFavorite,
+        addRecipe, updateRecipe, addComment, editComment, deleteComment,
+    };
 };

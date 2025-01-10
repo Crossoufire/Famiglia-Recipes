@@ -3,7 +3,7 @@ import json
 from flask import request, abort, jsonify, Blueprint
 
 from backend.api import db
-from backend.api.models.models import Recipe, Label
+from backend.api.models.models import Recipe, Label, Comment
 from backend.api.core.handlers import token_auth, current_user
 from backend.api.utils.helper import save_picture, naive_utcnow
 
@@ -165,8 +165,79 @@ def get_labels():
     return jsonify(data=Label.all_labels_as_list()), 200
 
 
-@main_bp.route("/export_recipe")
+@main_bp.route("/recipe/<int:recipe_id>/comments", methods=["GET"])
 @token_auth.login_required
-def export_recipe():
-    """ Export recipe as PDF (not implemented for now) """
-    pass
+def get_recipe_comments(recipe_id: int):
+    """ Get all comments for a specific recipe """
+    comments = Comment.query.filter_by(recipe_id=recipe_id).order_by(Comment.created_at.desc()).all()
+    return jsonify(data=[comment.to_dict() for comment in comments]), 200
+
+
+@main_bp.route("/recipe/<int:recipe_id>/comments", methods=["POST"])
+@token_auth.login_required
+def add_comment(recipe_id: int):
+    """ Add a new comment to a recipe """
+
+    try:
+        data = request.get_json()
+        content = data["content"]
+    except:
+        return abort(400, description="Invalid request")
+
+    if not content.strip():
+        return abort(400, description="Comment cannot be empty")
+
+    comment = Comment(
+        user_id=current_user.id,
+        recipe_id=recipe_id,
+        content=content,
+        created_at=naive_utcnow(),
+    )
+
+    db.session.add(comment)
+    db.session.commit()
+
+    return jsonify(data=comment.to_dict()), 200
+
+
+@main_bp.route("/comments/<int:comment_id>", methods=["POST"])
+@token_auth.login_required
+def update_comment(comment_id: int):
+    """ Update an existing comment """
+
+    comment = Comment.query.get_or_404(comment_id)
+
+    # Check if current user is comment author
+    if current_user.id != comment.user_id:
+        return abort(403, description="You can only edit your own comments")
+
+    try:
+        data = request.get_json()
+        content = data["content"]
+    except:
+        return abort(400, description="Invalid request")
+
+    if not content.strip():
+        return abort(400, description="Comment cannot be empty")
+
+    comment.content = content
+    comment.updated_at = naive_utcnow()
+
+    db.session.commit()
+
+    return jsonify(data=comment.to_dict()), 200
+
+
+@main_bp.route("/comments/<int:comment_id>", methods=["DELETE"])
+@token_auth.login_required
+def delete_comment(comment_id: int):
+    """ Delete a comment """
+
+    comment = Comment.query.get_or_404(comment_id)
+    if current_user.id != comment.user_id:
+        return abort(403, description="You don't have permission to delete this comment")
+
+    db.session.delete(comment)
+    db.session.commit()
+
+    return {}, 204

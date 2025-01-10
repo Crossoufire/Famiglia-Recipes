@@ -149,6 +149,7 @@ class Recipe(db.Model):
         return f"<Recipe [{self.id}] - {self.title[:10]}>"
 
     id = db.Column(db.Integer, primary_key=True)
+    submitter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     image = db.Column(db.String, default="default.png")
     cooking_time = db.Column(db.Integer, nullable=False)
@@ -156,14 +157,13 @@ class Recipe(db.Model):
     servings = db.Column(db.Integer, nullable=False)
     ingredients = db.Column(db.Text, nullable=False)
     steps = db.Column(db.Text, nullable=False)
-    comment = db.Column(db.Text)
-    submitter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    comment = db.Column(db.Text)  # Not used anymore
     submitted_date = db.Column(db.DateTime, nullable=False)
 
     # --- Relationships --------------------------------------------------
     submitter = db.relationship("User", back_populates="added_recipes")
-    favorited_by = db.relationship("User", secondary="favorites", back_populates="fav_recipes")
     labels = db.relationship("Label", secondary="recipe_label", back_populates="recipes")
+    favorited_by = db.relationship("User", secondary="favorites", back_populates="fav_recipes")
 
     @property
     def cover_image(self) -> str:
@@ -194,6 +194,30 @@ class Recipe(db.Model):
     @staticmethod
     def form_only() -> List[str]:
         return ["title", "image", "cooking_time", "prep_time", "servings", "ingredients", "steps", "comment", "labels"]
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime)
+
+    # --- Relationships --------------------------------------------------
+    user = db.relationship("User", backref=db.backref("comments", lazy="dynamic"))
+    recipe = db.relationship("Recipe", backref=db.backref("comments", lazy="dynamic"))
+
+    def to_dict(self):
+        recipe_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+        recipe_dict.update({
+            "created_at": self.created_at.strftime("%d %b %Y, at %H:%M"),
+            "updated_at": self.updated_at.strftime("%d %b %Y, at %H:%M") if self.updated_at else None,
+            "submitter": self.user.to_dict(),
+        })
+
+        return recipe_dict
 
 
 class Label(db.Model):

@@ -1,17 +1,23 @@
 import {toast} from "sonner";
-import {cn} from "@/lib/utils";
+import {bgSelector, cn} from "@/lib/utils";
+import {useForm} from "react-hook-form";
 import {useEffect, useState} from "react";
 import {Badge} from "@/components/ui/badge";
+import {queryClient} from "@/lib/queryClient";
 import {Button} from "@/components/ui/button";
+import {Textarea} from "@/components/ui/textarea";
 import {Separator} from "@/components/ui/separator";
 import {MutedText} from "@/components/app/MutedText";
 import {PageTitle} from "@/components/app/PageTitle";
-import {Card, CardContent} from "@/components/ui/card";
-import {useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
-import {queryKeys, useAuth, useMutations} from "@famiglia-recipes/api";
+import {Avatar, AvatarFallback} from "@/components/ui/avatar";
 import {createFileRoute, Link, useNavigate} from "@tanstack/react-router";
 import {recipeDetailsOptions} from "@famiglia-recipes/api/src/queryOptions";
-import {ChefHat, CircleCheck, Clock, Heart, History, Minus, Pen, Plus, Trash2, Users} from "lucide-react";
+import {Card, CardContent, CardHeader} from "@/components/ui/card";
+import {useIsMutating, useQuery, useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
+import {queryKeys, recipeCommentsOptions, useAuth, useMutations} from "@famiglia-recipes/api";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import {ChefHat, CircleCheck, Clock, Heart, History, LoaderCircle, Minus, Pen, Pencil, Plus, Trash2, Users} from "lucide-react";
 
 
 // noinspection JSCheckFunctionSignatures,JSUnusedGlobalSymbols
@@ -61,6 +67,9 @@ function RecipeDetailsPage() {
                     <div className="space-y-6">
                         <h1 className="text-3xl font-bold tracking-tight">
                             {recipe.title}
+                            <div className="text-muted-foreground text-sm mt-2 font-normal">
+                                Added by <b>{recipe.submitter.username}</b> the {recipe.submitted_date}
+                            </div>
                         </h1>
                         <div className="flex gap-3">
                             <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleUpdateFavorite} disabled={updateFavorite.isPending}>
@@ -134,18 +143,11 @@ function RecipeDetailsPage() {
                         </ol>
                     </div>
                     <div className="mt-9">
-                        <h2 className="text-2xl font-semibold tracking-tight mb-6">Comments</h2>
-                        {recipe.comment ?
-                            <div className="space-y-6">
-                                <Card className="p-0">
-                                    <CardContent className="px-4 py-3">
-                                        <p>{recipe.comment}</p>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                            :
-                            <MutedText className="text-base">No comments added yet</MutedText>
-                        }
+                        <CommentSection
+                            recipeId={recipe.id}
+                            currentUserId={currentUser.id}
+                            recipeSubmitterId={recipe.submitter_id}
+                        />
                     </div>
                 </div>
                 <div className="w-1/3 max-sm:w-full max-lg:w-[35%]">
@@ -217,5 +219,174 @@ const Servings = ({ initServings, multiSetter }) => {
                 <Plus className="w-4 h-4 hover:opacity-70"/>
             </div>
         </div>
+    );
+};
+
+
+const CommentSection = ({ recipeId, currentUserId, recipeSubmitterId }) => {
+    const isMutating = useIsMutating();
+    const { deleteComment } = useMutations();
+    const [isOpen, setIsOpen] = useState(false);
+    const [commentToEdit, setCommentToEdit] = useState(null);
+    const { data: comments, isLoading, isFetching, isError } = useQuery(recipeCommentsOptions(recipeId));
+
+    if (isError) return <p>The comments could not be loaded.</p>;
+    if (isLoading) return <LoaderCircle className="h-6 w-6 animate-spin"/>;
+
+    const onEditComment = (comment) => {
+        setIsOpen(true);
+        setCommentToEdit(comment);
+    };
+
+    const onAddComment = () => {
+        setIsOpen(true);
+        setCommentToEdit(null);
+    };
+
+    const onDeleteComment = (comment) => {
+        deleteComment.mutate({ comment_id: comment.id }, {
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({ queryKey: queryKeys.recipeCommentsKey(recipeId) });
+                toast.success("Comment deleted");
+            },
+        });
+    };
+
+    return (
+        <>
+            <h2 className="text-2xl flex justify-between items-center font-semibold tracking-tight mb-6">
+                <div>
+                    Comments
+                    <span className="text-muted-foreground text-sm font-normal ml-2">({comments?.length ?? 0})</span>
+                </div>
+                <Button variant="secondary" onClick={onAddComment}>
+                    <Plus className="h-5 w-5 mr-2"/> Add Comment
+                </Button>
+            </h2>
+            {(!!isMutating || isFetching) && <LoaderCircle className="w-10 h-10 animate-spin mb-4"/>}
+            {comments.length > 0 ?
+                comments.map(comment =>
+                    <div key={comment.id}>
+                        <Card className="relative bg-zinc-900 text-gray-100 mb-4">
+                            <CardHeader className="flex flex-row items-center gap-4 py-3 px-4">
+                                <Avatar className="w-10 h-10">
+                                    <AvatarFallback className={bgSelector(comment.submitter.username)}>
+                                        {comment.submitter.username.charAt(0)}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col">
+                                    <div className="flex items-center gap-2 -mt-2">
+                                        <span className="font-semibold">{comment.submitter.username}</span>
+                                        {comment.user_id === recipeSubmitterId &&
+                                            <ChefHat className="w-4 h-4 text-amber-500"/>
+                                        }
+                                    </div>
+                                    <time className="text-sm text-gray-400">
+                                        {comment.updated_at ?? comment.created_at}
+                                    </time>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="pb-3 mt-1">
+                                <div className="text-gray-300">{comment.content}</div>
+                            </CardContent>
+                            {comment.user_id === currentUserId &&
+                                <div className="absolute right-1 top-1">
+                                    <Button variant="ghost" size="icon" onClick={() => onEditComment(comment)}
+                                            disabled={(!!isMutating || isFetching)}>
+                                        <Pencil className="w-4 h-4 opacity-50"/>
+                                    </Button>
+                                    <Button variant="ghost" size="icon" onClick={() => onDeleteComment(comment)}
+                                            disabled={(!!isMutating || isFetching)}>
+                                        <Trash2 className="w-4 h-4 opacity-50"/>
+                                    </Button>
+                                </div>
+                            }
+                        </Card>
+                    </div>
+                )
+                :
+                <MutedText className="text-base -mt-2">No comments added yet</MutedText>
+            }
+            {isOpen &&
+                <CommentDialog
+                    open={isOpen}
+                    setOpen={setIsOpen}
+                    recipeId={recipeId}
+                    commentToEdit={commentToEdit}
+                />
+            }
+        </>
+    );
+};
+
+
+const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }) => {
+    const isEditing = !!commentToEdit;
+    const { addComment, editComment } = useMutations();
+    const form = useForm({ defaultValues: { content: isEditing ? commentToEdit.content : "" } });
+
+    function onSubmit(data) {
+        if (commentToEdit?.id) {
+            editComment.mutate({ comment_id: commentToEdit.id, content: data.content }, {
+                onSuccess: async () => {
+                    form.reset();
+                    setOpen(false);
+                    await queryClient.invalidateQueries({ queryKey: queryKeys.recipeCommentsKey(recipeId) });
+                },
+            });
+        }
+        else {
+            addComment.mutate({ recipe_id: recipeId, content: data.content }, {
+                onSuccess: async () => {
+                    form.reset();
+                    setOpen(false);
+                    await queryClient.invalidateQueries({ queryKey: queryKeys.recipeCommentsKey(recipeId) });
+                },
+            });
+        }
+    }
+
+    const buttonText = isEditing ? "Save" : "Add Comment";
+    const title = isEditing ? "Edit comment" : "Add comment";
+    const subtitle = isEditing ? "Edit your comment for this recipe" : "Add a new comment to this recipe";
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent className="max-sm:w-full w-[450px]">
+                <DialogHeader>
+                    <DialogTitle>{title}</DialogTitle>
+                    <DialogDescription>{subtitle}</DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <FormField
+                            name="content"
+                            control={form.control}
+                            render={({ field }) =>
+                                <FormItem>
+                                    <FormLabel className="sr-only">Comment</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            {...field}
+                                            className="h-[150px]"
+                                            placeholder="Add your comment here"
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Your comment will be visible to other users.
+                                    </FormDescription>
+                                    <FormMessage/>
+                                </FormItem>
+                            }
+                        />
+                        <DialogFooter>
+                            <Button type="submit" disabled={addComment.isPending || editComment.isPending}>
+                                {(addComment.isPending || editComment.isPending) ? "Submitting..." : buttonText}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
     );
 };
