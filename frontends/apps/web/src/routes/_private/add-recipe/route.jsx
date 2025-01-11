@@ -4,6 +4,7 @@ import {useSuspenseQuery} from "@tanstack/react-query";
 import {RecipeForm} from "@/components/recipe-form/RecipeForm";
 import {createFileRoute, useNavigate} from "@tanstack/react-router";
 import {addRecipeOptions, useMutations} from "@famiglia-recipes/api";
+import {useTranslation} from "react-i18next";
 
 
 // noinspection JSCheckFunctionSignatures,JSUnusedGlobalSymbols
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/_private/add-recipe")({
 
 
 function AddRecipePage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { addRecipe } = useMutations();
     const { data: labels } = useSuspenseQuery(addRecipeOptions());
@@ -44,14 +46,14 @@ function AddRecipePage() {
         addRecipe.mutate({ data: formData }, {
             onError: (error) => toast.error(error?.description),
             onSuccess: async (data) => {
-                toast.success("Recipe Added!");
+                toast.success(t("success-recipe-added"));
                 await navigate({ to: `/details/${data.recipe_id}`, replace: true });
             },
         });
     };
 
     return (
-        <PageTitle title="Add a Recipe" subtitle="Add a recipe here using the following form">
+        <PageTitle title={t("add-recipe")} subtitle={t("ar-subtitle")}>
             <RecipeForm
                 labels={labels}
                 type={"Creation"}

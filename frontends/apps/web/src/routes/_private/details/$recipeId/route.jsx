@@ -1,17 +1,19 @@
 import {toast} from "sonner";
 import {cn} from "@/lib/utils";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Badge} from "@/components/ui/badge";
+import {useTranslation} from "react-i18next";
 import {Button} from "@/components/ui/button";
 import {Separator} from "@/components/ui/separator";
 import {PageTitle} from "@/components/app/PageTitle";
+import {Servings} from "@/components/details/Servings";
 import {Card, CardContent} from "@/components/ui/card";
 import {CommentSection} from "@/components/details/CommentSection";
 import {useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
 import {queryKeys, useAuth, useMutations} from "@famiglia-recipes/api";
 import {createFileRoute, Link, useNavigate} from "@tanstack/react-router";
 import {recipeDetailsOptions} from "@famiglia-recipes/api/src/queryOptions";
-import {ChefHat, CircleCheck, Clock, Heart, History, Minus, Pen, Plus, Trash2, Users} from "lucide-react";
+import {ChefHat, CircleCheck, Clock, Heart, History, Pen, Trash2, Users} from "lucide-react";
 
 
 // noinspection JSCheckFunctionSignatures,JSUnusedGlobalSymbols
@@ -22,6 +24,7 @@ export const Route = createFileRoute("/_private/details/$recipeId")({
 
 
 function RecipeDetailsPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
     const queryClient = useQueryClient();
@@ -36,7 +39,7 @@ function RecipeDetailsPage() {
         deleteRecipe.mutate({ recipe_id: recipeId }, {
             onError: (error) => toast.error(error?.description),
             onSuccess: async () => {
-                toast.success("Recipe successfully deleted!");
+                toast.success(t("success-recipe-deleted"));
                 await navigate({ to: "/dashboard", replace: true });
             },
         });
@@ -47,7 +50,7 @@ function RecipeDetailsPage() {
             onError: (error) => toast.error(error?.description),
             onSuccess: () => {
                 queryClient.setQueryData(queryKeys.recipeDetailsKey(recipeId), (oldData) => {
-                    toast.success((oldData.is_favorited ? "Removed from your favorites" : "Added to your favorites"));
+                    toast.success((oldData.is_favorited ? t("removed-recipe-favorite") : t("added-recipe-favorite")));
                     return { ...oldData, is_favorited: !oldData.is_favorited };
                 });
             },
@@ -62,7 +65,7 @@ function RecipeDetailsPage() {
                         <h1 className="text-3xl font-bold tracking-tight">
                             {recipe.title}
                             <div className="text-muted-foreground text-sm mt-2 font-normal">
-                                Added by <b>{recipe.submitter.username}</b> the {recipe.submitted_date}
+                                {t("added-by")} <b>{recipe.submitter.username}</b> {t("the")} {t("submit-date", { date: recipe.submitted_date })}
                             </div>
                         </h1>
                         <div className="flex gap-3">
@@ -98,7 +101,7 @@ function RecipeDetailsPage() {
                             <div className="flex items-center justify-between gap-3">
                                 <ChefHat className="w-6 h-6 text-amber-600"/>
                                 <div>
-                                    <div className="font-semibold">Cooking</div>
+                                    <div className="font-semibold">{t("cook-details")}</div>
                                     <div>{recipe.cooking_time} min</div>
                                 </div>
                             </div>
@@ -112,7 +115,7 @@ function RecipeDetailsPage() {
                             <div className="flex items-center justify-between gap-3">
                                 <Users className="w-6 h-6 text-amber-600"/>
                                 <div>
-                                    <div className="font-semibold">Servings</div>
+                                    <div className="font-semibold">{t("servings")}</div>
                                     <Servings
                                         multiSetter={setMulti}
                                         initServings={recipe.servings}
@@ -128,7 +131,7 @@ function RecipeDetailsPage() {
                             {recipe.steps.map((step, idx) =>
                                 <li key={idx}>
                                     <div className="grid grid-cols-[80px_1fr] text-lg">
-                                        <div className="flex items-center font-semibold text-cyan-500">Step {idx + 1}</div>
+                                        <div className="flex items-center font-semibold text-cyan-500">{t("step")} {idx + 1}</div>
                                         <div>{step.description}</div>
                                     </div>
                                     <Separator className="mt-4"/>
@@ -154,7 +157,7 @@ function RecipeDetailsPage() {
                     </div>
                     <Card className="sticky top-24 mt-8">
                         <CardContent className="pt-3">
-                            <h2 className="text-2xl font-semibold tracking-tight mb-6">Ingredients</h2>
+                            <h2 className="text-2xl font-semibold tracking-tight mb-6">{t("ingredients")}</h2>
                             <ul className="space-y-3 text-lg">
                                 {recipe.ingredients.map(data =>
                                     <li key={data.ingredient} className="flex items-start">
@@ -170,48 +173,3 @@ function RecipeDetailsPage() {
         </PageTitle>
     );
 }
-
-
-const Servings = ({ initServings, multiSetter }) => {
-    const [servings, setServings] = useState(initServings);
-    const [disabled, setDisabled] = useState(false);
-
-    useEffect(() => {
-        setServings(initServings);
-    }, [initServings]);
-
-    const updateServings = (action) => {
-        let newServing = initServings;
-
-        if (action === "add") {
-            newServing = servings + 1;
-            setDisabled(false);
-        }
-
-        if (action === "remove") {
-            newServing = servings - 1;
-            if (newServing === 1) {
-                setDisabled(true);
-            }
-        }
-
-        setServings(newServing);
-        multiSetter(newServing / initServings);
-    };
-
-    return (
-        <div className="flex items-center justify-around gap-2">
-            {disabled ?
-                <Minus className="w-4 h-4"/>
-                :
-                <div role="button" onClick={() => updateServings("remove")}>
-                    <Minus className="w-4 h-4 hover:opacity-70"/>
-                </div>
-            }
-            {servings} pers.
-            <div role="button" onClick={() => updateServings("add")}>
-                <Plus className="w-4 h-4 hover:opacity-70"/>
-            </div>
-        </div>
-    );
-};

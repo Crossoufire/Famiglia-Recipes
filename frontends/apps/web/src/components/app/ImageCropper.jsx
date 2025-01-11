@@ -1,11 +1,13 @@
 import Cropper from "react-easy-crop";
 import {useCallback, useState} from "react";
 import {Input} from "@/components/ui/input";
+import {useTranslation} from "react-i18next";
 import {Button} from "@/components/ui/button";
 import {MutedText} from "@/components/app/MutedText";
 
 
 export const ImageCropper = ({ onCropApplied, fileName, cropShape, aspect, resultClassName = "" }) => {
+    const { t } = useTranslation();
     const [state, setState] = useState({
         zoom: 1,
         open: true,
@@ -66,6 +68,7 @@ export const ImageCropper = ({ onCropApplied, fileName, cropShape, aspect, resul
         ev.preventDefault();
 
         const croppedImage = await getCroppedImg(state.imageSrc, state.croppedAreaPixels);
+        // noinspection JSCheckFunctionSignatures
         const croppedFile = new File([croppedImage], `${fileName}.jpg`, { type: "image/jpeg" });
         onCropApplied(croppedFile);
         // noinspection JSCheckFunctionSignatures
@@ -74,7 +77,6 @@ export const ImageCropper = ({ onCropApplied, fileName, cropShape, aspect, resul
 
     const handleEditCrop = (ev) => {
         ev.preventDefault();
-
         // noinspection JSCheckFunctionSignatures
         setState((prev) => ({ ...prev, open: true, showResult: false }));
     };
@@ -91,8 +93,8 @@ export const ImageCropper = ({ onCropApplied, fileName, cropShape, aspect, resul
             {(state.imageSrc && state.open) &&
                 <div className="space-y-4 mt-6 bg-card rounded-lg p-3">
                     <div>
-                        <div>Crop Recipe Image</div>
-                        <MutedText className="not-italic">Resize the recipe image to fit the crop area.</MutedText>
+                        <div>{t("crop-title")}</div>
+                        <MutedText className="not-italic">{t("crop-subtitle")}</MutedText>
                     </div>
                     <div className="relative h-[250px] w-full">
                         <Cropper
@@ -106,18 +108,18 @@ export const ImageCropper = ({ onCropApplied, fileName, cropShape, aspect, resul
                             onZoomChange={(zoom) => setState((prev) => ({ ...prev, zoom }))}
                         />
                     </div>
-                    <Button onClick={handleApplyCrop}>Apply Crop</Button>
+                    <Button onClick={handleApplyCrop}>{t("save")}</Button>
                 </div>
             }
             {state.showResult &&
                 <div className="space-y-4 mt-4 bg-card rounded-lg p-3 h-min-[250px]">
-                    <MutedText className="not-italic">Selected Image</MutedText>
+                    <MutedText className="not-italic">{t("crop-selected")}</MutedText>
                     <img
                         alt={fileName}
                         className={resultClassName}
                         src={URL.createObjectURL(state.croppedImage)}
                     />
-                    <Button onClick={handleEditCrop}>Edit Crop</Button>
+                    <Button onClick={handleEditCrop}>{t("edit")}</Button>
                 </div>
             }
         </div>

@@ -1,10 +1,13 @@
 import {Link} from "@tanstack/react-router";
 import {Badge} from "@/components/ui/badge";
 import {ChefHat, Clock} from "lucide-react";
+import {useTranslation} from "react-i18next";
 import {Card, CardFooter, CardHeader} from "@/components/ui/card";
 
 
 export const RecipeCard = ({ recipe }) => {
+    const { t } = useTranslation();
+
     return (
         <Link to={`/details/${recipe.id}`}>
             <Card className="flex flex-col group h-full rounded-lg">
@@ -24,7 +27,7 @@ export const RecipeCard = ({ recipe }) => {
                             </div>
                             <div className="flex items-center gap-1">
                                 <ChefHat className="h-4 w-4 text-amber-600"/>
-                                <span>Cook: {recipe.cooking_time} min</span>
+                                <span>{t("cook")}: {recipe.cooking_time} min</span>
                             </div>
                         </div>
                         <div className="space-y-0.5">
@@ -32,7 +35,7 @@ export const RecipeCard = ({ recipe }) => {
                                 {recipe.title}
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                                <b>{recipe.submitter.username}</b> - {recipe.submitted_date}
+                                <b>{recipe.submitter.username}</b> - {t("submit-date", { date: recipe.submitted_date })}
                             </p>
                         </div>
                     </CardHeader>

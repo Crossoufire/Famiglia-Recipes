@@ -1,22 +1,25 @@
 import {useState} from "react";
 import {cn} from "@/lib/utils";
 import {router} from "@/router";
+import {useTranslation} from "react-i18next";
 import {Button} from "@/components/ui/button";
 import {useAuth} from "@famiglia-recipes/api";
 import {Book, ChefHat, LogOut, Menu, Plus, X} from "lucide-react";
+import {LanguageSwitcher} from "@/components/app/LanguageSwitcher";
 import {Link as NavLink, useLocation, useNavigate} from "@tanstack/react-router";
 
 
 export const Navbar = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { currentUser, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
-        { name: "Dashboard", to: "/dashboard", icon: ChefHat },
-        { name: "Add Recipe", to: "/add-recipe", icon: Plus },
-        { name: "All Recipes", to: "/all-recipes", icon: Book },
+        { name: t("dashboard-nav"), to: "/dashboard", icon: ChefHat },
+        { name: t("add-recipe-nav"), to: "/add-recipe", icon: Plus },
+        { name: t("all-recipes-nav"), to: "/all-recipes", icon: Book },
     ];
 
     const logoutUser = () => {
@@ -40,14 +43,22 @@ export const Navbar = () => {
         return (
             <nav className="w-screen z-50 flex items-center fixed top-0 h-16 border-b bg-neutral-950 border-b-neutral-700 bg-background">
                 <div className="md:max-w-screen-xl flex w-full justify-between items-center container">
-                    <NavLink to="/" className="text-lg font-semibold">Famiglia-Recipes</NavLink>
-                    {pathname !== "/" &&
-                        <div className="space-x-3">
+                    <NavLink to="/" className="flex items-center gap-3 text-lg font-semibold">
+                        <img alt="Famiglia Recipes" src="/logo192.png" className="w-[28px] h-[28px]"/>
+                        Famiglia Recipes
+                    </NavLink>
+                    {pathname === "/" ?
+                        <div className="flex items-center gap-3">
+                            <LanguageSwitcher/>
+                        </div>
+                        :
+                        <div className="flex items-center gap-3">
+                            <LanguageSwitcher/>
                             <Button size="sm" asChild>
-                                <NavLink to="/">Login</NavLink>
+                                <NavLink to="/">{t("login")}</NavLink>
                             </Button>
                             <Button size="sm" variant="secondary" asChild>
-                                <NavLink to="/">Register</NavLink>
+                                <NavLink to="/">{t("register")}</NavLink>
                             </Button>
                         </div>
                     }
@@ -79,7 +90,8 @@ export const Navbar = () => {
                     </div>
                     <div className="hidden md:block">
                         <div className="ml-4 flex items-center md:ml-6">
-                            <span className="text-gray-300 font-medium mr-4">Bienvenue {currentUser.username}</span>
+                            <LanguageSwitcher className="mr-4"/>
+                            <span className="text-gray-300 font-medium mr-4">{t("welcome-nav")} {currentUser.username}</span>
                             <Button variant="ghost" size="icon" onClick={logoutUser}>
                                 <LogOut className="h-5 w-5"/>
                                 <span className="sr-only">Logout</span>
@@ -109,6 +121,7 @@ export const Navbar = () => {
                     </div>
                     <div className="pt-2 pb-2 border-t border-gray-700">
                         <div className="flex items-center px-5">
+                            <LanguageSwitcher/>
                             <div className="ml-3">
                                 <div className="text-base font-medium leading-none">
                                     {currentUser.username}

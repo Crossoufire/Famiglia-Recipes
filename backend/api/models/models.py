@@ -93,8 +93,8 @@ class User(db.Model):
 
         user_dict.update({
             "role": RoleType(self.role).value,
-            "last_seen": self.last_seen.strftime("%d %b %Y"),
-            "registered": self.registered.strftime("%d %b %Y"),
+            "last_seen": self.last_seen,
+            "registered": self.registered,
         })
 
         return user_dict
@@ -178,7 +178,7 @@ class Recipe(db.Model):
             "ingredients": json.loads(self.ingredients),
             "cover_image": self.cover_image,
             "steps": json.loads(self.steps),
-            "submitted_date": self.submitted_date.strftime("%d %b %Y"),
+            "submitted_date": self.submitted_date,
             "submitter": self.submitter.to_dict(),
             "labels": [label.to_dict() for label in self.labels],
             "is_favorited": current_user in self.favorited_by,
@@ -212,8 +212,8 @@ class Comment(db.Model):
         recipe_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
         recipe_dict.update({
-            "created_at": self.created_at.strftime("%d %b %Y, at %H:%M"),
-            "updated_at": self.updated_at.strftime("%d %b %Y, at %H:%M") if self.updated_at else None,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at if self.updated_at else None,
             "submitter": self.user.to_dict(),
         })
 

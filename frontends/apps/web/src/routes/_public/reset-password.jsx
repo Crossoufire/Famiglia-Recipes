@@ -1,6 +1,7 @@
 import {toast} from "sonner";
 import {useForm} from "react-hook-form";
 import {Input} from "@/components/ui/input";
+import {useTranslation} from "react-i18next";
 import {Button} from "@/components/ui/button";
 import {PageTitle} from "@/components/app/PageTitle";
 import {useMutations} from "@famiglia-recipes/api/src/mutations";
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/_public/reset-password")({
 
 
 function ResetPasswordPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { token } = Route.useSearch();
     const { resetPassword } = useMutations();
@@ -22,9 +24,9 @@ function ResetPasswordPage() {
 
     const onSubmit = (data) => {
         resetPassword.mutate({ token, new_password: data.new_password }, {
-            onError: (error) => toast.error(error?.description ?? "The provided token is invalid or expired"),
+            onError: (error) => toast.error(error?.description ?? t("invalid-token")),
             onSuccess: async () => {
-                toast.success("Your password was successfully modified");
+                toast.success(t("success-pass-modified"));
                 await navigate({ to: "/" });
             },
             onSettled: () => form.reset(),
@@ -32,7 +34,7 @@ function ResetPasswordPage() {
     };
 
     return (
-        <PageTitle title="Change your Password" subtitle="You can now change your password to a new one">
+        <PageTitle title={t("rp-title")} subtitle={t("rp-subtitle")}>
             <div className="mt-4 w-[300px] max-sm:w-full">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -46,7 +48,7 @@ function ResetPasswordPage() {
                                 }}
                                 render={({ field }) =>
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>{t("password")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -72,7 +74,7 @@ function ResetPasswordPage() {
                                 }}
                                 render={({ field }) =>
                                     <FormItem>
-                                        <FormLabel>Confirm Password</FormLabel>
+                                        <FormLabel>{t("confirm-password")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -86,7 +88,7 @@ function ResetPasswordPage() {
                             />
                         </div>
                         <Button type="submit" className="w-full" disabled={resetPassword.isPending || form.formState.isSubmitting}>
-                            Reset password
+                            {t("submit")}
                         </Button>
                     </form>
                 </Form>

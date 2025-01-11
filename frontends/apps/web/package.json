@@ -26,12 +26,15 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.0.4",
+        "i18next": "^24.2.1",
+        "i18next-browser-languagedetector": "^8.0.2",
         "lucide-react": "^0.470.0",
         "nprogress": "^0.2.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-easy-crop": "^5.2.0",
         "react-hook-form": "^7.54.2",
+        "react-i18next": "^15.4.0",
         "sonner": "^1.7.1"
     },
     "devDependencies": {

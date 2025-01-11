@@ -56,3 +56,23 @@ export const bgSelector = (username) => {
     const firstLetter = username.charAt(0).toLowerCase();
     return colors[firstLetter] || "bg-gray-500";
 };
+
+
+export const formatDateTime = (dateInput, locales, options = {}) => {
+    console.log({ options });
+    if (!dateInput) return "--";
+    let date = new Date(dateInput);
+    if (isNaN(date.getTime())) return "--";
+
+    const formatOptions = {
+        timeZone: new Intl.DateTimeFormat().resolvedOptions().timeZone,
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: options.includeTime ? "numeric" : undefined,
+        minute: options.includeTime ? "numeric" : undefined,
+        hour12: false,
+    };
+
+    return new Intl.DateTimeFormat(locales, formatOptions).format(date);
+};

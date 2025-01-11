@@ -1,6 +1,7 @@
 import {toast} from "sonner";
 import {useForm} from "react-hook-form";
 import {Input} from "@/components/ui/input";
+import {useTranslation} from "react-i18next";
 import {useAuth} from "@famiglia-recipes/api";
 import {FormButton} from "@/components/app/FormButton";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
@@ -8,6 +9,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 
 
 export const RegisterForm = () => {
+    const { t } = useTranslation();
     const { register } = useAuth();
     const form = useForm({
         defaultValues: {
@@ -30,10 +32,10 @@ export const RegisterForm = () => {
         };
 
         register.mutate({ data: dataToSend }, {
-            onError: (error) => toast.error(error?.description ?? "An error occurred while creating your account"),
+            onError: (error) => toast.error(error?.description ?? t("unexpected-error")),
             onSuccess: () => {
                 form.reset();
-                toast.success("Your account has been created. You can now log-in.");
+                toast.success(t("success-account-created"));
             },
         });
     };
@@ -42,7 +44,7 @@ export const RegisterForm = () => {
         <Card>
             <CardHeader>
                 <CardTitle className="flex justify-center text-lg">
-                    Create an account
+                    {t("create-account")}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -59,7 +61,7 @@ export const RegisterForm = () => {
                                 }}
                                 render={({ field }) =>
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>{t("username")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -97,7 +99,7 @@ export const RegisterForm = () => {
                                 }}
                                 render={({ field }) =>
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>{t("password")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -122,7 +124,7 @@ export const RegisterForm = () => {
                                 }}
                                 render={({ field }) =>
                                     <FormItem>
-                                        <FormLabel>Confirm Password</FormLabel>
+                                        <FormLabel>{t("confirm-password")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -140,7 +142,7 @@ export const RegisterForm = () => {
                                 rules={{ required: "The register key is required" }}
                                 render={({ field }) =>
                                     <FormItem>
-                                        <FormLabel>Register Key</FormLabel>
+                                        <FormLabel>{t("register-key")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -154,7 +156,7 @@ export const RegisterForm = () => {
                             />
                         </div>
                         <FormButton disabled={register.isPending || form.formState.isSubmitting}>
-                            Create your account
+                            {t("register")}
                         </FormButton>
                     </form>
                 </Form>

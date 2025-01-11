@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {useForm} from "react-hook-form";
+import {useTranslation} from "react-i18next";
 import {queryClient} from "@/lib/queryClient";
 import {Button} from "@/components/ui/button";
 import {Textarea} from "@/components/ui/textarea";
@@ -9,6 +10,7 @@ import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Di
 
 
 export const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }) => {
+    const { t } = useTranslation();
     const isEditing = !!commentToEdit;
     const { addComment, editComment } = useMutations();
     const [warning, setWarning] = useState(false);
@@ -38,9 +40,8 @@ export const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }) => {
         }
     }
 
-    const buttonText = isEditing ? "Save" : "Add Comment";
-    const title = isEditing ? "Edit comment" : "Add comment";
-    const subtitle = isEditing ? "Edit your comment for this recipe" : "Add a new comment to this recipe";
+    const title = isEditing ? t("edit-comment") : t("add-comment");
+    const subtitle = isEditing ? t("ec-subtitle") : t("ac-subtitle");
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -51,7 +52,6 @@ export const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }) => {
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
                         <FormField
                             name="content"
                             control={form.control}
@@ -62,14 +62,14 @@ export const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }) => {
                                         <Textarea
                                             {...field}
                                             className="h-[150px]"
-                                            placeholder="Add your comment here"
+                                            placeholder={t("c-placeholder")}
                                         />
                                     </FormControl>
                                     <FormDescription>
                                         {warning ?
-                                            <div className="text-red-500">Comment cannot be empty</div>
+                                            <div className="text-red-500">{t("c-error")}</div>
                                             :
-                                            "Your comment will be visible to other users."
+                                            t("c-info")
                                         }
                                     </FormDescription>
                                     <FormMessage/>
@@ -78,7 +78,7 @@ export const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }) => {
                         />
                         <DialogFooter>
                             <Button type="submit" disabled={addComment.isPending || editComment.isPending}>
-                                {(addComment.isPending || editComment.isPending) ? "Submitting..." : buttonText}
+                                {(addComment.isPending || editComment.isPending) ? t("submitting") : t("save")}
                             </Button>
                         </DialogFooter>
                     </form>

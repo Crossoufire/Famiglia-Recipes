@@ -1,10 +1,11 @@
 import {toast} from "sonner";
-import {PageTitle} from "@/components/app/PageTitle";
+import {useTranslation} from "react-i18next";
 import {useMutations} from "@famiglia-recipes/api";
+import {PageTitle} from "@/components/app/PageTitle";
 import {useSuspenseQuery} from "@tanstack/react-query";
+import {RecipeForm} from "@/components/recipe-form/RecipeForm";
 import {createFileRoute, useNavigate} from "@tanstack/react-router";
 import {editRecipeOptions} from "@famiglia-recipes/api/src/queryOptions";
-import {RecipeForm} from "@/components/recipe-form/RecipeForm";
 
 
 // noinspection JSCheckFunctionSignatures,JSUnusedGlobalSymbols
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/_private/edit-recipe/$recipeId")({
 
 
 function EditRecipePage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { recipeId } = Route.useParams();
     const { updateRecipe } = useMutations();
@@ -45,14 +47,14 @@ function EditRecipePage() {
         updateRecipe.mutate({ recipe_id: recipeId, data: formData }, {
             onError: (error) => toast.error(error?.description),
             onSuccess: async () => {
-                toast.success("Recipe modified successfully");
+                toast.success(t("success-recipe-edited"));
                 await navigate({ to: `/details/${recipeId}`, replace: true });
             },
         });
     };
 
     return (
-        <PageTitle title="Edit the Recipe" subtitle="Edit the recipe using the following form">
+        <PageTitle title={t("edit-recipe")} subtitle={t("edit-recipe-subtitle")}>
             <RecipeForm
                 type={"Edition"}
                 onSubmit={onSubmit}

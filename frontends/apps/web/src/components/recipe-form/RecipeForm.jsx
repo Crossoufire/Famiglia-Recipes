@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useForm} from "react-hook-form";
 import {Input} from "@/components/ui/input";
+import {useTranslation} from "react-i18next";
 import {Button} from "@/components/ui/button";
 import {Textarea} from "@/components/ui/textarea";
 import {useBlocker} from "@tanstack/react-router";
@@ -12,6 +13,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 
 
 export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type }) => {
+    const { t } = useTranslation();
     const form = useForm({ defaultValues: initValues });
     const [blockerActive, setBlockerActive] = useState(true);
 
@@ -19,7 +21,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
         shouldBlockFn: () => {
             if (!form.formState.isDirty) return false;
             if (!blockerActive) return false;
-            return !confirm("Are you sure you want to leave? All your changes will be lost.");
+            return !confirm(t("block-confirm"));
         },
     });
 
@@ -31,7 +33,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                     control={form.control}
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Recipe Image</FormLabel>
+                            <FormLabel>{t("r-image")}</FormLabel>
                             <FormControl>
                                 <ImageCropper
                                     aspect={4 / 3}
@@ -47,12 +49,12 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                 <FormField
                     name="title"
                     control={form.control}
-                    rules={{ required: "Recipe title is required" }}
+                    rules={{ required: t("r-title-req") }}
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Recipe Title</FormLabel>
+                            <FormLabel>{t("r-title")}</FormLabel>
                             <FormControl>
-                                <Input {...field} placeholder="Recipe title"/>
+                                <Input {...field} placeholder={t("r-title")}/>
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
@@ -66,7 +68,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="line-clamp-1">
-                                    Preparation Time (min)
+                                    {t("r-preparation")}
                                 </FormLabel>
                                 <FormControl>
                                     <Input
@@ -86,7 +88,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="line-clamp-1">
-                                    Cooking Time (min)
+                                    {t("r-cooking")}
                                 </FormLabel>
                                 <FormControl>
                                     <Input
@@ -105,7 +107,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                         rules={{ required: "Field required" }}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Servings</FormLabel>
+                                <FormLabel>{t("r-servings")}</FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
@@ -124,17 +126,17 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                     rules={{
                         validate: (value) => {
                             if (!value || value.length === 0) {
-                                return "One quantity and ingredient required.";
+                                return t("r-ingredient-req");
                             }
                             if (value.some(ing => !ing.quantity.trim() || !ing.description.trim())) {
-                                return "All ingredients must have a quantity and a description";
+                                return t("r-quantity-req");
                             }
                             return true;
                         },
                     }}
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Ingredients</FormLabel>
+                            <FormLabel>{t("ingredients")}</FormLabel>
                             <FormControl>
                                 <DynamicIngredientList
                                     ingredients={field.value}
@@ -151,17 +153,17 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                     rules={{
                         validate: (value) => {
                             if (!value || value.length === 0) {
-                                return "One step required";
+                                return t("r-steps-req");
                             }
                             if (value.some(step => step.trim() === "")) {
-                                return "All steps must have a description";
+                                return t("r-all-steps-req");
                             }
                             return true;
                         },
                     }}
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Steps</FormLabel>
+                            <FormLabel>{t("r-steps")}</FormLabel>
                             <FormControl>
                                 <DynamicStepList
                                     steps={field.value}
@@ -175,7 +177,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                 <FormField
                     name="labels"
                     control={form.control}
-                    rules={{ required: "One label required" }}
+                    rules={{ required: t("r-label-req") }}
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Labels</FormLabel>
@@ -196,7 +198,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                         control={form.control}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Comment</FormLabel>
+                                <FormLabel>{t("comment")}</FormLabel>
                                 <FormControl>
                                     <Textarea {...field}/>
                                 </FormControl>
@@ -206,7 +208,7 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type })
                     />
                 }
                 <Button type="submit" className="w-52" disabled={pendingState || form.formState.isSubmitting} onClick={() => setBlockerActive(false)}>
-                    {type === "Creation" ? "Create Recipe" : "Edit Recipe"}
+                    {type === "Creation" ? t("r-add") : t("r-edit")}
                 </Button>
             </form>
         </Form>

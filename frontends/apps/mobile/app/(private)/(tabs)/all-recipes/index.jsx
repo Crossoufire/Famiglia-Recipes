@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Link, useRouter} from "expo-router";
+import {Link} from "expo-router";
 import {Search} from "lucide-react-native";
 import {Loading} from "@/components/Loading";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
@@ -9,7 +9,6 @@ import {Pressable, RefreshControl, ScrollView, Text, TextInput, View} from "reac
 
 
 export default function AllRecipesScreen() {
-    const router = useRouter();
     const queryClient = useQueryClient();
     const [query, setQuery] = useState("");
     const [selectedLabels, setSelectedLabels] = useState([]);

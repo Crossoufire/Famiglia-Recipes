@@ -2,14 +2,15 @@ import {useState} from "react";
 import {Search} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {Badge} from "@/components/ui/badge";
+import {useTranslation} from "react-i18next";
 import {queryKeys} from "@famiglia-recipes/api";
-import {PageTitle} from "@/components/app/PageTitle";
 import {Separator} from "@/components/ui/separator";
+import {PageTitle} from "@/components/app/PageTitle";
+import {MutedText} from "@/components/app/MutedText";
 import {createFileRoute, Link} from "@tanstack/react-router";
 import {groupRecipesAlphabetically, normalizeStr} from "@/lib/utils";
 import {useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
 import {allRecipesOptions} from "@famiglia-recipes/api/src/queryOptions";
-import {MutedText} from "@/components/app/MutedText";
 
 
 // noinspection JSCheckFunctionSignatures,JSUnusedGlobalSymbols
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/_private/all-recipes")({
 
 
 function AllRecipesPage() {
+    const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [query, setQuery] = useState("");
     const apiData = useSuspenseQuery(allRecipesOptions()).data;
@@ -49,7 +51,7 @@ function AllRecipesPage() {
     const sortedRecipes = groupRecipesAlphabetically(filteredRecipes);
 
     return (
-        <PageTitle title={`All Recipes (${apiData.recipes.length})`} subtitle="All recipes sorted alphabetically">
+        <PageTitle title={t("all-recipes", { count: apiData.recipes.length })} subtitle={t("all-recipes-subtitle")}>
             <div className="mt-6 space-y-4">
                 <div>
                     <div className="rounded-md border border-neutral-500 w-[320px] max-sm:w-full">
@@ -57,7 +59,7 @@ function AllRecipesPage() {
                             <Search className="h-4 w-4 text-neutral-500"/>
                             <Input
                                 value={query}
-                                placeholder={"Search by Recipe Title"}
+                                placeholder={t("search-recipes")}
                                 onChange={(ev) => setQuery(ev.target.value)}
                                 className={"border-none focus-visible:ring-0"}
                             />
@@ -65,7 +67,7 @@ function AllRecipesPage() {
                     </div>
                 </div>
                 <div className="max-w-[800px]">
-                    <div className="text-lg font-semibold mb-1">Available Labels</div>
+                    <div className="text-lg font-semibold mb-1">{t("available-labels")}</div>
                     <div className="flex flex-wrap items-center gap-2">
                         {apiData.labels.map(label =>
                             <Badge key={label.id} color={label.color} onClick={() => labelClicked(label, true)}
@@ -74,10 +76,10 @@ function AllRecipesPage() {
                             </Badge>
                         )}
                     </div>
-                    <div className="text-lg font-semibold mb-1 mt-6">Selected Labels</div>
+                    <div className="text-lg font-semibold mb-1 mt-6">{t("selected-labels")}</div>
                     <div className="flex flex-wrap items-center gap-2">
                         {selectedLabels.length === 0 ?
-                            <MutedText>No selected labels added for filtering</MutedText>
+                            <MutedText>{t("s-no-labels")}</MutedText>
                             :
                             selectedLabels.map(label =>
                                 <Badge key={label.id} color={label.color} onClick={() => labelClicked(label, false)}

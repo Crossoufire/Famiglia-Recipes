@@ -1,9 +1,12 @@
 import {Minus, Plus} from "lucide-react";
 import {Input} from "@/components/ui/input";
+import {useTranslation} from "react-i18next";
 import {Button} from "@/components/ui/button";
 
 
 export const DynamicIngredientList = ({ ingredients, setIngredients }) => {
+    const { t } = useTranslation();
+
     const addIngredient = (ev) => {
         ev.preventDefault();
         setIngredients([...ingredients, { quantity: "", description: "" }]);
@@ -38,25 +41,26 @@ export const DynamicIngredientList = ({ ingredients, setIngredients }) => {
                     <Input
                         type="number"
                         className="w-28"
-                        placeholder="Quantity"
                         onKeyDown={handleOnEnter}
                         value={ingredient.quantity}
+                        placeholder={t("quantity")}
                         onChange={(ev) => updateIngredient(ev, idx, "quantity")}
                     />
                     <Input
                         className="flex-grow"
-                        placeholder="Ingredient"
                         onKeyDown={handleOnEnter}
                         value={ingredient.description}
+                        placeholder={t("ingredient")}
                         onChange={(ev) => updateIngredient(ev, idx, "description")}
                     />
-                    <Button variant="outline" size="icon" className="w-[50px]" tabIndex={-1} onClick={(ev) => removeIngredient(ev, idx)} disabled={ingredients.length === 1}>
+                    <Button variant="outline" size="icon" className="w-[50px]" tabIndex={-1}
+                            onClick={(ev) => removeIngredient(ev, idx)} disabled={ingredients.length === 1}>
                         <Minus className="h-4 w-4"/>
                     </Button>
                 </div>
             ))}
-            <Button onClick={addIngredient} className="mt-2">
-                <Plus className="h-4 w-4 mr-2"/> Add Ingredient
+            <Button onClick={addIngredient} size="sm">
+                <Plus className="h-4 w-4 mr-2"/> {t("add")}
             </Button>
         </div>
     );

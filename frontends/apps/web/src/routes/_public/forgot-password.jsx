@@ -1,6 +1,7 @@
 import {toast} from "sonner";
 import {useForm} from "react-hook-form";
 import {Input} from "@/components/ui/input";
+import {useTranslation} from "react-i18next";
 import {PageTitle} from "@/components/app/PageTitle";
 import {FormButton} from "@/components/app/FormButton";
 import {useMutations} from "@famiglia-recipes/api/src";
@@ -15,23 +16,24 @@ export const Route = createFileRoute("/_public/forgot-password")({
 
 
 function ForgotPasswordPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { forgotPassword } = useMutations();
     const form = useForm({ defaultValues: { email: "" } });
 
     const onSubmit = (data) => {
         forgotPassword.mutate({ email: data.email, callback: import.meta.env.VITE_RESET_PASSWORD_CALLBACK }, {
-            onError: (error) => toast.error(error?.description ?? "An error occurred sending your reset password email"),
+            onError: (error) => toast.error(error?.description ?? t("unexpected-error")),
             onSuccess: async () => {
                 form.reset();
-                toast.success("An email was sent to reset your password");
+                toast.success(t("success-reset-email"));
                 await navigate({ to: "/" });
             },
         });
     };
 
     return (
-        <PageTitle title="Forgot Password" subtitle="Enter the email associated with your account to reset your password">
+        <PageTitle title={t("fp-title")} subtitle={t("fp-subtitle")}>
             <div className="mt-4 max-w-[300px]">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -54,7 +56,7 @@ function ForgotPasswordPage() {
                             }
                         />
                         <FormButton disabled={forgotPassword.isPending || form.formState.isSubmitting}>
-                            Submit
+                            {t("submit")}
                         </FormButton>
                     </form>
                 </Form>

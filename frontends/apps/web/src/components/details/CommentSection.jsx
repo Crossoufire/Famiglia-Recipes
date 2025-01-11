@@ -1,6 +1,7 @@
 import {toast} from "sonner";
 import {useState} from "react";
 import {bgSelector} from "@/lib/utils";
+import {useTranslation} from "react-i18next";
 import {Button} from "@/components/ui/button";
 import {queryClient} from "@/lib/queryClient";
 import {MutedText} from "@/components/app/MutedText";
@@ -13,6 +14,7 @@ import {queryKeys, recipeCommentsOptions, useMutations} from "@famiglia-recipes/
 
 
 export const CommentSection = ({ recipeId, currentUserId, recipeSubmitterId }) => {
+    const { t } = useTranslation();
     const isMutating = useIsMutating();
     const { deleteComment } = useMutations();
     const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +38,7 @@ export const CommentSection = ({ recipeId, currentUserId, recipeSubmitterId }) =
         deleteComment.mutate({ comment_id: comment.id }, {
             onSuccess: async () => {
                 await queryClient.invalidateQueries({ queryKey: queryKeys.recipeCommentsKey(recipeId) });
-                toast.success("Comment deleted");
+                toast.success(t("success-comment-deleted"));
             },
         });
     };
@@ -45,11 +47,11 @@ export const CommentSection = ({ recipeId, currentUserId, recipeSubmitterId }) =
         <>
             <h2 className="text-2xl flex justify-between items-center font-semibold tracking-tight mb-6">
                 <div>
-                    Comments
+                    {t("comments")}
                     <span className="text-muted-foreground text-sm font-normal ml-2">({comments?.length ?? 0})</span>
                 </div>
                 <Button variant="secondary" onClick={onAddComment}>
-                    <Plus className="h-5 w-5 mr-2"/> Add Comment
+                    <Plus className="h-5 w-5 mr-2"/> {t("add-comment")}
                 </Button>
             </h2>
             {comments.length > 0 ?
@@ -70,7 +72,11 @@ export const CommentSection = ({ recipeId, currentUserId, recipeSubmitterId }) =
                                         }
                                     </div>
                                     <time className="text-sm text-gray-400">
-                                        {comment.updated_at ?? comment.created_at}
+                                        {comment.updated_at ?
+                                            t("submit-date", { date: comment.updated_at, includeTime: true })
+                                            :
+                                            t("submit-date", { date: comment.created_at, includeTime: true })
+                                        }
                                     </time>
                                 </div>
                             </CardHeader>

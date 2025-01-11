@@ -2,6 +2,7 @@ import {toast} from "sonner";
 import {useLayoutEffect} from "react";
 import {useForm} from "react-hook-form";
 import {Input} from "@/components/ui/input";
+import {useTranslation} from "react-i18next";
 import {useAuth} from "@famiglia-recipes/api";
 import {FormButton} from "@/components/app/FormButton";
 import {Link, useNavigate, useRouter} from "@tanstack/react-router";
@@ -12,6 +13,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 export const LoginForm = () => {
     const router = useRouter();
     const { login } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
     const form = useForm({ defaultValues: { username: "", password: "" }, shouldFocusError: false });
@@ -27,11 +29,11 @@ export const LoginForm = () => {
         login.mutate(data, {
             onError: (error) => {
                 if (error.status === 401) {
-                    form.setError("username", { type: "manual", message: "Username or password incorrect." });
-                    form.setError("password", { type: "manual", message: "Username or password incorrect." });
+                    form.setError("username", { type: "manual", message: t("login-error") });
+                    form.setError("password", { type: "manual", message: t("login-error") });
                     return;
                 }
-                toast.error("An error occurred trying to login");
+                toast.error(t("unexpected-error"));
             }
         });
     };
@@ -40,7 +42,7 @@ export const LoginForm = () => {
         <Card>
             <CardHeader>
                 <CardTitle className="flex justify-center text-lg">
-                    Welcome back!
+                    {t("welcome-back")}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -53,7 +55,7 @@ export const LoginForm = () => {
                                 rules={{ required: "Please enter a valid username" }}
                                 render={({ field }) =>
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>{t("username")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -71,9 +73,9 @@ export const LoginForm = () => {
                                 render={({ field }) =>
                                     <FormItem>
                                         <div className="flex items-center justify-between">
-                                            <FormLabel>Password</FormLabel>
+                                            <FormLabel>{t("password")}</FormLabel>
                                             <Link to="/forgot-password" className="text-sm underline" tabIndex={-1}>
-                                                Forgot password?
+                                                {t("forgot-password")}
                                             </Link>
                                         </div>
                                         <FormControl>
@@ -89,7 +91,7 @@ export const LoginForm = () => {
                             />
                         </div>
                         <FormButton disabled={login.isPending}>
-                            Login
+                            {t("login")}
                         </FormButton>
                     </form>
                 </Form>
