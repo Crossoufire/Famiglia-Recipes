@@ -70,7 +70,7 @@ export class ApiClient {
             const refreshResponse = await this.put("/tokens", body);
 
             if (refreshResponse.ok) {
-                this.setAccessToken(refreshResponse.body.access_token);
+                await this.setAccessToken(refreshResponse.body.access_token);
 
                 // Set refresh token from body for mobile clients
                 if (!this.includeCredentials()) {

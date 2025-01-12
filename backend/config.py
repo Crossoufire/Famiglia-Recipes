@@ -15,8 +15,7 @@ def as_bool(value: str) -> bool:
 
 class Config:
     # Database option
-    SQLALCHEMY_DATABASE_URI = (os.environ.get("FAM_DATABASE_URI") or
-                               f"sqlite:///{os.path.join(basedir + '/instance', 'site.db')}")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("FAM_DATABASE_URI") or f"sqlite:///{os.path.join(basedir + '/instance', 'site.db')}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Security options
