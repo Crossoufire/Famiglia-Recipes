@@ -177,6 +177,5 @@ def reset_password():
 
     user.password = generate_password_hash(data.get("new_password"))
     db.session.commit()
-    current_app.logger.info(f"[INFO] - [{user.id}] Password changed.")
 
     return {}, 204
