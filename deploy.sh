@@ -3,7 +3,7 @@
 echo "Deploying Famiglia-Recipes App..."
 
 echo "Running database migrations..."
-npm run db migrate
+npm run dk migrate
 
 echo "Building application..."
 npm run build
