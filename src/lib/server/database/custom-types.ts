@@ -15,7 +15,7 @@ export const customJson = <TData>(name: string) =>
     })(name);
 
 
-export const imageUrl = (name: string, staticPath: string = "/static/recipe-images") =>
+export const imageUrl = (name: string) =>
     customType<{ data: string; driverData: string }>({
         dataType() {
             return "text";
@@ -24,7 +24,11 @@ export const imageUrl = (name: string, staticPath: string = "/static/recipe-imag
             return value;
         },
         fromDriver(value: string) {
-            const baseUrl = process.env.VITE_BASE_URL;
-            return `${baseUrl}${staticPath}/${value}`;
+            if (process.env.NODE_ENV === "production") {
+                return `${process.env.VITE_BASE_URL}$/uploads/recipe-images/${value}`;
+            }
+            else {
+                return `${process.env.VITE_BASE_URL}$/static/recipe-images/${value}`;
+            }
         },
     })(name);
