@@ -8,10 +8,6 @@ npm run dk migrate
 echo "Building application..."
 npm run build
 
-echo "Creating Necessary directories..."
-mkdir -p instance
-mkdir -p public/static/recipe-images
-
 echo "Stopping existing processes..."
 pm2 stop famiglia-recipes 2>/dev/null || true
 
