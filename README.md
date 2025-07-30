@@ -112,7 +112,7 @@ REGISTER_KEY_HASH=...
 There are two critical path configurations that must be kept in sync between the Node.js app and Nginx reverse proxy:
 
 1. **Upload URL Path:**
-    - **Nginx:** `location /uploads/` in the `nginx.conf`.
+    - **Nginx:** `location /uploads/recipe-images/` in the `nginx.conf`.
     - **Application:** The URL string in `imageUrl` located in `src/lib/server/database/custom-types.ts`.
 
 2. **Upload Filesystem Path:**
