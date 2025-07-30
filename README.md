@@ -88,7 +88,7 @@ DATABASE_URL="file:./instance/site.db"
 VITE_BASE_URL="http://localhost:3000"
 
 # Path to uploads images
-# IMAGE_UPLOADS_PATH="./public/static/recipe-images"
+IMAGE_UPLOADS_PATH="./public/static/recipe-images"
 
 # Secret for session encryption (use a long random string)
 BETTER_AUTH_SECRET="your_strong_secret_here"
