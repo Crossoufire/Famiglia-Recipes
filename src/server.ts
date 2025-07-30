@@ -4,7 +4,9 @@ import {seedLabels} from "~/lib/server/utils/labels-seeder";
 import {createStartHandler, defaultStreamHandler} from "@tanstack/react-start/server";
 
 
-dotenv.config({ path: ".env", quiet: true });
+if (process.env.NODE_ENV === "development") {
+    dotenv.config({ path: ".env", quiet: true });
+}
 
 
 export default createStartHandler({ createRouter })(defaultStreamHandler);

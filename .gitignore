@@ -30,3 +30,4 @@ db
 .tanstack
 logs/
 /scripts
+ecosystem.config.cjs

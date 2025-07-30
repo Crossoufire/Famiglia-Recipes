@@ -2,7 +2,9 @@ import dotenv from "dotenv";
 import type {Config} from "drizzle-kit";
 
 
-dotenv.config({ path: ".env", quiet: true });
+if (process.env.NODE_ENV === "development") {
+    dotenv.config({ path: ".env", quiet: true });
+}
 
 
 export default {
