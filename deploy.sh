@@ -8,12 +8,12 @@ npm run dk migrate
 echo "Building application..."
 npm run build
 
-echo "Copy .env.production to .output dir"
-if [ -f ".env.production" ]; then
-    cp .env.production .output/
-    echo ".env.production copied successfully."
+echo "Copy .env to .output dir"
+if [ -f ".env" ]; then
+    cp .env .output/
+    echo ".env copied successfully."
 else
-    echo "WARNING: .env.production not found in the project root. Exiting."
+    echo "WARNING: .env not found in the project root. Exiting."
     exit 1
 fi
 
