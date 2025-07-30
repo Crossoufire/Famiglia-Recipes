@@ -27,9 +27,9 @@ export const generatePasswordHash = (password: string, method: string = "scrypt"
 
 
 const checkScryptHash = (password: string, salt: string, storedHash: string) => {
-    let n = 32768;
-    let r = 8;
-    let p = 1;
+    const n = 32768;
+    const r = 8;
+    const p = 1;
     const keyLen = 64;
     const maxmem = 1024 * 1024 * 1024;
 
@@ -52,9 +52,9 @@ const generateSalt = (length: number) => {
 
 const hashPassword = (method: string, salt: string, password: string) => {
     if (method === "scrypt" || method.startsWith("scrypt:")) {
-        let n = 32768;
-        let r = 8;
-        let p = 1;
+        const n = 32768;
+        const r = 8;
+        const p = 1;
         const keyLen = 64;
         const maxmem = 1024 * 1024 * 1024;
 

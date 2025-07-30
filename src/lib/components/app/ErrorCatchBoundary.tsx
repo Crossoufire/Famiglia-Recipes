@@ -1,10 +1,9 @@
 import React from "react";
 import {Skull} from "lucide-react";
-import {ErrorComponentProps} from "@tanstack/react-router";
 import {ErrorComponent} from "~/lib/components/app/ErrorComponent";
 
 
-export function ErrorCatchBoundary({}: Readonly<ErrorComponentProps>) {
+export function ErrorCatchBoundary() {
     return (
         <ErrorComponent
             title={"Well, This is Awkward"}

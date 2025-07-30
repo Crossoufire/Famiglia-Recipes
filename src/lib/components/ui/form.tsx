@@ -1,9 +1,9 @@
-import * as React from "react"
-import {cn} from "~/lib/utils/helpers"
-import {Slot} from "@radix-ui/react-slot"
-import {Label} from "~/lib/components/ui/label"
-import * as LabelPrimitive from "@radix-ui/react-label"
-import {Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext, useFormState} from "react-hook-form"
+import * as React from "react";
+import {cn} from "~/lib/utils/helpers";
+import {Slot} from "@radix-ui/react-slot";
+import {Label} from "~/lib/components/ui/label";
+import * as LabelPrimitive from "@radix-ui/react-label";
+import {Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext, useFormState} from "react-hook-form";
 
 
 const Form = FormProvider;
@@ -24,18 +24,21 @@ const FormField = <
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({ ...props }: ControllerProps<TFieldValues, TName>) => {
+
+    const contextValue = React.useMemo(() => ({ name: props.name }), [props.name]);
+
     return (
-        <FormFieldContext.Provider value={{ name: props.name }}>
+        <FormFieldContext value={contextValue}>
             <Controller {...props}/>
-        </FormFieldContext.Provider>
+        </FormFieldContext>
     );
 }
 
 
 const useFormField = () => {
     const { getFieldState } = useFormContext();
-    const itemContext = React.useContext(FormItemContext);
-    const fieldContext = React.useContext(FormFieldContext);
+    const itemContext = React.use(FormItemContext);
+    const fieldContext = React.use(FormFieldContext);
     const formState = useFormState({ name: fieldContext.name });
     const fieldState = getFieldState(fieldContext.name, formState);
 
@@ -67,14 +70,16 @@ const FormItemContext = React.createContext<FormItemContextValue>({} as FormItem
 function FormItem({ className, ...props }: React.ComponentProps<"div">) {
     const id = React.useId();
 
+    const idMemo = React.useMemo(() => ({ id }), [id]);
+    
     return (
-        <FormItemContext.Provider value={{ id }}>
+        <FormItemContext value={idMemo}>
             <div
                 data-slot="form-item"
                 className={cn("grid gap-2", className)}
                 {...props}
             />
-        </FormItemContext.Provider>
+        </FormItemContext>
     );
 }
 

@@ -49,7 +49,7 @@ export const errorMiddleware = createMiddleware({ type: "function" }).server(asy
         }
 
         let errorMessageForLog = "Unexpected Error";
-        let originalError = error instanceof Error ? error : new Error(String(error));
+        const originalError = error instanceof Error ? error : new Error(String(error));
         if (error instanceof z.ZodError) {
             errorMessageForLog = "Unexpected Zod validation error";
             originalError.message = "A validation error occurred. Please try again later.";

@@ -9,10 +9,11 @@ interface ServingsProps {
 
 
 export const Servings = ({ initServings, multiSetter }: ServingsProps) => {
-    const [disabled, setDisabled] = useState(false);
     const [servings, setServings] = useState(initServings);
+    const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
         setServings(initServings);
     }, [initServings]);
 

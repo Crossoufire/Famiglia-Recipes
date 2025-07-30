@@ -30,7 +30,7 @@ export const saveUploadedImage = async ({ file, resize }: SaveUploadedImageOptio
         const buffer = Buffer.from(arrayBuffer);
         return processAndSaveImage({ buffer, resize });
     }
-    catch (error) {
+    catch {
         throw new FormattedError("This image could not be processed");
     }
 };

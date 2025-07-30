@@ -20,7 +20,7 @@ export function tryOrNotFound<T>(fn: () => T): T {
     try {
         return fn();
     }
-    catch (error) {
+    catch {
         throw notFound();
     }
 }

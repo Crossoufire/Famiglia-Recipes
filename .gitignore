@@ -5,8 +5,6 @@ yarn.lock
 .DS_Store
 .cache
 .env
-.env.production
-.env
 
 .data
 .vercel

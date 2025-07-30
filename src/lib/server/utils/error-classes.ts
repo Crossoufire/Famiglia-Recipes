@@ -17,7 +17,7 @@ export class FormattedError extends Error {
 
 
 export class FormZodError extends Error {
-    public readonly issues: any[];
+    public readonly issues: z.core.$ZodIssue[];
 
     constructor(zodError: z.ZodError, message?: string) {
         super(message || "Form validation failed");

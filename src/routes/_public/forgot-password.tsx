@@ -25,8 +25,8 @@ function ForgotPasswordPage() {
             email: submitted.email,
             redirectTo: "/reset-password",
         }, {
-            onError: (_ctx) => {
-                toast.error(t("unexpected-error"));
+            onError: (ctx) => {
+                toast.error(ctx.error.message);
             },
             onSuccess: async () => {
                 toast.success("An email was send to reset your password.")

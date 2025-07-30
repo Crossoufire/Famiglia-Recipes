@@ -3,7 +3,7 @@ import NProgress from "nprogress";
 import {useRouter} from "@tanstack/react-router";
 
 
-NProgress.configure({ showSpinner: false, parent: "body" })
+NProgress.configure({ showSpinner: false, parent: "body" });
 
 
 export const useNProgress = () => {
