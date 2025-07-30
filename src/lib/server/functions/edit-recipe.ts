@@ -5,10 +5,10 @@ import {notFound} from "@tanstack/react-router";
 import {createServerFn} from "@tanstack/react-start";
 import {HEIGHT, WIDTH} from "~/lib/server/utils/constants";
 import {FormattedError} from "~/lib/server/utils/error-classes";
-import {deleteImage, saveUploadedImage} from "~/lib/server/utils/image-handler";
 import {authMiddleware} from "~/lib/server/middleware/auth-guard";
 import {tryFormZodError, tryOrNotFound} from "~/lib/server/utils/zod-errors";
 import {editRecipeSchema, imageRecipeSchema} from "~/lib/server/utils/schemas";
+import {deleteImage, saveUploadedImage} from "~/lib/server/utils/image-handler";
 import {label, recipe as recipeTable, recipe, recipeLabel} from "~/lib/server/database/schema";
 
 
@@ -51,7 +51,9 @@ export const postEditRecipe = createServerFn({ method: "POST" })
         const formDataRecipe: string = data.get("recipe") as string;
 
         const recipeData = tryFormZodError(() => editRecipeSchema.parse(JSON.parse(formDataRecipe)));
-        if (formDataImage) tryFormZodError(() => imageRecipeSchema.parse(formDataImage))
+        if (formDataImage) {
+            tryFormZodError(() => imageRecipeSchema.parse(formDataImage));
+        }
 
         const checkRecipe = await db
             .select()
@@ -63,7 +65,8 @@ export const postEditRecipe = createServerFn({ method: "POST" })
             throw new FormattedError("Recipe not found");
         }
 
-        let coverName = checkRecipe.image;
+        const url = new URL(checkRecipe.image);
+        let coverName = url.pathname.split("/").pop() as string;
         if (formDataImage) {
             coverName = await saveUploadedImage({
                 file: formDataImage,

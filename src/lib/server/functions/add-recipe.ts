@@ -1,12 +1,12 @@
 import {asc, inArray} from "drizzle-orm";
 import {db} from "~/lib/server/database/db";
 import {createServerFn} from "@tanstack/react-start";
+import {HEIGHT, WIDTH} from "~/lib/server/utils/constants";
 import {tryFormZodError} from "~/lib/server/utils/zod-errors";
 import {saveUploadedImage} from "~/lib/server/utils/image-handler";
 import {authMiddleware} from "~/lib/server/middleware/auth-guard";
 import {imageRecipeSchema, recipeFormSchema} from "~/lib/server/utils/schemas";
 import {comment, label, recipe, recipeLabel} from "~/lib/server/database/schema";
-import {HEIGHT, WIDTH} from "~/lib/server/utils/constants";
 
 
 export const getLabels = createServerFn({ method: "GET" })
@@ -32,7 +32,7 @@ export const postAddRecipe = createServerFn({ method: "POST" })
         if (formDataImage) tryFormZodError(() => imageRecipeSchema.parse(formDataImage))
         const recipeData = tryFormZodError(() => recipeFormSchema.parse(JSON.parse(formDataRecipe)));
 
-        let coverName: string | null = null;
+        let coverName = "default.png";
         if (formDataImage) {
             coverName = await saveUploadedImage({
                 file: formDataImage,
@@ -56,13 +56,13 @@ export const postAddRecipe = createServerFn({ method: "POST" })
                 .insert(recipe)
                 .values({
                     steps: steps,
+                    image: coverName,
                     title: recipeData.title,
                     ingredients: ingredients,
                     submitterId: currentUser.id,
                     servings: recipeData.servings,
                     cookingTime: recipeData.cooking,
                     prepTime: recipeData.preparation,
-                    image: coverName || "default.png",
                 })
                 .returning();
 

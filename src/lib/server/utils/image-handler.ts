@@ -6,9 +6,6 @@ import pinoLogger from "~/lib/server/core/pino-logger";
 import {FormattedError} from "~/lib/server/utils/error-classes";
 
 
-const IMAGE_SAVE_LOCATION = "./public/static/recipe-images";
-
-
 interface ResizeOptions {
     width: number;
     height: number;
@@ -43,8 +40,8 @@ const processAndSaveImage = async ({ buffer, resize }: ProcessAndSaveImageOption
     const randomHex = crypto.randomBytes(8).toString("hex");
     const fileName = `${randomHex}.jpg`;
 
-    await fsPromises.mkdir(IMAGE_SAVE_LOCATION, { recursive: true });
-    const filePath = path.join(IMAGE_SAVE_LOCATION, fileName);
+    await fsPromises.mkdir(process.env.IMAGE_UPLOADS_PATH as string, { recursive: true });
+    const filePath = path.join(process.env.IMAGE_UPLOADS_PATH as string, fileName);
 
     const sharpInstance = sharp(buffer);
     if (resize) {
@@ -61,7 +58,7 @@ export const deleteImage = async (imageName: string | null | undefined) => {
     if (!imageName || imageName === "default.png") return;
 
     try {
-        const imagePath = path.join(process.cwd(), IMAGE_SAVE_LOCATION, imageName);
+        const imagePath = path.join(process.env.IMAGE_UPLOADS_PATH as string, imageName);
         await fsPromises.unlink(imagePath);
     }
     catch (err: any) {

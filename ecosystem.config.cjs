@@ -1,3 +1,8 @@
+const productionEnv = require("dotenv").config({
+    path: ".env.production",
+}).parsed;
+
+
 module.exports = {
     apps: [{
         name: "famiglia-recipes",
@@ -6,13 +11,10 @@ module.exports = {
         instances: 1,
         exec_mode: "fork",
 
-        env: {
-            NODE_ENV: "production",
-            PORT: 3000,
-        },
         env_production: {
             NODE_ENV: "production",
             PORT: 3000,
+            ...productionEnv,
         },
 
         max_restarts: 5,

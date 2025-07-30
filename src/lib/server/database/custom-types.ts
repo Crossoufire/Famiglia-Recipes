@@ -24,11 +24,12 @@ export const imageUrl = (name: string) =>
             return value;
         },
         fromDriver(value: string) {
+            // NOTE: This '/uploads/' path is served by Nginx. It MUST match the `location` block in the nginx.conf file.
             if (process.env.NODE_ENV === "production") {
-                return `${process.env.VITE_BASE_URL}$/uploads/recipe-images/${value}`;
+                return `${process.env.VITE_BASE_URL}/uploads/recipe-images/${value}`;
             }
             else {
-                return `${process.env.VITE_BASE_URL}$/static/recipe-images/${value}`;
+                return `${process.env.VITE_BASE_URL}/static/recipe-images/${value}`;
             }
         },
     })(name);

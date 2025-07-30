@@ -8,11 +8,11 @@ import {integer, primaryKey, sqliteTable, text} from "drizzle-orm/sqlite-core"
 export const recipe = sqliteTable("recipe", {
     comment: text(),
     servings: integer().notNull(),
-    image: imageUrl("image"),
     id: integer().primaryKey().notNull(),
     title: text({ length: 255 }).notNull(),
     prepTime: integer("prep_time").notNull(),
     cookingTime: integer("cooking_time").notNull(),
+    image: imageUrl("image").default("default.png").notNull(),
     steps: customJson<{ description: string }[]>("steps").notNull(),
     submittedDate: text("submitted_date").default(sql`CURRENT_TIMESTAMP`).notNull(),
     ingredients: customJson<{ proportion: string, ingredient: string }[]>("ingredients").notNull(),
