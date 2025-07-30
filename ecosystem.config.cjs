@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     apps: [{
         name: "famiglia-recipes",
         script: ".output/server/index.mjs",

@@ -37,6 +37,14 @@ export default [
         },
     },
     {
+        files: ["*.config.cjs", "*.config.js", "*.config.mjs"],
+        languageOptions: {
+            env: {
+                node: true,
+            },
+        },
+    },
+    {
         ignores: [
             "dist/**",
             "build/**",
