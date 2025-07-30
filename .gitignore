@@ -31,3 +31,4 @@ db
 logs/
 /scripts
 ecosystem.config.cjs
+deploy.sh
