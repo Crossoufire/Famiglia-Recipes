@@ -46,8 +46,8 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Crossoufire/famiglia-recipes.git](https://github.com/Crossoufire/famiglia-recipes.git)
-   cd famiglia-recipes
+   git clone https://github.com/Crossoufire/Famiglia-Recipes.git
+   cd Famiglia-Recipes
    ```
 
 2. **Install dependencies:**
@@ -109,7 +109,7 @@ REGISTER_KEY_HASH=...
 
 ## Production Configuration
 
-There are two critical path configurations that must be kept in sync between the Node.js app and Nginx reverse proxy:
+There are two critical path configurations that must be kept in sync between the `Node.js` app and `Nginx` reverse proxy:
 
 1. **Upload URL Path:**
     - **Nginx:** `location /uploads/recipe-images/` in the `nginx.conf`.
