@@ -50,7 +50,10 @@ export const imageRecipeSchema = z
 
 export const uploadRecipeSchema = z.object({
     type: z.enum(["file", "text"]),
-    content: z.union([z.instanceof(File), z.string()]),
+    content: z.union([
+        z.instanceof(File).refine((file) => file.size <= 7 * 1024 * 1024, `File size should be less than 7MB.`),
+        z.string(),
+    ]),
 });
 
 
