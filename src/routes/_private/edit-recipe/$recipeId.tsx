@@ -27,9 +27,9 @@ function EditRecipePage() {
         cooking: apiData.recipe.cookingTime,
         preparation: apiData.recipe.prepTime,
         comment: apiData.recipe.comment || "",
-        labels: apiData.recipe.recipeLabels.map(ing => ing.name),
-        steps: apiData.recipe.steps.map(ing => ({ content: ing.description })),
-        ingredients: apiData.recipe.ingredients.map(ing => ({ quantity: ing.proportion, description: ing.ingredient })),
+        labels: apiData.recipe.recipeLabels.map((ing) => ing.name),
+        steps: apiData.recipe.steps.map((ing) => ({ content: ing.description })),
+        ingredients: apiData.recipe.ingredients.map((ing) => ({ quantity: ing.proportion, description: ing.ingredient })),
     };
 
     const onSubmit = async (submittedData: RecipeFormValues) => {

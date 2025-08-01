@@ -19,7 +19,7 @@ export const DynamicIngredientList = ({ control }: DynIngListProps) => {
 
     const addIngredient = (ev: React.MouseEvent | React.KeyboardEvent) => {
         ev.preventDefault();
-        append({ quantity: "", description: "" });
+        append({ quantity: 0, description: "" });
     };
 
     const removeIngredient = (ev: React.MouseEvent, idx: number) => {

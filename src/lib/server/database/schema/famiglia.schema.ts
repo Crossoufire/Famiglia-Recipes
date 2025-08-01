@@ -14,9 +14,9 @@ export const recipe = sqliteTable("recipe", {
     cookingTime: integer("cooking_time").notNull(),
     image: imageUrl("image").default("default.png").notNull(),
     steps: customJson<{ description: string }[]>("steps").notNull(),
-    submittedDate: text("submitted_date").default(sql`CURRENT_TIMESTAMP`).notNull(),
-    ingredients: customJson<{ proportion: string, ingredient: string }[]>("ingredients").notNull(),
     submitterId: integer("submitter_id").notNull().references(() => user.id),
+    submittedDate: text("submitted_date").default(sql`CURRENT_TIMESTAMP`).notNull(),
+    ingredients: customJson<{ proportion: number, ingredient: string }[]>("ingredients").notNull(),
 });
 
 
@@ -32,7 +32,7 @@ export const favorites = sqliteTable("favorites",
 export const recipeLabel = sqliteTable("recipe_label",
     {
         recipeId: integer("recipe_id").notNull().references(() => recipe.id, { onDelete: "cascade" }),
-        labelId: integer("label_id").notNull().references(() => label.id),
+        labelId: integer("label_id").notNull().references(() => label.id, { onDelete: "cascade" }),
     },
     (table) => [
         primaryKey({ columns: [table.recipeId, table.labelId], name: "recipe_label_recipe_id_label_id_pk" })

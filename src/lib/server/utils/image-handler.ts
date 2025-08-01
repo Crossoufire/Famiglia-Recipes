@@ -67,3 +67,10 @@ export const deleteImage = async (imageName: string | null | undefined) => {
         }
     }
 };
+
+
+export async function fileToBase64(file: File) {
+    const arrayBuffer = await file.arrayBuffer();
+    const imageBuffer = Buffer.from(arrayBuffer);
+    return imageBuffer.toString("base64");
+}

@@ -8,6 +8,7 @@ import {RATIO} from "~/lib/server/utils/constants";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Textarea} from "~/lib/components/ui/textarea";
 import {ImageCropper} from "~/lib/components/app/ImageCropper";
+import UploadDialog from "~/lib/components/recipe-form/UploadDialog";
 import {DynamicStepList} from "~/lib/components/recipe-form/StepsList";
 import {LabelSelector} from "~/lib/components/recipe-form/LabelSelector";
 import {DynamicIngredientList} from "~/lib/components/recipe-form/IngredientList";
@@ -54,60 +55,26 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type }:
     });
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-7 w-[750px] max-sm:w-full">
-                <FormField
-                    name="image"
-                    control={form.control}
-                    render={({ field }) =>
-                        <FormItem>
-                            <FormLabel>{t("r-image")}</FormLabel>
-                            <FormControl>
-                                <ImageCropper
-                                    aspect={RATIO}
-                                    cropShape={"rect"}
-                                    fileName={field.name}
-                                    resultClassName={"h-[150px]"}
-                                    onCropApplied={field.onChange}
-                                />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    }
-                />
-                <FormField
-                    name="title"
-                    control={form.control}
-                    render={({ field }) =>
-                        <FormItem>
-                            <FormLabel>{t("r-title")}</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    placeholder={t("r-title")}
-                                />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    }
-                />
-                <div className="grid grid-cols-3 gap-4">
+        <div>
+            <div className="mt-8 mb-7">
+                <div className="font-medium text-sm">{t("ai-parsing")}</div>
+                <UploadDialog form={form}/>
+            </div>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7 w-[750px] max-sm:w-full">
                     <FormField
-                        name="preparation"
+                        name="image"
                         control={form.control}
                         render={({ field }) =>
                             <FormItem>
-                                <FormLabel className="line-clamp-1">
-                                    {t("r-preparation")}
-                                </FormLabel>
+                                <FormLabel>{t("r-image")}</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        {...field}
-                                        type={"number"}
-                                        onChange={(ev) => {
-                                            const value = parseInt(ev.target.value, 10);
-                                            field.onChange(isNaN(value) ? "" : value)
-                                        }}
+                                    <ImageCropper
+                                        aspect={RATIO}
+                                        cropShape={"rect"}
+                                        fileName={field.name}
+                                        resultClassName={"h-[150px]"}
+                                        onCropApplied={field.onChange}
                                     />
                                 </FormControl>
                                 <FormMessage/>
@@ -115,21 +82,96 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type }:
                         }
                     />
                     <FormField
-                        name="cooking"
+                        name="title"
                         control={form.control}
                         render={({ field }) =>
                             <FormItem>
-                                <FormLabel className="line-clamp-1">
-                                    {t("r-cooking")}
-                                </FormLabel>
+                                <FormLabel>{t("r-title")}</FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        type={"number"}
-                                        onChange={(ev) => {
-                                            const value = parseInt(ev.target.value, 10);
-                                            field.onChange(isNaN(value) ? "" : value)
-                                        }}
+                                        placeholder={t("r-title")}
+                                    />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        }
+                    />
+                    <div className="grid grid-cols-3 gap-4">
+                        <FormField
+                            name="preparation"
+                            control={form.control}
+                            render={({ field }) =>
+                                <FormItem>
+                                    <FormLabel className="line-clamp-1">
+                                        {t("r-preparation")}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type={"number"}
+                                            onChange={(ev) => {
+                                                const value = parseInt(ev.target.value, 10);
+                                                field.onChange(isNaN(value) ? "" : value)
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            }
+                        />
+                        <FormField
+                            name="cooking"
+                            control={form.control}
+                            render={({ field }) =>
+                                <FormItem>
+                                    <FormLabel className="line-clamp-1">
+                                        {t("r-cooking")}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type={"number"}
+                                            onChange={(ev) => {
+                                                const value = parseInt(ev.target.value, 10);
+                                                field.onChange(isNaN(value) ? "" : value)
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            }
+                        />
+                        <FormField
+                            name="servings"
+                            control={form.control}
+                            render={({ field }) =>
+                                <FormItem>
+                                    <FormLabel>{t("r-servings")}</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type={"number"}
+                                            onChange={(ev) => {
+                                                const value = parseInt(ev.target.value, 10);
+                                                field.onChange(isNaN(value) ? "" : value)
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            }
+                        />
+                    </div>
+                    <FormField
+                        name="ingredients"
+                        control={form.control}
+                        render={() =>
+                            <FormItem>
+                                <FormLabel>{t("ingredients")}</FormLabel>
+                                <FormControl>
+                                    <DynamicIngredientList
+                                        control={form.control}
                                     />
                                 </FormControl>
                                 <FormMessage/>
@@ -137,97 +179,62 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type }:
                         }
                     />
                     <FormField
-                        name="servings"
+                        name="steps"
                         control={form.control}
-                        render={({ field }) =>
+                        render={() =>
                             <FormItem>
-                                <FormLabel>{t("r-servings")}</FormLabel>
+                                <FormLabel>{t("r-steps")}</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        {...field}
-                                        type={"number"}
-                                        onChange={(ev) => {
-                                            const value = parseInt(ev.target.value, 10);
-                                            field.onChange(isNaN(value) ? "" : value)
-                                        }}
+                                    <DynamicStepList
+                                        control={form.control}
                                     />
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
                         }
                     />
-                </div>
-                <FormField
-                    name="ingredients"
-                    control={form.control}
-                    render={() =>
-                        <FormItem>
-                            <FormLabel>{t("ingredients")}</FormLabel>
-                            <FormControl>
-                                <DynamicIngredientList
-                                    control={form.control}
-                                />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    }
-                />
-                <FormField
-                    name="steps"
-                    control={form.control}
-                    render={() =>
-                        <FormItem>
-                            <FormLabel>{t("r-steps")}</FormLabel>
-                            <FormControl>
-                                <DynamicStepList
-                                    control={form.control}
-                                />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    }
-                />
-                <FormField
-                    name="labels"
-                    control={form.control}
-                    render={({ field }) =>
-                        <FormItem>
-                            <FormLabel>Labels</FormLabel>
-                            <FormControl>
-                                <LabelSelector
-                                    labelsList={labels}
-                                    selectedLabels={field.value}
-                                    setSelectedLabels={field.onChange}
-                                />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    }
-                />
-                {type === "Creation" &&
                     <FormField
-                        name="comment"
+                        name="labels"
                         control={form.control}
                         render={({ field }) =>
                             <FormItem>
-                                <FormLabel>{t("comment")}</FormLabel>
+                                <FormLabel>Labels</FormLabel>
                                 <FormControl>
-                                    <Textarea {...field}/>
+                                    <LabelSelector
+                                        labelsList={labels}
+                                        selectedLabels={field.value}
+                                        setSelectedLabels={field.onChange}
+                                    />
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
                         }
                     />
-                }
-                <Button
-                    type="submit"
-                    className="w-52"
-                    onClick={() => setBlockerActive(false)}
-                    disabled={pendingState || form.formState.isSubmitting}
-                >
-                    {type === "Creation" ? t("r-add") : t("r-edit")}
-                </Button>
-            </form>
-        </Form>
+                    {type === "Creation" &&
+                        <FormField
+                            name="comment"
+                            control={form.control}
+                            render={({ field }) =>
+                                <FormItem>
+                                    <FormLabel>{t("comment")}</FormLabel>
+                                    <FormControl>
+                                        <Textarea {...field}/>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            }
+                        />
+                    }
+                    <Button
+                        type="submit"
+                        className="w-52"
+                        onClick={() => setBlockerActive(false)}
+                        disabled={pendingState || form.formState.isSubmitting}
+                    >
+                        {type === "Creation" ? t("r-add") : t("r-edit")}
+                    </Button>
+                </form>
+            </Form>
+        </div>
     );
 };

@@ -167,7 +167,7 @@ function RecipeDetailsPage() {
                                 {recipe.ingredients.map((data) =>
                                     <li key={data.ingredient} className="flex items-start">
                                         <CircleCheck className="w-4 h-4 mr-4 mt-1 flex-shrink-0 text-green-600"/>
-                                        <span>{(parseFloat(data.proportion) * multi).toFixed(1)} {data.ingredient}</span>
+                                        <span>{(data.proportion * multi).toFixed(1)} {data.ingredient}</span>
                                     </li>
                                 )}
                             </ul>

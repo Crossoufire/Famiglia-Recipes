@@ -1,5 +1,5 @@
 import {useMutation} from "@tanstack/react-query";
-import {postAddRecipe} from "../server/functions/add-recipe";
+import {postAddRecipe, uploadRecipeForParsing} from "../server/functions/add-recipe";
 import {postEditRecipe} from "~/lib/server/functions/edit-recipe";
 import {deleteComment, editComment} from "../server/functions/recipe-details";
 import {addComment, deleteRecipe, favoriteRecipe} from "~/lib/server/functions/recipe-details";
@@ -51,4 +51,11 @@ export const useAddRecipe = () => {
     return useMutation({
         mutationFn: ({ data }: { data: FormData }) => postAddRecipe({ data }),
     });
+}
+
+
+export const useUploadMutation = () => {
+    return useMutation({
+        mutationFn: (formData: FormData) => uploadRecipeForParsing({ data: formData }),
+    })
 }

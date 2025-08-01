@@ -28,7 +28,7 @@ function AddRecipePage() {
         comment: "",
         preparation: 30,
         steps: [{ content: "" }],
-        ingredients: [{ quantity: "", description: "" }],
+        ingredients: [{ quantity: 0, description: "" }],
     };
 
     const onSubmit = async (submittedData: RecipeFormValues) => {
