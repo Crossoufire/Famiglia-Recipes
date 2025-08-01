@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {cn} from "~/lib/utils/helpers";
 import {useForm} from "react-hook-form";
 import {useTranslation} from "react-i18next";
 import {Input} from "~/lib/components/ui/input";
@@ -44,12 +45,14 @@ export const RecipeForm = ({ initValues, onSubmit, labels, pendingState, type }:
 
     return (
         <div>
-            <div className="mt-8 mb-7">
-                <div className="font-medium text-sm">{t("ai-parsing")}</div>
-                <UploadDialog form={form}/>
-            </div>
+            {type === "Creation" &&
+                <div className="mt-8 mb-7">
+                    <div className="font-medium text-sm">{t("ai-parsing")}</div>
+                    <UploadDialog form={form}/>
+                </div>
+            }
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7 w-[750px] max-sm:w-full">
+                <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-7 w-[750px] max-sm:w-full", type === "Edit" && "mt-8")}>
                     <FormField
                         name="image"
                         control={form.control}
