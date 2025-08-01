@@ -5,6 +5,7 @@ import {Input} from "~/lib/components/ui/input";
 import {useBlocker} from "@tanstack/react-router";
 import {Button} from "~/lib/components/ui/button";
 import {RATIO} from "~/lib/server/utils/constants";
+import {LabelType} from "~/lib/server/types/types";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Textarea} from "~/lib/components/ui/textarea";
 import {ImageCropper} from "~/lib/components/app/ImageCropper";
@@ -14,19 +15,6 @@ import {LabelSelector} from "~/lib/components/recipe-form/LabelSelector";
 import {DynamicIngredientList} from "~/lib/components/recipe-form/IngredientList";
 import {frontRecipeFormSchema, RecipeFormValues} from "~/lib/server/utils/schemas";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "~/lib/components/ui/form";
-
-
-export type Ingredient = {
-    quantity: string;
-    description: string;
-};
-
-
-export type LabelType = {
-    id: number;
-    name: string;
-    color: string;
-};
 
 
 interface RecipeFormProps {

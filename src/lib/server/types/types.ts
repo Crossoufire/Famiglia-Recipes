@@ -3,14 +3,27 @@ import {authOptions} from "~/lib/react-query";
 import {recipeFormSchema} from "~/lib/server/utils/schemas";
 
 
+export type RecipeFormType = z.infer<typeof recipeFormSchema>;
 export type CurrentUser = ReturnType<typeof authOptions>["queryFn"];
 
-export type RecipeFormType = z.infer<typeof recipeFormSchema>;
+export type Ingredient = {
+    quantity: string;
+    description: string;
+};
+
+export type LabelType = {
+    id: number;
+    name: string;
+    color: string;
+};
 
 export type UploadData = {
     type: "file" | "text";
     content: File | string;
 }
+
+
+// --- OPEN ROUTER AI TYPES -------------------------------------------------------------
 
 export type Request = {
     prompt?: string;

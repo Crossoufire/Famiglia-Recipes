@@ -1,6 +1,7 @@
 import React from "react";
 import {Button} from "~/lib/components/ui/button";
-import {LabelType} from "~/lib/components/recipe-form/RecipeForm";
+
+import {LabelType} from "~/lib/server/types/types";
 
 
 interface LabelSelectorProps {

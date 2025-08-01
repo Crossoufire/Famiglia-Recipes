@@ -50,6 +50,10 @@ export const DynamicIngredientList = ({ control }: DynIngListProps) => {
                                         className="w-28"
                                         onKeyDown={handleOnEnter}
                                         placeholder={t("quantity")}
+                                        onChange={(ev) => {
+                                            const value = parseInt(ev.target.value, 10);
+                                            field.onChange(isNaN(value) ? "" : value);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage/>
