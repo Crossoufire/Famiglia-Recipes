@@ -10,17 +10,20 @@ export default defineConfig({
         tsConfigPaths({ projects: ["./tsconfig.json"] }),
         tailwindcss(),
         tanstackStart({
+            target: "node-server",
+            customViteReactPlugin: true,
             spa: {
                 enabled: true,
             },
-            react: {
-                babel: {
-                    plugins: [["babel-plugin-react-compiler", { target: "19" }]],
-                },
+            tsr: {
+                semicolons: true,
+                quoteStyle: "double",
             },
-            target: "node-server",
-            customViteReactPlugin: true,
         }),
-        viteReact(),
+        viteReact({
+            babel: {
+                plugins: [["babel-plugin-react-compiler", { target: "19" }]],
+            },
+        }),
     ],
 })
