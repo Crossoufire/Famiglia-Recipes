@@ -16,7 +16,7 @@ import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Di
 
 
 const MAX_TEXT_LENGTH = 10_000;
-const MAX_FILE_SIZE = 7 * 1024 * 1024;
+const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const ACCEPTED_FILE_TYPES = {
     "image/png": [".png"],
     "image/webp": [".webp"],
