@@ -42,16 +42,15 @@ export const editRecipeSchema = z.object({
 });
 
 
-export const imageRecipeSchema = z
-    .instanceof(File)
-    .refine((file) => file.size <= 20 * 1024 * 1024, "Max image size is 20MB.")
+export const imageRecipeSchema = z.instanceof(File)
+    .refine((file: File) => file.size <= 20 * 1024 * 1024, "Max image size is 20MB.")
     .optional()
 
 
 export const uploadRecipeSchema = z.object({
     type: z.enum(["file", "text"]),
     content: z.union([
-        z.instanceof(File).refine((file) => file.size <= 20 * 1024 * 1024, `File size should be less than 20MB.`),
+        z.instanceof(File).refine((file: File) => file.size <= 20 * 1024 * 1024, `File size should be less than 20MB.`),
         z.string(),
     ]),
 });

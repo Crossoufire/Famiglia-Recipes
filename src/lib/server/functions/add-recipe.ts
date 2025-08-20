@@ -25,7 +25,7 @@ export const getLabels = createServerFn({ method: "GET" })
             .select()
             .from(label)
             .orderBy(asc(label.order));
-    })
+    });
 
 
 export const postAddRecipe = createServerFn({ method: "POST" })
@@ -254,7 +254,7 @@ function createRecipeText() {
     },
     {
         quantity: 1,
-        description: "pincé de poivre"
+        description: "pincée de poivre"
     },
     `.trim();
 }

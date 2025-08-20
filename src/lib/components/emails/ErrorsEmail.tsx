@@ -15,6 +15,16 @@ interface ErrorEmailProps {
 
 
 export default function ErrorEmail({ ctx, brand = "Famiglia-Recipes" }: ErrorEmailProps) {
+    if (ctx === undefined) {
+        ctx = {
+            message: "No context provided",
+            errorName: "Unknown",
+            timestamp: new Date().toISOString(),
+            errorMessage: "No error message provided",
+            stack: undefined,
+        }
+    }
+
     const niceTime = new Date(ctx.timestamp).toLocaleString("fr", {
         month: "long",
         day: "numeric",
