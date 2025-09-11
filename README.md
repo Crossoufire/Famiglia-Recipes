@@ -3,8 +3,6 @@
 A simple and modern web application for families to share and manage their favorite recipes.
 This app is built with a focus on simplicity and ease of use.
 
----
-
 ## Features
 
 - **Full Recipe CRUD:** Create, read, update, and delete recipes.
@@ -18,8 +16,6 @@ This app is built with a focus on simplicity and ease of use.
 - **Admin & Maintenance:**
     - In prod, critical server errors automatically trigger an email to the site administrator.
 
----
-
 ## Tech Stack
 
 - **Backend:** Node.js
@@ -30,8 +26,6 @@ This app is built with a focus on simplicity and ease of use.
 - **Authentication:** [Better-Auth](https://github.com/GentikSolm/better-auth)
 - **Validation:** [Zod 4](https://zod.dev/)
 - **i18n:** [i18next](https://www.i18next.com/)
-
----
 
 ## Getting Started
 
