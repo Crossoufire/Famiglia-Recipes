@@ -5,7 +5,7 @@ import {Button} from "~/lib/components/ui/button";
 import {useQueryClient} from "@tanstack/react-query";
 import {Textarea} from "~/lib/components/ui/textarea";
 import {Comment} from "~/lib/components/details/CommentSection";
-import {queryKeys, useAddComment, useEditComment} from "~/lib/react-query";
+import {recipeCommentsOptions, useAddComment, useEditComment} from "~/lib/react-query";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "~/lib/components/ui/form";
 import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from "~/lib/components/ui/dialog";
 
@@ -40,7 +40,7 @@ export const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }: Commen
                 onSuccess: async () => {
                     form.reset();
                     setOpen(false);
-                    await queryClient.invalidateQueries({ queryKey: queryKeys.recipeCommentsKey(recipeId) });
+                    await queryClient.invalidateQueries({ queryKey: recipeCommentsOptions(recipeId).queryKey });
                 },
             });
         }
@@ -49,7 +49,7 @@ export const CommentDialog = ({ open, setOpen, commentToEdit, recipeId }: Commen
                 onSuccess: async () => {
                     form.reset();
                     setOpen(false);
-                    await queryClient.invalidateQueries({ queryKey: queryKeys.recipeCommentsKey(recipeId) });
+                    await queryClient.invalidateQueries({ queryKey: recipeCommentsOptions(recipeId).queryKey });
                 },
             });
         }

@@ -1,8 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
-import {postAddRecipe, uploadRecipeForParsing} from "../server/functions/add-recipe";
 import {postEditRecipe} from "~/lib/server/functions/edit-recipe";
-import {deleteComment, editComment} from "../server/functions/recipe-details";
-import {addComment, deleteRecipe, favoriteRecipe} from "~/lib/server/functions/recipe-details";
+import {postAddRecipe, uploadRecipeForParsing} from "~/lib/server/functions/add-recipe";
+import {addComment, deleteComment, deleteRecipe, editComment, favoriteRecipe} from "~/lib/server/functions/recipe-details";
 
 
 export const useDeleteRecipe = () => {

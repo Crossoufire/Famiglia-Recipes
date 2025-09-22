@@ -12,12 +12,12 @@ import {createFileRoute, Link} from "@tanstack/react-router";
 import {groupRecipesAlphabetically, normalizeStr} from "~/lib/utils/helpers";
 
 
-export type ApiData = Awaited<ReturnType<NonNullable<ReturnType<typeof allRecipesOptions>["queryFn"]>>>;
-type RecipeLabel = Awaited<ReturnType<NonNullable<ReturnType<typeof allRecipesOptions>["queryFn"]>>>["labels"][0];
+export type ApiData = Awaited<ReturnType<NonNullable<typeof allRecipesOptions["queryFn"]>>>;
+type RecipeLabel = Awaited<ReturnType<NonNullable<typeof allRecipesOptions["queryFn"]>>>["labels"][0];
 
 
 export const Route = createFileRoute("/_private/all-recipes")({
-    loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(allRecipesOptions()),
+    loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(allRecipesOptions),
     component: AllRecipesPage,
 });
 
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_private/all-recipes")({
 function AllRecipesPage() {
     const { t } = useTranslation();
     const [query, setQuery] = useState("");
-    const apiData = useSuspenseQuery(allRecipesOptions()).data;
+    const apiData = useSuspenseQuery(allRecipesOptions).data;
     const [selectedLabels, setSelectedLabels] = useState<RecipeLabel[]>([]);
     const availableLabels = apiData.labels.filter((label) => !selectedLabels.some(sl => sl.id === label.id));
 

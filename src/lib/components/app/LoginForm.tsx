@@ -1,6 +1,6 @@
 import {useForm} from "react-hook-form";
 import {LoaderCircle} from "lucide-react";
-import {queryKeys} from "~/lib/react-query";
+import {authOptions} from "~/lib/react-query";
 import {useTranslation} from "react-i18next";
 import {Input} from "~/lib/components/ui/input";
 import authClient from "~/lib/utils/auth-client";
@@ -48,7 +48,7 @@ export const LoginForm = () => {
                 }
             },
             onSuccess: async () => {
-                await queryClient.invalidateQueries({ queryKey: queryKeys.authKey() });
+                await queryClient.invalidateQueries({ queryKey: authOptions.queryKey });
                 await router.invalidate();
                 await navigate({ to: "/dashboard", replace: true });
             }

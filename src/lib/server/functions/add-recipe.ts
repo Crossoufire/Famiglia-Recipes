@@ -1,5 +1,6 @@
 import z from "zod";
 import mammoth from "mammoth";
+import {serverEnv} from "~/env/server";
 import {asc, inArray} from "drizzle-orm";
 import {db} from "~/lib/server/database/db";
 import {createServerFn} from "@tanstack/react-start";
@@ -187,7 +188,7 @@ async function callGeminiModel(textContent: string | null, file: File | null) {
     }
 
     const requestBody: Request = {
-        model: process.env.OPEN_ROUTER_MODEL_ID as string,
+        model: serverEnv.OPEN_ROUTER_MODEL_ID,
         max_tokens: 3000,
         messages: messages,
         response_format: {
@@ -208,11 +209,11 @@ async function callGeminiModel(textContent: string | null, file: File | null) {
         ],
     };
 
-    const response = await fetch(`${process.env.OPEN_ROUTER_BASE_URL}/chat/completions`, {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.OPEN_ROUTER_API_KEY}`,
+            "Authorization": `Bearer ${serverEnv.OPEN_ROUTER_API_KEY}`,
         },
         body: JSON.stringify(requestBody),
     });

@@ -1,6 +1,7 @@
 import path from "path";
 import sharp from "sharp";
 import crypto from "crypto";
+import {serverEnv} from "~/env/server";
 import {promises as fsPromises} from "node:fs";
 import pinoLogger from "~/lib/server/core/pino-logger";
 import {FormattedError} from "~/lib/server/utils/error-classes";
@@ -40,8 +41,8 @@ const processAndSaveImage = async ({ buffer, resize }: ProcessAndSaveImageOption
     const randomHex = crypto.randomBytes(8).toString("hex");
     const fileName = `${randomHex}.jpg`;
 
-    await fsPromises.mkdir(process.env.IMAGE_UPLOADS_PATH as string, { recursive: true });
-    const filePath = path.join(process.env.IMAGE_UPLOADS_PATH as string, fileName);
+    await fsPromises.mkdir(serverEnv.IMAGE_UPLOADS_PATH, { recursive: true });
+    const filePath = path.join(serverEnv.IMAGE_UPLOADS_PATH, fileName);
 
     const sharpInstance = sharp(buffer);
     if (resize) {
@@ -58,7 +59,7 @@ export const deleteImage = async (imageName: string | null | undefined) => {
     if (!imageName || imageName === "default.png") return;
 
     try {
-        const imagePath = path.join(process.env.IMAGE_UPLOADS_PATH as string, imageName);
+        const imagePath = path.join(serverEnv.IMAGE_UPLOADS_PATH, imageName);
         await fsPromises.unlink(imagePath);
     }
     catch (err: any) {

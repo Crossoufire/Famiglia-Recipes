@@ -1,15 +1,14 @@
-import {queryKeys} from "~/lib/react-query";
-import {CurrentUser} from "~/lib/server/types/types";
+import {authOptions} from "~/lib/react-query";
 import {createFileRoute, redirect} from "@tanstack/react-router";
 
 
 export const Route = createFileRoute("/_public")({
     validateSearch: ({ search }) => search as { authExpired?: boolean },
     beforeLoad: async ({ context: { queryClient }, search }) => {
-        const currentUser: CurrentUser = queryClient.getQueryData(queryKeys.authKey());
-        
+        const currentUser = queryClient.getQueryData(authOptions.queryKey);
+
         if (search.authExpired) {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.authKey() });
+            await queryClient.invalidateQueries({ queryKey: authOptions.queryKey });
             queryClient.clear();
             throw redirect({ to: "/", replace: true });
         }

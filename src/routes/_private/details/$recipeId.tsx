@@ -13,7 +13,7 @@ import {useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
 import {CommentSection} from "~/lib/components/details/CommentSection";
 import {createFileRoute, Link, useNavigate} from "@tanstack/react-router";
 import {useDeleteRecipe, useFavoriteRecipe} from "~/lib/react-query/mutations";
-import {queryKeys, recipeDetailsOptions} from "~/lib/react-query/queryOptions";
+import {recipeDetailsOptions} from "~/lib/react-query/queryOptions";
 import {ChefHat, CircleCheck, Clock, Heart, History, Pen, Trash2, Users} from "lucide-react";
 
 
@@ -53,7 +53,7 @@ function RecipeDetailsPage() {
     const handleUpdateFavorite = () => {
         updateFavorite.mutate({ recipeId }, {
             onSuccess: () => {
-                queryClient.setQueryData<RecipeDetails>(queryKeys.recipeDetailsKey(parseInt(recipeId)), (oldData) => {
+                queryClient.setQueryData(recipeDetailsOptions(Number(recipeId)).queryKey, (oldData) => {
                     if (!oldData) return;
                     toast.success((oldData.isFavorited ? t("removed-recipe-favorite") : t("added-recipe-favorite")));
                     return { ...oldData, isFavorited: !oldData.isFavorited };

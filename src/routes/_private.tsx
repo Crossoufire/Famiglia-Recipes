@@ -1,11 +1,10 @@
-import {queryKeys} from "~/lib/react-query";
-import {CurrentUser} from "~/lib/server/types/types";
+import {authOptions} from "~/lib/react-query";
 import {createFileRoute, redirect} from "@tanstack/react-router";
 
 
 export const Route = createFileRoute("/_private")({
     beforeLoad: ({ context: { queryClient } }) => {
-        const currentUser: CurrentUser = queryClient.getQueryData(queryKeys.authKey());
+        const currentUser = queryClient.getQueryData(authOptions.queryKey);
         if (!currentUser) {
             throw redirect({ to: "/" });
         }

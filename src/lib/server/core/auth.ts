@@ -1,6 +1,8 @@
+import {clientEnv} from "~/env/client";
+import {serverEnv} from "~/env/server";
 import {betterAuth} from "better-auth";
 import {db} from "~/lib/server/database/db";
-import {sendEmail} from "../utils/mail-sender";
+import {sendEmail} from "~/lib/server/utils/mail-sender";
 import {reactStartCookies} from "better-auth/react-start";
 import {drizzleAdapter} from "better-auth/adapters/drizzle";
 import {checkWerkzeugPassword, generatePasswordHash} from "~/lib/server/core/security";
@@ -8,8 +10,8 @@ import {checkWerkzeugPassword, generatePasswordHash} from "~/lib/server/core/sec
 
 export const auth = betterAuth({
     appName: "Famiglia-Recipe",
-    baseURL: process.env.VITE_BASE_URL,
-    secret: process.env.BETTER_AUTH_SECRET,
+    baseURL: clientEnv.VITE_BASE_URL,
+    secret: serverEnv.BETTER_AUTH_SECRET,
     database: drizzleAdapter(db, {
         provider: "sqlite",
     }),

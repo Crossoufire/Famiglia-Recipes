@@ -7,56 +7,45 @@ import {getAllRecipes} from "~/lib/server/functions/all-recipes";
 import {getComments, getDetails} from "~/lib/server/functions/recipe-details";
 
 
-export const queryKeys = {
-    authKey: () => ["currentUser"] as const,
-    addRecipeKey: () => ["addRecipe"] as const,
-    dashboardKey: () => ["dashboard"] as const,
-    allRecipesKey: () => ["allRecipes"] as const,
-    editRecipeKey: (recipeId: number) => ["editRecipe", recipeId.toString()] as const,
-    recipeCommentsKey: (recipeId: number) => ["comments", recipeId.toString()] as const,
-    recipeDetailsKey: (recipeId: number) => ["recipeDetails", recipeId.toString()] as const,
-};
-
-
-export const authOptions = () => queryOptions({
-    queryKey: queryKeys.authKey(),
+export const authOptions = queryOptions({
+    queryKey: ["currentUser"],
     queryFn: () => getCurrentUser(),
     staleTime: 60 * 1000,
 });
 
 
-export const dashboardOptions = () => queryOptions({
-    queryKey: queryKeys.dashboardKey(),
+export const dashboardOptions = queryOptions({
+    queryKey: ["dashboard"],
     queryFn: () => getDashboard(),
 });
 
 
-export const allRecipesOptions = () => queryOptions({
-    queryKey: queryKeys.allRecipesKey(),
+export const allRecipesOptions = queryOptions({
+    queryKey: ["allRecipes"],
     queryFn: () => getAllRecipes(),
 });
 
 
 export const recipeDetailsOptions = (recipeId: number) => queryOptions({
-    queryKey: queryKeys.recipeDetailsKey(recipeId),
+    queryKey: ["recipeDetails", recipeId.toString()],
     queryFn: () => getDetails({ data: recipeId.toString() }),
 });
 
 
 export const recipeCommentsOptions = (recipeId: number) => queryOptions({
-    queryKey: queryKeys.recipeCommentsKey(recipeId),
+    queryKey: ["comments", recipeId.toString()],
     queryFn: () => getComments({ data: recipeId.toString() }),
     placeholderData: [],
 });
 
 
-export const addRecipeOptions = () => queryOptions({
-    queryKey: queryKeys.addRecipeKey(),
+export const addRecipeOptions = queryOptions({
+    queryKey: ["addRecipe"],
     queryFn: () => getLabels(),
 });
 
 
 export const editRecipeOptions = (recipeId: number) => queryOptions({
-    queryKey: queryKeys.editRecipeKey(recipeId),
+    queryKey: ["editRecipe", recipeId.toString()],
     queryFn: () => getEditRecipe({ data: recipeId.toString() }),
 });

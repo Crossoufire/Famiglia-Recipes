@@ -10,7 +10,7 @@ import {editRecipeOptions, useUpdateRecipe} from "~/lib/react-query";
 
 export const Route = createFileRoute("/_private/edit-recipe/$recipeId")({
     loader: ({ context: { queryClient }, params: { recipeId } }) =>
-        queryClient.ensureQueryData(editRecipeOptions(parseInt(recipeId))),
+        queryClient.ensureQueryData(editRecipeOptions(Number(recipeId))),
     component: EditRecipePage,
 })
 
@@ -20,7 +20,7 @@ function EditRecipePage() {
     const { t } = useTranslation();
     const { recipeId } = Route.useParams();
     const updateRecipeMutation = useUpdateRecipe();
-    const apiData = useSuspenseQuery(editRecipeOptions(parseInt(recipeId))).data;
+    const apiData = useSuspenseQuery(editRecipeOptions(Number(recipeId))).data;
     const initValues: RecipeFormValues = {
         title: apiData.recipe.title,
         servings: apiData.recipe.servings,

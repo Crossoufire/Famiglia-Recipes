@@ -10,7 +10,7 @@ import {createFileRoute, useNavigate} from "@tanstack/react-router";
 
 
 export const Route = createFileRoute("/_private/add-recipe")({
-    loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(addRecipeOptions()),
+    loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(addRecipeOptions),
     component: AddRecipePage,
 });
 
@@ -19,7 +19,7 @@ function AddRecipePage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const addRecipe = useAddRecipe();
-    const { data: labels } = useSuspenseQuery(addRecipeOptions());
+    const { data: labels } = useSuspenseQuery(addRecipeOptions);
     const initValues: RecipeFormValues = {
         title: "",
         labels: [],

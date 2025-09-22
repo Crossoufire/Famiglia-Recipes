@@ -9,7 +9,7 @@ import {CommentDialog} from "~/lib/components/details/CommentDialog";
 import {Card, CardContent, CardHeader} from "~/lib/components/ui/card";
 import {ChefHat, LoaderCircle, Pencil, Plus, Trash2} from "lucide-react";
 import {useIsMutating, useQuery, useQueryClient} from "@tanstack/react-query";
-import {queryKeys, recipeCommentsOptions, useDeleteComment} from "~/lib/react-query";
+import {recipeCommentsOptions, useDeleteComment} from "~/lib/react-query";
 
 
 interface CommentSectionProps {
@@ -44,7 +44,7 @@ export const CommentSection = ({ recipeId, currentUserId, recipeSubmitterId }: C
     const onDeleteComment = (comment: Comment) => {
         deleteCommentMutation.mutate({ commentId: comment.id }, {
             onSuccess: async () => {
-                await queryClient.invalidateQueries({ queryKey: queryKeys.recipeCommentsKey(recipeId) });
+                await queryClient.invalidateQueries({ queryKey: recipeCommentsOptions(recipeId).queryKey });
                 toast.success(t("success-comment-deleted"));
             },
         });

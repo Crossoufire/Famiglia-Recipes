@@ -1,8 +1,8 @@
 import {useState} from "react";
 import {cn} from "~/lib/utils/helpers";
-import {queryKeys} from "~/lib/react-query";
 import {useAuth} from "~/lib/hooks/use-auth";
 import {useTranslation} from "react-i18next";
+import {authOptions} from "~/lib/react-query";
 import authClient from "~/lib/utils/auth-client";
 import {Button} from "~/lib/components/ui/button";
 import {useQueryClient} from "@tanstack/react-query";
@@ -29,7 +29,7 @@ export const Navbar = () => {
     const logoutUser = async () => {
         await authClient.signOut();
         await router.invalidate();
-        queryClient.setQueryData(queryKeys.authKey(), null);
+        queryClient.setQueryData(authOptions.queryKey, null);
         await navigate({ to: "/", replace: true });
         queryClient.removeQueries();
     };

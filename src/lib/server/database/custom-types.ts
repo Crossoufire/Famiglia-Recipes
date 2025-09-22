@@ -1,3 +1,5 @@
+import {clientEnv} from "~/env/client";
+import {serverEnv} from "~/env/server";
 import {customType} from "drizzle-orm/sqlite-core";
 
 
@@ -24,12 +26,6 @@ export const imageUrl = (name: string) =>
             return value;
         },
         fromDriver(value: string) {
-            // NOTE: This '/uploads/recipe-images/' path is served by Nginx. It MUST match the `location` block in the nginx.conf file.
-            if (process.env.NODE_ENV === "production") {
-                return `${process.env.VITE_BASE_URL}/uploads/recipe-images/${value}`;
-            }
-            else {
-                return `${process.env.VITE_BASE_URL}/static/recipe-images/${value}`;
-            }
+            return `${clientEnv.VITE_BASE_URL}/${serverEnv.UPLOADS_DIR_NAME}/recipe-images/${value}`;
         },
     })(name);

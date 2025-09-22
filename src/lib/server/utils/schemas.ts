@@ -14,8 +14,8 @@ export const stepSchema = z.object({
 
 export const recipeFormSchema = z.object({
     title: z.string().min(1, "Title is required"),
-    cooking: z.number().int().positive("Cooking time must be a positive number"),
-    preparation: z.number().int().positive("Preparation time must be a positive number"),
+    cooking: z.number().int().nonnegative("Cooking time must be a positive number"),
+    preparation: z.number().int().nonnegative("Preparation time must be a positive number"),
     servings: z.number().int().positive("Servings must be a positive number"),
     ingredients: z.array(ingredientSchema).min(1, "At least one ingredient is required"),
     steps: z.array(stepSchema).min(1, "At least one step is required"),
@@ -33,8 +33,8 @@ export const frontRecipeFormSchema = recipeFormSchema.extend({
 export const editRecipeSchema = z.object({
     id: z.string(),
     title: z.string().min(1, "Title is required"),
-    cooking: z.number().int().positive("Cooking time must be a positive number"),
-    preparation: z.number().int().positive("Preparation time must be a positive number"),
+    cooking: z.number().int().nonnegative("Cooking time must be a positive number"),
+    preparation: z.number().int().nonnegative("Preparation time must be a positive number"),
     servings: z.number().int().positive("Servings must be a positive number"),
     ingredients: z.array(ingredientSchema).min(1, "At least one ingredient is required"),
     steps: z.array(stepSchema).min(1, "At least one step is required"),

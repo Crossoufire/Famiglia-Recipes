@@ -7,7 +7,7 @@ import {Avatar, AvatarFallback} from "~/lib/components/ui/avatar";
 import {Card, CardContent, CardFooter, CardHeader} from "~/lib/components/ui/card";
 
 
-type Recipe = Awaited<ReturnType<NonNullable<ReturnType<typeof dashboardOptions>["queryFn"]>>>["favoriteRecipes"][0];
+type Recipe = Awaited<ReturnType<NonNullable<typeof dashboardOptions["queryFn"]>>>["favoriteRecipes"][0];
 
 
 export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
