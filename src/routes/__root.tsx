@@ -2,6 +2,7 @@
 import appCss from "~/styles.css?url";
 import {I18nextProvider} from "react-i18next";
 import i18nInstance from "~/lib/client/i18n/i18n";
+import {authOptions} from "~/lib/client/react-query";
 import {type QueryClient} from "@tanstack/react-query";
 import {Toaster} from "~/lib/client/components/ui/sonner";
 import {Navbar} from "~/lib/client/components/app/Navbar";
@@ -15,7 +16,7 @@ import {createRootRouteWithContext, HeadContent, Outlet, Scripts} from "@tanstac
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
     ssr: false,
-    // beforeLoad: async ({ context: { queryClient } }) => queryClient.prefetchQuery(authOptions),
+    beforeLoad: async ({ context: { queryClient } }) => queryClient.prefetchQuery(authOptions),
     head: () => ({
         meta: [
             { charSet: "UTF-8" },
