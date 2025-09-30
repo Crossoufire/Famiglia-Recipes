@@ -1,21 +1,21 @@
 /// <reference types="vite/client"/>
 import appCss from "~/styles.css?url";
-import i18nInstance from "~/lib/i18n/i18n";
-import React, {lazy, Suspense} from "react";
 import {I18nextProvider} from "react-i18next";
-import {authOptions} from "~/lib/react-query";
-import {Toaster} from "~/lib/components/ui/sonner";
-import {Navbar} from "~/lib/components/app/Navbar";
-import {Footer} from "~/lib/components/app/Footer";
-import {useNProgress} from "~/lib/hooks/use-nprogress";
+import i18nInstance from "~/lib/client/i18n/i18n";
 import {type QueryClient} from "@tanstack/react-query";
+import {Toaster} from "~/lib/client/components/ui/sonner";
+import {Navbar} from "~/lib/client/components/app/Navbar";
+import {Footer} from "~/lib/client/components/app/Footer";
+import {TanStackDevtools} from "@tanstack/react-devtools";
+import {useNProgress} from "~/lib/client/hooks/use-nprogress";
+import {ReactQueryDevtoolsPanel} from "@tanstack/react-query-devtools";
+import {TanStackRouterDevtoolsPanel} from "@tanstack/react-router-devtools";
 import {createRootRouteWithContext, HeadContent, Outlet, Scripts} from "@tanstack/react-router";
 
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-    beforeLoad: async ({ context: { queryClient } }) => {
-        return queryClient.fetchQuery(authOptions);
-    },
+    ssr: false,
+    // beforeLoad: async ({ context: { queryClient } }) => queryClient.prefetchQuery(authOptions),
     head: () => ({
         meta: [
             { charSet: "UTF-8" },
@@ -30,37 +30,45 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 
 function RootComponent() {
-    return (
-        <RootDocument>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Outlet/>
-            </Suspense>
-        </RootDocument>
-    );
-}
-
-
-function RootDocument({ children }: { readonly children: React.ReactNode }) {
     useNProgress();
 
     return (
-        <html className="dark" suppressHydrationWarning>
+        <html lang="en" className="dark" suppressHydrationWarning>
         <head>
             <HeadContent/>
         </head>
         <body>
 
         <div id="root">
-            <I18nextProvider i18n={i18nInstance}>
-                <Toaster/>
-                <Navbar/>
-                <main className="max-w-screen-xl container mx-auto px-0.5">
-                    {children}
-                </main>
-                <Footer/>
-                {import.meta.env.DEV && <ReactQueryDevtools/>}
-                {import.meta.env.DEV && <TanStackRouterDevtools/>}
-            </I18nextProvider>
+            <div className="flex flex-col min-h-[calc(100vh_-_64px)] mt-[64px]">
+                <I18nextProvider i18n={i18nInstance}>
+                    <Toaster/>
+                    <Navbar/>
+                    <main className="flex-1 w-[100%] max-w-[1320px] px-2 mx-auto">
+                        <Outlet/>
+                    </main>
+                    <Footer/>
+                </I18nextProvider>
+            </div>
+
+            {import.meta.env.DEV &&
+                <TanStackDevtools
+                    eventBusConfig={{
+                        debug: false,
+                        connectToServerBus: true,
+                    }}
+                    plugins={[
+                        {
+                            name: "TanStack Query",
+                            render: <ReactQueryDevtoolsPanel/>,
+                        },
+                        {
+                            name: "TanStack Router",
+                            render: <TanStackRouterDevtoolsPanel/>,
+                        },
+                    ]}
+                />
+            }
         </div>
 
         <Scripts/>
@@ -68,12 +76,3 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         </html>
     );
 }
-
-
-const TanStackRouterDevtools = lazy(() =>
-    import("@tanstack/react-router-devtools").then((res) => ({ default: res.TanStackRouterDevtools }))
-);
-
-const ReactQueryDevtools = lazy(() =>
-    import("@tanstack/react-query-devtools").then((res) => ({ default: res.ReactQueryDevtools }))
-);

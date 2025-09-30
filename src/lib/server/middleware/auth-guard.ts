@@ -1,11 +1,11 @@
 import {auth} from "~/lib/server/core/auth";
 import {redirect} from "@tanstack/react-router";
 import {createMiddleware} from "@tanstack/react-start";
-import {getWebRequest} from "@tanstack/react-start/server";
+import {getRequest} from "@tanstack/react-start/server";
 
 
 export const authMiddleware = createMiddleware({ type: "function" }).server(async ({ next }) => {
-    const { headers } = getWebRequest()!;
+    const { headers } = getRequest();
     const session = await auth.api.getSession({ headers, query: { disableCookieCache: true } });
 
     if (!session || !session.user) {
@@ -16,7 +16,7 @@ export const authMiddleware = createMiddleware({ type: "function" }).server(asyn
         context: {
             currentUser: {
                 ...session.user,
-                id: parseInt(session.user.id),
+                id: Number(session.user.id),
             }
         }
     });

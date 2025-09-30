@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "incremental": true,
         "strict": true,
         "esModuleInterop": true,
         "jsx": "react-jsx",
@@ -16,16 +15,15 @@
         "skipLibCheck": true,
         "target": "ES2022",
         "allowJs": true,
-        "noErrorTruncation": false,
+        "noEmit": true,
+        "strictNullChecks": true,
         "forceConsistentCasingInFileNames": true,
         "baseUrl": ".",
         "paths": {
             "~/*": [
                 "./src/*"
             ]
-        },
-        "noEmit": true,
-        "strictNullChecks": true
+        }
     },
     "include": [
         "**/*.ts",

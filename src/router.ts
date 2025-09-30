@@ -1,14 +1,14 @@
-import "./global-middleware";
 import {toast} from "sonner";
 import {routeTree} from "~/routeTree.gen";
-import {NotFound} from "~/lib/components/app/NotFound";
-import {routerWithQueryClient} from "@tanstack/react-router-with-query";
-import {ErrorCatchBoundary} from "~/lib/components/app/ErrorCatchBoundary";
-import {createRouter as createTanStackRouter} from "@tanstack/react-router";
+import {createRouter} from "@tanstack/react-router";
+import {NotFound} from "~/lib/client/components/app/NotFound";
+import {DefaultLoader} from "~/lib/client/components/app/DefaultLoader";
 import {MutationCache, QueryCache, QueryClient} from "@tanstack/react-query";
+import {setupRouterSsrQueryIntegration} from "@tanstack/react-router-ssr-query";
+import {ErrorCatchBoundary} from "~/lib/client/components/app/ErrorCatchBoundary";
 
 
-export function createRouter() {
+export function getRouter() {
     const queryClient = new QueryClient({
         queryCache: new QueryCache({
             onError: (error, query) => {
@@ -21,9 +21,16 @@ export function createRouter() {
             },
         }),
         mutationCache: new MutationCache({
-            onError: (error) => {
-                toast.error(error.message);
+            onError: (_error, _variables, _context, mutation) => {
+                if (mutation?.meta?.errorMessage) {
+                    toast.error(mutation.meta.errorMessage.toString());
+                }
             },
+            onSuccess: (_data, _variables, _context, mutation) => {
+                if (mutation?.meta?.successMessage) {
+                    toast.success(mutation.meta.successMessage.toString());
+                }
+            }
         }),
         defaultOptions: {
             queries: {
@@ -34,25 +41,26 @@ export function createRouter() {
         },
     });
 
-    return routerWithQueryClient(
-        createTanStackRouter({
-            routeTree,
-            context: { queryClient },
-            defaultPreload: false,
-            defaultPreloadStaleTime: 0,
-            defaultErrorComponent: ErrorCatchBoundary,
-            defaultNotFoundComponent: NotFound,
-            scrollRestoration: true,
-            defaultStructuralSharing: true,
-            defaultSsr: false,
-        }),
+    const router = createRouter({
+        routeTree,
+        context: { queryClient },
+        defaultPreload: false,
+        defaultPreloadStaleTime: 0,
+        defaultErrorComponent: ErrorCatchBoundary,
+        defaultNotFoundComponent: NotFound,
+        defaultPendingComponent: DefaultLoader,
+        defaultPendingMs: 1000,
+        defaultPendingMinMs: 500,
+        scrollRestoration: true,
+        defaultStructuralSharing: true,
+    });
+
+    setupRouterSsrQueryIntegration({
+        router,
         queryClient,
-    );
-}
+        handleRedirects: true,
+        wrapQueryClient: true,
+    });
 
-
-declare module "@tanstack/react-router" {
-    interface Register {
-        router: ReturnType<typeof createRouter>;
-    }
+    return router;
 }

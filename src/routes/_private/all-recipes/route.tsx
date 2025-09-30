@@ -1,14 +1,14 @@
 import {useState} from "react";
 import {Search} from "lucide-react";
 import {useTranslation} from "react-i18next";
-import {Input} from "~/lib/components/ui/input";
-import {Badge} from "~/lib/components/ui/badge";
-import {allRecipesOptions} from "~/lib/react-query";
+import {Input} from "~/lib/client/components/ui/input";
+import {Badge} from "~/lib/client/components/ui/badge";
 import {useSuspenseQuery} from "@tanstack/react-query";
-import {Separator} from "~/lib/components/ui/separator";
-import {PageTitle} from "~/lib/components/app/PageTitle";
-import {MutedText} from "~/lib/components/app/MutedText";
+import {allRecipesOptions} from "~/lib/client/react-query";
 import {createFileRoute, Link} from "@tanstack/react-router";
+import {Separator} from "~/lib/client/components/ui/separator";
+import {PageTitle} from "~/lib/client/components/app/PageTitle";
+import {MutedText} from "~/lib/client/components/app/MutedText";
 import {groupRecipesAlphabetically, normalizeStr} from "~/lib/utils/helpers";
 
 

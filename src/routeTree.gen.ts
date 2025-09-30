@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createServerRootRoute } from "@tanstack/react-start/server";
-
 import { Route as rootRouteImport } from "./routes/__root";
 import { Route as PublicRouteImport } from "./routes/_public";
 import { Route as PrivateRouteImport } from "./routes/_private";
@@ -19,11 +17,9 @@ import { Route as PublicForgotPasswordRouteImport } from "./routes/_public/forgo
 import { Route as PrivateDashboardRouteRouteImport } from "./routes/_private/dashboard/route";
 import { Route as PrivateAllRecipesRouteRouteImport } from "./routes/_private/all-recipes/route";
 import { Route as PrivateAddRecipeRouteRouteImport } from "./routes/_private/add-recipe/route";
+import { Route as ApiAuthSplatRouteImport } from "./routes/api/auth/$";
 import { Route as PrivateEditRecipeRecipeIdRouteImport } from "./routes/_private/edit-recipe/$recipeId";
 import { Route as PrivateDetailsRecipeIdRouteImport } from "./routes/_private/details/$recipeId";
-import { ServerRoute as ApiAuthSplatServerRouteImport } from "./routes/api/auth/$";
-
-const rootServerRouteImport = createServerRootRoute();
 
 const PublicRoute = PublicRouteImport.update({
   id: "/_public",
@@ -63,6 +59,11 @@ const PrivateAddRecipeRouteRoute = PrivateAddRecipeRouteRouteImport.update({
   path: "/add-recipe",
   getParentRoute: () => PrivateRoute,
 } as any);
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: "/api/auth/$",
+  path: "/api/auth/$",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const PrivateEditRecipeRecipeIdRoute =
   PrivateEditRecipeRecipeIdRouteImport.update({
     id: "/edit-recipe/$recipeId",
@@ -74,11 +75,6 @@ const PrivateDetailsRecipeIdRoute = PrivateDetailsRecipeIdRouteImport.update({
   path: "/details/$recipeId",
   getParentRoute: () => PrivateRoute,
 } as any);
-const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
-  id: "/api/auth/$",
-  path: "/api/auth/$",
-  getParentRoute: () => rootServerRouteImport,
-} as any);
 
 export interface FileRoutesByFullPath {
   "/add-recipe": typeof PrivateAddRecipeRouteRoute;
@@ -89,6 +85,7 @@ export interface FileRoutesByFullPath {
   "/": typeof PublicIndexRoute;
   "/details/$recipeId": typeof PrivateDetailsRecipeIdRoute;
   "/edit-recipe/$recipeId": typeof PrivateEditRecipeRecipeIdRoute;
+  "/api/auth/$": typeof ApiAuthSplatRoute;
 }
 export interface FileRoutesByTo {
   "/add-recipe": typeof PrivateAddRecipeRouteRoute;
@@ -99,6 +96,7 @@ export interface FileRoutesByTo {
   "/": typeof PublicIndexRoute;
   "/details/$recipeId": typeof PrivateDetailsRecipeIdRoute;
   "/edit-recipe/$recipeId": typeof PrivateEditRecipeRecipeIdRoute;
+  "/api/auth/$": typeof ApiAuthSplatRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
@@ -112,6 +110,7 @@ export interface FileRoutesById {
   "/_public/": typeof PublicIndexRoute;
   "/_private/details/$recipeId": typeof PrivateDetailsRecipeIdRoute;
   "/_private/edit-recipe/$recipeId": typeof PrivateEditRecipeRecipeIdRoute;
+  "/api/auth/$": typeof ApiAuthSplatRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
@@ -123,7 +122,8 @@ export interface FileRouteTypes {
     | "/reset-password"
     | "/"
     | "/details/$recipeId"
-    | "/edit-recipe/$recipeId";
+    | "/edit-recipe/$recipeId"
+    | "/api/auth/$";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/add-recipe"
@@ -133,7 +133,8 @@ export interface FileRouteTypes {
     | "/reset-password"
     | "/"
     | "/details/$recipeId"
-    | "/edit-recipe/$recipeId";
+    | "/edit-recipe/$recipeId"
+    | "/api/auth/$";
   id:
     | "__root__"
     | "/_private"
@@ -145,33 +146,14 @@ export interface FileRouteTypes {
     | "/_public/reset-password"
     | "/_public/"
     | "/_private/details/$recipeId"
-    | "/_private/edit-recipe/$recipeId";
+    | "/_private/edit-recipe/$recipeId"
+    | "/api/auth/$";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   PrivateRoute: typeof PrivateRouteWithChildren;
   PublicRoute: typeof PublicRouteWithChildren;
-}
-export interface FileServerRoutesByFullPath {
-  "/api/auth/$": typeof ApiAuthSplatServerRoute;
-}
-export interface FileServerRoutesByTo {
-  "/api/auth/$": typeof ApiAuthSplatServerRoute;
-}
-export interface FileServerRoutesById {
-  __root__: typeof rootServerRouteImport;
-  "/api/auth/$": typeof ApiAuthSplatServerRoute;
-}
-export interface FileServerRouteTypes {
-  fileServerRoutesByFullPath: FileServerRoutesByFullPath;
-  fullPaths: "/api/auth/$";
-  fileServerRoutesByTo: FileServerRoutesByTo;
-  to: "/api/auth/$";
-  id: "__root__" | "/api/auth/$";
-  fileServerRoutesById: FileServerRoutesById;
-}
-export interface RootServerRouteChildren {
-  ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute;
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute;
 }
 
 declare module "@tanstack/react-router" {
@@ -232,6 +214,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivateAddRecipeRouteRouteImport;
       parentRoute: typeof PrivateRoute;
     };
+    "/api/auth/$": {
+      id: "/api/auth/$";
+      path: "/api/auth/$";
+      fullPath: "/api/auth/$";
+      preLoaderRoute: typeof ApiAuthSplatRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/_private/edit-recipe/$recipeId": {
       id: "/_private/edit-recipe/$recipeId";
       path: "/edit-recipe/$recipeId";
@@ -245,17 +234,6 @@ declare module "@tanstack/react-router" {
       fullPath: "/details/$recipeId";
       preLoaderRoute: typeof PrivateDetailsRecipeIdRouteImport;
       parentRoute: typeof PrivateRoute;
-    };
-  }
-}
-declare module "@tanstack/react-start/server" {
-  interface ServerFileRoutesByPath {
-    "/api/auth/$": {
-      id: "/api/auth/$";
-      path: "/api/auth/$";
-      fullPath: "/api/auth/$";
-      preLoaderRoute: typeof ApiAuthSplatServerRouteImport;
-      parentRoute: typeof rootServerRouteImport;
     };
   }
 }
@@ -297,13 +275,18 @@ const PublicRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   PrivateRoute: PrivateRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>();
-const rootServerRouteChildren: RootServerRouteChildren = {
-  ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
-};
-export const serverRouteTree = rootServerRouteImport
-  ._addFileChildren(rootServerRouteChildren)
-  ._addFileTypes<FileServerRouteTypes>();
+
+import type { getRouter } from "./router.ts";
+import type { startInstance } from "./start.ts";
+declare module "@tanstack/react-start" {
+  interface Register {
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>;
+  }
+}

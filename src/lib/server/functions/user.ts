@@ -1,12 +1,12 @@
+import {serverEnv} from "~/env/server";
 import {auth} from "~/lib/server/core/auth";
 import {scryptSync, timingSafeEqual} from "crypto";
 import {createServerFn} from "@tanstack/react-start";
-import {getWebRequest} from "@tanstack/react-start/server";
-import {serverEnv} from "~/env/server";
+import {getRequest} from "@tanstack/react-start/server";
 
 
 export const getCurrentUser = createServerFn({ method: "GET" }).handler(async () => {
-    const { headers } = getWebRequest();
+    const { headers } = getRequest();
     const session = await auth.api.getSession({ headers });
 
     if (!session?.user) {
@@ -15,13 +15,13 @@ export const getCurrentUser = createServerFn({ method: "GET" }).handler(async ()
 
     return {
         ...session.user,
-        id: parseInt(session.user.id),
+        id: Number(session.user.id),
     };
 });
 
 
 export const validateKey = createServerFn({ method: "GET" })
-    .validator((data: string) => data)
+    .inputValidator((data: string) => data)
     .handler(async ({ data: submittedKey }) => {
         const salt = serverEnv.REGISTER_KEY_SALT;
         const keyHash = serverEnv.REGISTER_KEY_HASH;

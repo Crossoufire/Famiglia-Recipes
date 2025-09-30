@@ -3,17 +3,16 @@ import {db} from "~/lib/server/database/db";
 import {and, desc, eq, sql} from "drizzle-orm";
 import {notFound} from "@tanstack/react-router";
 import {createServerFn} from "@tanstack/react-start";
-import {tryOrNotFound} from "~/lib/server/utils/zod-errors";
-import {deleteImage} from "~/lib/server/utils/image-handler";
-import {setResponseStatus} from "@tanstack/react-start/server";
-import {FormattedError} from "~/lib/server/utils/error-classes";
+import {tryOrNotFound} from "~/lib/utils/zod-errors";
+import {deleteImage} from "~/lib/utils/image-handler";
+import {FormattedError} from "~/lib/utils/error-classes";
 import {authMiddleware} from "~/lib/server/middleware/auth-guard";
 import {comment, favorites, recipe, recipe as recipeTable} from "~/lib/server/database/schema";
 
 
 export const getDetails = createServerFn({ method: "GET" })
     .middleware([authMiddleware])
-    .validator(data => tryOrNotFound(() => z.coerce.number().int().positive().parse(data)))
+    .inputValidator(data => tryOrNotFound(() => z.coerce.number().int().positive().parse(data)))
     .handler(async ({ data: recipeId, context: { currentUser } }) => {
         const recipeDetails = await db.query.recipe.findFirst({
             where: eq(recipeTable.id, recipeId),
@@ -50,7 +49,7 @@ export const getDetails = createServerFn({ method: "GET" })
 
 export const deleteRecipe = createServerFn({ method: "POST" })
     .middleware([authMiddleware])
-    .validator(data => z.coerce.number().int().positive().parse(data))
+    .inputValidator((data) => z.coerce.number().int().positive().parse(data))
     .handler(async ({ data: recipeId, context: { currentUser } }) => {
         if (currentUser.role !== "manager") {
             throw new FormattedError("Unauthorized");
@@ -76,7 +75,7 @@ export const deleteRecipe = createServerFn({ method: "POST" })
 
 export const favoriteRecipe = createServerFn({ method: "POST" })
     .middleware([authMiddleware])
-    .validator(data => z.coerce.number().int().positive().parse(data))
+    .inputValidator((data) => z.coerce.number().int().positive().parse(data))
     .handler(async ({ data: recipeId, context: { currentUser } }) => {
         const existingFavorite = await db
             .select()
@@ -99,7 +98,7 @@ export const favoriteRecipe = createServerFn({ method: "POST" })
 
 export const getComments = createServerFn({ method: "GET" })
     .middleware([authMiddleware])
-    .validator(data => tryOrNotFound(() => z.coerce.number().int().positive().parse(data)))
+    .inputValidator((data) => tryOrNotFound(() => z.coerce.number().int().positive().parse(data)))
     .handler(async ({ data: recipeId }) => {
         return db.query.comment.findMany({
             where: eq(comment.recipeId, recipeId),
@@ -111,7 +110,7 @@ export const getComments = createServerFn({ method: "GET" })
 
 export const addComment = createServerFn({ method: "POST" })
     .middleware([authMiddleware])
-    .validator(data => z.object({ content: z.string().min(1), recipeId: z.number().int().positive() }).parse(data))
+    .inputValidator((data) => z.object({ content: z.string().min(1), recipeId: z.number().int().positive() }).parse(data))
     .handler(async ({ data: { content, recipeId }, context: { currentUser } }) => {
         if (!content.trim()) {
             throw new FormattedError("Comment cannot be empty");
@@ -130,14 +129,12 @@ export const addComment = createServerFn({ method: "POST" })
         await db
             .insert(comment)
             .values({ content, recipeId, userId: currentUser.id });
-
-        setResponseStatus(201);
     });
 
 
 export const editComment = createServerFn({ method: "POST" })
     .middleware([authMiddleware])
-    .validator(data => z.object({ content: z.string().min(1), commentId: z.number().int().positive() }).parse(data))
+    .inputValidator((data) => z.object({ content: z.string().min(1), commentId: z.number().int().positive() }).parse(data))
     .handler(async ({ data: { commentId, content }, context: { currentUser } }) => {
         const commentToUpdate = await db.query.comment.findFirst({
             where: (comment) => eq(comment.id, commentId),
@@ -162,14 +159,12 @@ export const editComment = createServerFn({ method: "POST" })
                 updatedAt: sql`datetime('now')`,
             })
             .where(eq(comment.id, commentId));
-
-        setResponseStatus(201);
     });
 
 
 export const deleteComment = createServerFn({ method: "POST" })
     .middleware([authMiddleware])
-    .validator(data => z.coerce.number().int().positive().parse(data))
+    .inputValidator((data) => z.coerce.number().int().positive().parse(data))
     .handler(async ({ data: commentId, context: { currentUser } }) => {
         const checkComment = await db
             .select()

@@ -3,18 +3,18 @@ import {eq, inArray} from "drizzle-orm";
 import {db} from "~/lib/server/database/db";
 import {notFound} from "@tanstack/react-router";
 import {createServerFn} from "@tanstack/react-start";
-import {HEIGHT, WIDTH} from "~/lib/server/utils/constants";
-import {FormattedError} from "~/lib/server/utils/error-classes";
+import {HEIGHT, WIDTH} from "~/lib/utils/constants";
+import {FormattedError} from "~/lib/utils/error-classes";
 import {authMiddleware} from "~/lib/server/middleware/auth-guard";
-import {tryFormZodError, tryOrNotFound} from "~/lib/server/utils/zod-errors";
-import {editRecipeSchema, imageRecipeSchema} from "~/lib/server/utils/schemas";
-import {deleteImage, saveUploadedImage} from "~/lib/server/utils/image-handler";
+import {tryFormZodError, tryOrNotFound} from "~/lib/utils/zod-errors";
+import {editRecipeSchema, imageRecipeSchema} from "~/lib/utils/schemas";
+import {deleteImage, saveUploadedImage} from "~/lib/utils/image-handler";
 import {label, recipe as recipeTable, recipe, recipeLabel} from "~/lib/server/database/schema";
 
 
 export const getEditRecipe = createServerFn({ method: "POST" })
     .middleware([authMiddleware])
-    .validator(data => tryOrNotFound(() => z.coerce.number().int().positive().parse(data)))
+    .inputValidator((data) => tryOrNotFound(() => z.coerce.number().int().positive().parse(data)))
     .handler(async ({ data: recipeId }) => {
         const singleRecipe = await db.query.recipe.findFirst({
             where: eq(recipe.id, recipeId),
@@ -42,7 +42,7 @@ export const getEditRecipe = createServerFn({ method: "POST" })
 
 export const postEditRecipe = createServerFn({ method: "POST" })
     .middleware([authMiddleware])
-    .validator((data: FormData) => {
+    .inputValidator((data: FormData) => {
         if (!(data instanceof FormData)) throw new Error("Invalid FormData");
         return data;
     })

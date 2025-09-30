@@ -50,16 +50,19 @@ Follow these instructions to get a copy of the project up and running on your lo
    ```
 
 3. **Set up environment variables:**
-    - Create a `.env` file in the root of the project by copying the example file:
+
+   Create a `.env` file in the root of the project by copying the example file:
       ```bash
       cp .env.example .env
       ```
-    - Fill in the required variables in the `.env` file. See the section below for details.
+   Fill in the required variables in the `.env` file. See the section below for details.
 
 4. **Generate a registration key:**
-   The application uses a _secret key_ for new user registrations. Run the following script to generate a new key and hash, then add them to your `.env` file.
+
+   The application uses a _register key_ for new user registrations.
+   Run the following script to generate a new key and hash, then add them to your `.env` file.
    ```bash
-   node src/lib/server/utils/hash-key.ts
+    npm run key:generate -- "your_register_key_here"
    ```
 
 5. **Run the development server:**

@@ -16,6 +16,7 @@ export default [
         },
         rules: {
             ...reactHooks.configs.recommended.rules,
+            "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
         },
     },
     reactPlugin.configs.recommended,
@@ -34,6 +35,8 @@ export default [
         rules: {
             "@eslint-react/no-array-index-key": "off",
             "@typescript-eslint/no-explicit-any": "off",
+            "@eslint-react/no-unstable-context-value": "off",
+            "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": "off",
         },
     },
     {

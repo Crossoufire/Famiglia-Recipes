@@ -2,18 +2,18 @@ import {toast} from "sonner";
 import {useState} from "react";
 import {cn} from "~/lib/utils/helpers";
 import {useTranslation} from "react-i18next";
-import {useAuth} from "~/lib/hooks/use-auth";
-import {Badge} from "~/lib/components/ui/badge";
-import {Button} from "~/lib/components/ui/button";
-import {Separator} from "~/lib/components/ui/separator";
-import {PageTitle} from "~/lib/components/app/PageTitle";
-import {Card, CardContent} from "~/lib/components/ui/card";
-import {Servings} from "~/lib/components/details/Servings";
+import {useAuth} from "~/lib/client/hooks/use-auth";
+import {Badge} from "~/lib/client/components/ui/badge";
+import {Button} from "~/lib/client/components/ui/button";
+import {Separator} from "~/lib/client/components/ui/separator";
+import {PageTitle} from "~/lib/client/components/app/PageTitle";
+import {Card, CardContent} from "~/lib/client/components/ui/card";
+import {Servings} from "~/lib/client/components/details/Servings";
 import {useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
-import {CommentSection} from "~/lib/components/details/CommentSection";
 import {createFileRoute, Link, useNavigate} from "@tanstack/react-router";
-import {useDeleteRecipe, useFavoriteRecipe} from "~/lib/react-query/mutations";
-import {recipeDetailsOptions} from "~/lib/react-query/queryOptions";
+import {recipeDetailsOptions} from "~/lib/client/react-query/queryOptions";
+import {CommentSection} from "~/lib/client/components/details/CommentSection";
+import {useDeleteRecipe, useFavoriteRecipe} from "~/lib/client/react-query/mutations";
 import {ChefHat, CircleCheck, Clock, Heart, History, Pen, Trash2, Users} from "lucide-react";
 
 
@@ -23,9 +23,6 @@ export const Route = createFileRoute("/_private/details/$recipeId")({
     },
     component: RecipeDetailsPage,
 })
-
-
-type RecipeDetails = Awaited<ReturnType<NonNullable<ReturnType<typeof recipeDetailsOptions>["queryFn"]>>>;
 
 
 function RecipeDetailsPage() {

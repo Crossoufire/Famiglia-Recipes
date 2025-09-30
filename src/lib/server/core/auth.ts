@@ -2,14 +2,15 @@ import {clientEnv} from "~/env/client";
 import {serverEnv} from "~/env/server";
 import {betterAuth} from "better-auth";
 import {db} from "~/lib/server/database/db";
-import {sendEmail} from "~/lib/server/utils/mail-sender";
+import {sendEmail} from "~/lib/utils/mail-sender";
+import {createServerOnlyFn} from "@tanstack/react-start";
 import {reactStartCookies} from "better-auth/react-start";
 import {drizzleAdapter} from "better-auth/adapters/drizzle";
 import {checkWerkzeugPassword, generatePasswordHash} from "~/lib/server/core/security";
 
 
-export const auth = betterAuth({
-    appName: "Famiglia-Recipe",
+const getAuthConfig = createServerOnlyFn(() => betterAuth({
+    appName: "Famiglia-Recipes",
     baseURL: clientEnv.VITE_BASE_URL,
     secret: serverEnv.BETTER_AUTH_SECRET,
     database: drizzleAdapter(db, {
@@ -49,10 +50,10 @@ export const auth = betterAuth({
         },
         password: {
             hash: async (password: string) => {
-                return generatePasswordHash(password)
+                return generatePasswordHash(password);
             },
             verify: async ({ hash, password }) => {
-                return checkWerkzeugPassword(password, hash)
+                return checkWerkzeugPassword(password, hash);
             },
         },
     },
@@ -81,4 +82,7 @@ export const auth = betterAuth({
     plugins: [
         reactStartCookies(),
     ]
-});
+}));
+
+
+export const auth = getAuthConfig();

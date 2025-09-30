@@ -1,12 +1,12 @@
 import {useTranslation} from "react-i18next";
 import {CookingPot, Search, Star} from "lucide-react";
 import {createFileRoute} from "@tanstack/react-router";
-import {Separator} from "~/lib/components/ui/separator";
-import {LoginForm} from "~/lib/components/app/LoginForm";
-import {PageTitle} from "~/lib/components/app/PageTitle";
-import {Card, CardContent} from "~/lib/components/ui/card";
-import {RegisterForm} from "~/lib/components/app/RegisterForm";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "~/lib/components/ui/tabs";
+import {Separator} from "~/lib/client/components/ui/separator";
+import {LoginForm} from "~/lib/client/components/app/LoginForm";
+import {PageTitle} from "~/lib/client/components/app/PageTitle";
+import {Card, CardContent} from "~/lib/client/components/ui/card";
+import {RegisterForm} from "~/lib/client/components/app/RegisterForm";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "~/lib/client/components/ui/tabs";
 
 
 export const Route = createFileRoute("/_public/")({

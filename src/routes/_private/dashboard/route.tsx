@@ -1,11 +1,11 @@
 import {useTranslation} from "react-i18next";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import {createFileRoute} from "@tanstack/react-router";
-import {Separator} from "~/lib/components/ui/separator";
-import {MutedText} from "~/lib/components/app/MutedText";
-import {PageTitle} from "~/lib/components/app/PageTitle";
-import {RecipeCard} from "~/lib/components/app/RecipeCard";
-import {dashboardOptions} from "~/lib/react-query/queryOptions";
+import {Separator} from "~/lib/client/components/ui/separator";
+import {MutedText} from "~/lib/client/components/app/MutedText";
+import {PageTitle} from "~/lib/client/components/app/PageTitle";
+import {RecipeCard} from "~/lib/client/components/app/RecipeCard";
+import {dashboardOptions} from "~/lib/client/react-query/queryOptions";
 
 
 export const Route = createFileRoute("/_private/dashboard")({

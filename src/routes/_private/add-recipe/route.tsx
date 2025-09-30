@@ -1,12 +1,12 @@
 import {toast} from "sonner";
 import {useTranslation} from "react-i18next";
-import {useAddRecipe} from "~/lib/react-query";
+import {RecipeFormValues} from "~/lib/utils/schemas";
+import {useAddRecipe} from "~/lib/client/react-query";
 import {useSuspenseQuery} from "@tanstack/react-query";
-import {PageTitle} from "~/lib/components/app/PageTitle";
-import {RecipeFormValues} from "~/lib/server/utils/schemas";
-import {addRecipeOptions} from "~/lib/react-query/queryOptions";
-import {RecipeForm} from "~/lib/components/recipe-form/RecipeForm";
+import {PageTitle} from "~/lib/client/components/app/PageTitle";
 import {createFileRoute, useNavigate} from "@tanstack/react-router";
+import {addRecipeOptions} from "~/lib/client/react-query/queryOptions";
+import {RecipeForm} from "~/lib/client/components/recipe-form/RecipeForm";
 
 
 export const Route = createFileRoute("/_private/add-recipe")({

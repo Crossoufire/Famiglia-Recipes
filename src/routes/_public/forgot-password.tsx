@@ -2,12 +2,12 @@ import {toast} from "sonner";
 import {useForm} from "react-hook-form";
 import {LoaderCircle} from "lucide-react";
 import {useTranslation} from "react-i18next";
-import {Input} from "~/lib/components/ui/input";
 import authClient from "~/lib/utils/auth-client";
-import {PageTitle} from "~/lib/components/app/PageTitle";
-import {FormButton} from "~/lib/components/app/FormButton";
+import {Input} from "~/lib/client/components/ui/input";
+import {PageTitle} from "~/lib/client/components/app/PageTitle";
+import {FormButton} from "~/lib/client/components/app/FormButton";
 import {createFileRoute, useNavigate} from "@tanstack/react-router";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "~/lib/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "~/lib/client/components/ui/form";
 
 
 export const Route = createFileRoute("/_public/forgot-password")({
